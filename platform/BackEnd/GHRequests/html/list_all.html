@@ -1,0 +1,504 @@
+<script>
+
+	  app.controller('PageController', ['$scope', '$http', '$window','ngDialog', '$timeout', function($scope, $http, $window, ngDialog, $timeout) {
+
+		var vm = this;
+		vm.arr_data = [];
+
+		$scope.search = "";
+		$scope.number_per_page = 100;
+
+
+		vm.t = {};
+
+	
+		vm.t.GHRequests = GHRequests;
+
+		vm.t.search_for_user_id = 0;
+		
+
+		$http({
+		    method: 'POST',
+		    url: '/platform/ghrequests/get_all_gh_requests/',
+			data: { search: $scope.search }
+		}).success(function (result) {
+			if (result.is_success) {
+				vm.arr_data = result.arr_data;
+			}
+		});
+
+		$scope.add = function() {
+			$window.location = "/segments/edit/0";
+			
+		};
+
+		$scope.edit_click = function(index) {
+			$window.location = "/segments/edit/" + index;
+			
+		};
+
+		$scope.delete_click = function(index) {
+			var result = $window.confirm('Are you sure you want to delete?');
+                        if (result) {
+                                $http({
+                                    method: 'get',
+                                    url: '/segments/delete/' + index,
+                                }).success(function (result) {
+                                        $window.location = "/segments";
+                                });
+                        }
+		};
+
+		$scope.search_submission = function() {
+			//alert('in here');
+			$http({
+			    method: 'POST',
+			    url: '/segments/get_arr_search_results/',
+				data: { search: $scope.search }
+			}).success(function (result) {
+				$scope.arr_segments_data = result.arr_data;
+				//alert(result.arr_data);
+			});
+			
+		};
+
+		vm.clear_image_receipt = function($id, $index) {
+			//alert('in here');
+			var temp_result = confirm("Are You Sure You Want To Clear Image Request for #" + $id + "?");
+			if (temp_result) {
+				$http({
+				    method: 'POST',
+				    url: '/platform/matchedrequests/clear_image_receipt/' + $id,
+					data: { }
+				}).success(function (result) {
+					if (result.is_success) {
+						alert("Image Cleared");
+						vm.arr_data[$index].is_have_image_receipt = "N";
+						vm.arr_data[$index].image_receipt_gm_date_time = "";
+					} else {
+						alert("Unable to Clear Image");
+					}
+					//alert(result.arr_data);
+				});
+			}
+			
+		};
+
+		vm.confirm_request = function($id, $index) {
+			//alert('in here');
+			var temp_result = confirm("Are You Sure You Want To Confirm Matched Request #" + $id + "?");
+			if (temp_result) {
+				$http({
+				    method: 'POST',
+				    url: '/platform/matchedrequests/confirm_request/' + $id,
+					data: { }
+				}).success(function (result) {
+					if (result.is_success) {
+						alert("Request Confirmed");
+						vm.arr_data.splice($index, 1);
+					}
+					//alert(result.arr_data);
+				});
+			}
+			
+		};
+
+		vm.cancel_request = function($id, $index) {
+			//alert('in here');
+			var temp_result = confirm("Are You Sure You Want To Cancel GH Request #" + $id + "?");
+			if (temp_result) {
+				$http({
+				    method: 'POST',
+				    url: '/platform/ghrequests/cancel_gh_simple/' + $id,
+					data: { }
+				}).success(function (result) {
+					if (result.is_success) {
+						alert("Request Cancelled");
+						vm.arr_data.splice($index, 1);
+					} else {
+						alert("Unable To Cancel Request");
+					}
+					//alert(result.arr_data);
+				});
+			}
+			
+		};
+
+		vm.disapprove_user_for_gh_matching = function(login, user_id, $index) {
+			//alert('in here');
+			var temp_result = confirm("Are You Sure You Want To Disapprove " + login + " for Matching Their GH?");
+			if (temp_result) {
+				$http({
+				    method: 'POST',
+				    url: '/platform/ghrequests/disapprove_user_for_gh_matching/' + user_id,
+					data: { }
+				}).success(function (result) {
+					if (result.is_success) {
+						for(var i=0;i<vm.arr_data.length;i++) {
+							if (vm.arr_data[i]['user_id'] == user_id) {
+								vm.arr_data[i]['is_approved_for_matching'] = "N";
+							}
+						}
+						alert(login + " Is Disapproved For Matching Their GH");
+					} else {
+						alert("Unable To Disapprove User For Matching Their GH");
+					}
+					//alert(result.arr_data);
+				});
+			}
+			
+		};
+
+		vm.approve_user_for_gh_matching = function(login, user_id, $index) {
+			//alert('in here');
+			var temp_result = confirm("Are You Sure You Want To Approve " + login + " for Matching Their GH?");
+			if (temp_result) {
+				$http({
+				    method: 'POST',
+				    url: '/platform/ghrequests/approve_user_for_gh_matching/' + user_id,
+					data: { }
+				}).success(function (result) {
+					if (result.is_success) {
+						for(var i=0;i<vm.arr_data.length;i++) {
+							if (vm.arr_data[i]['user_id'] == user_id) {
+								vm.arr_data[i]['is_approved_for_matching'] = "Y";
+							}
+						}
+						alert(login + " Is Approve For Matching Their GH");
+						//vm.arr_data[$index]['is_approved_for_matching'] = "Y";
+					} else {
+						alert("Unable To Approve User For Matching Their GH");
+					}
+					//alert(result.arr_data);
+				});
+			}
+			
+		};
+
+		vm.build_total_gh = function(data) {
+			var total = 0;
+			total = (+data.daily_bonus_earning_balance) + (+data.daily_growth_balance) + (+data.level_income_balance) + (+data.task_earning_balance);
+			return total;
+		}
+
+
+		vm.arr_matched_expire_timestamp = [];
+
+		vm.get_end_time = function (data) {
+			//var mm = moment().utc(data.gm_created);
+			//var end_timestamp = mm.valueOf() + 172800;
+			
+			if (typeof vm.arr_matched_expire_timestamp[data.id] === 'undefined') {
+				console.log(data.expiration_gm_date_time);
+				var mm = moment.utc(data.expiration_gm_date_time);
+				var end_timestamp = mm.valueOf();
+				//console.log(end_timestamp);
+				vm.arr_matched_expire_timestamp[data.id] = end_timestamp;
+				return vm.arr_matched_expire_timestamp[data.id];
+			} else {
+				//console.log(vm.arr_matched_expire_timestamp[data.id]);
+				return vm.arr_matched_expire_timestamp[data.id];
+			}
+		};
+
+
+		vm.user_change = function() {
+			console.log('user changed');
+			if (typeof vm.user_selected.selected === 'undefined') {
+				vm.t.search_for_user_id = 0;
+			} else {
+				vm.t.search_for_user_id = vm.user_selected.selected['id'];
+			}
+
+			$http({
+			    method: 'POST',
+			    url: '/platform/ghrequests/get_ghrequests_for_user/' + vm.t.search_for_user_id,
+				data: { search: $scope.search }
+			}).success(function (result) {
+				if (result.is_success) {
+					vm.arr_data = result.arr_data;
+				}
+			});
+		};
+
+
+		vm.arr_users_data = [];
+
+		vm.refresh_users = function(search) {
+			//console.log('refresh users');
+			$http({
+			    method: 'POST',
+			    url: '/platform/users/get_arr_search_results',
+				data: { search: search, limit: 20 }
+			}).success(function (result) {
+				//alert(result.total_clicks);
+				//alert('here');
+				//alert(result);
+				vm.arr_users_data = result.arr_data;
+				//alert($scope.arr_segment_data);
+			});
+
+		};
+
+		vm.open_loh_approve_dialog = function(gh_id, $index) {
+			var new_dialog = ngDialog.open({ id: 'loh_approve_dialog_id', closeByDocument: false, showClose: true, closeByEscape: true,  className: 'ngdialog-theme-default loh-reject-dialog', template: 'loh_approve_dialog', controller: 'LohApproveController', controllerAs: 'loh_ctrl', data: { gh_id: gh_id, index: $index, vm_parent: vm } });
+			// example on checking whether created `new_dialog` is open
+			$timeout(function() {
+				console.log(ngDialog.isOpen(new_dialog.id));
+			}, 2000)
+		};
+
+
+
+	}]);
+
+
+</script>
+
+<style>
+
+	.ngdialog.ngdialog-theme-default.loh-reject-dialog .ngdialog-content {
+		width: 90% !important;
+		padding-top: 0px !important;
+	}
+
+</style>
+
+<div class="page-title-header">
+	GH Requests
+</div>
+
+<div ng-controller="PageController as page_ctrl">
+
+	<div style="clear:both;"></div>
+
+
+	<div class="flex_container">
+		<div>
+
+			<div style="margin:10px;">
+				<ui-select ng-change="page_ctrl.user_change()" allow-clear="true" ng-model="page_ctrl.user_selected.selected" theme="bootstrap" style="width:300px;">
+				    <ui-select-match placeholder="Select or search a user in the list...">{{$select.selected.login}}</ui-select-match>
+				    <ui-select-choices repeat="item in page_ctrl.arr_users_data | filter: $select.search"
+						refresh="page_ctrl.refresh_users($select.search)"
+						     refresh-delay="1"
+						>
+				      <div ng-bind-html="item.login | highlight: $select.search"></div>
+				    </ui-select-choices>
+				  </ui-select>
+
+			</div>
+			<table  style="border-collapse: collapse; margin:10px;"  class="general_data_table">
+			<tr>
+			<th class="general_table_header">No</th>
+			<th class="general_table_header">User</th>
+			<th class="general_table_header">Country</th>
+			<th class="general_table_header">ID</th>
+			<th class="general_table_header">Amount</th>
+			<th class="general_table_header">Amount Available</th>
+			<th class="general_table_header">Amount Matched</th>
+			<th class="general_table_header">Amount Matched Completed</th>
+			<th class="general_table_header">Is GH Matching Approved</th>
+			<th class="general_table_header">Have Addtional BTC Addresses</th>
+			<th class="general_table_header">Create Date</th>
+			<!--
+			<th class="general_table_header">Confirm Date</th>
+			-->
+			<th class="general_table_header" width="150">Action</th>
+			</tr>
+
+			<tr ng-if="arr_data.length == 0">
+				<td colspan="9">
+				      <strong>No results found...</strong>
+				</td>
+			</tr>
+			<tr class="have_hover full-standard-fade" ng-repeat="data in page_ctrl.arr_data track by $index">
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{$index+1}}</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="word-break: break-all"><a target="_blank" href="/platform/membersadmin/edit/{{data.user_id}}/">{{data.login}}</a></td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{data.country}}</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{data.id}}</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">${{data.amount | number:2}}</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">${{data.amount_available | number:2}}</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">${{data.amount_matched | number:2}}</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">${{data.amount_matched_completed | number:2}}</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{data.is_approved_for_matching}}</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{data.is_have_additional_btc_addresses}}</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="word-break: break-all">{{data.gm_created}} UTC</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="">
+					<div  style="padding-top:3px; padding-bottom:3px; padding-left:5px; padding-right:5px; width:100%;">
+						<div ng-show="data.is_approved_for_matching == 'N'" style="float:left; padding-left:5px; padding-right:5px;padding:2px;">
+							<button  type="button" class="btn btn-primary" style="padding-bottom:5px; padding-top:5px;" ng-click="page_ctrl.approve_user_for_gh_matching(data.login, data.user_id, $index)">APPROVE USER FOR MATCHING</button>
+						</div>
+						<div ng-show="data.is_approved_for_matching == 'Y'" style="float:left;padding-left:5px; padding-right:5px;">
+							<button  type="button" class="btn btn-danger" style="padding-bottom:5px; padding-top:5px;" ng-click="page_ctrl.disapprove_user_for_gh_matching(data.login, data.user_id, $index)">DISAPPROVE USER FOR MATCHING</button>
+						</div>
+						<div ng-show="(data.is_loh_rejected == 'N' && data.is_loh_approved == 'N' && data.is_completed_loh == 'Y' && data.status_id == page_ctrl.t.GHRequests.ACTIVE_STATUS_ID)" style="float:left; padding-left:5px; padding-right:5px; padding-top:5px; padding-bottom:5px;">
+							<button type="button" class="btn btn-primary" style="padding-bottom:5px; padding-top:5px;" ng-click="page_ctrl.open_loh_approve_dialog(data.id, $index)">REVIEW LOH</button>
+						</div>
+						<div ng-show="(data.is_loh_rejected == 'Y' && data.is_loh_approved == 'N' && data.status_id == page_ctrl.t.GHRequests.ACTIVE_STATUS_ID)" style="float:left; padding-left:5px; padding-right:5px; padding-top:5px; padding-bottom:5px;">
+							<button type="button" class="btn btn-primary" style="padding-bottom:5px; padding-top:5px;" ng-click="page_ctrl.open_loh_approve_dialog(data.id, $index)">LOH RE-DO</button>
+						</div>
+						<div style="float:left; padding-left:5px; padding-right:5px; padding-top:5px; padding-bottom:5px;">
+							<button type="button" class="btn btn-danger" style="padding-bottom:5px; padding-top:5px;" ng-click="page_ctrl.cancel_request(data.id, $index)">CANCEL</button>
+						</div>
+						<div style="clear:both;"></div>
+					</div>
+					<div style="clear:both;"></div>
+				</td>
+			</tr>
+			</table>
+		</div>
+	</div>
+
+
+</div>
+
+<script>
+
+app.controller('LohApproveController', ['$scope', '$http', '$window', 'ngDialog', function($scope, $http, $window, ngDialog) {
+	var vm = this;
+	
+
+	vm.ngDialogData = $scope.ngDialogData;
+	//console.info($scope.ngDialogData);
+
+	vm.t = {};
+
+	//alert($scope.ngDialogData.wallet_name);
+	vm.t.form_data = {};
+
+	vm.t.is_submit_error_message = false;
+
+	vm.t.loh_id = 0;
+
+	vm.t.data = {};
+
+	$http({
+	    method: 'POST',
+	    url: '/platform/loh/get_loh_data_by_gh_request' + "/" + $scope.ngDialogData.gh_id,
+		data: { }
+	}).success(function (result) {
+		if (result.is_success) {
+			//$scope.ngDialogData.parent_vm.refresh_ph_orders();
+			vm.t.data = result.data;
+			vm.t.loh_id = result.data.id;
+		}
+	});
+
+	//alert($scope.ngDialogData.user_id);
+	vm.approve_loh = function(percent_bonus) {
+		//alert($scope.t.form_data.amount);
+		//alert($scope.data.name);
+		// console.info('in here');
+		
+		
+		//alert(angular.toJson($scope.data));
+		$http({
+			method: 'POST',
+			url: '/platform/loh/approve_loh' + "/" + vm.t.loh_id,
+			data: { percent_bonus: percent_bonus }
+		}).success(function (result) {
+			if (result.is_success) {
+				$index = $scope.ngDialogData.index;
+				//console.info($index);
+				//console.info($scope.ngDialogData.vm_parent.arr_data[$index]);
+				$scope.ngDialogData.vm_parent.arr_data[$index].is_loh_approved = "Y";
+				$scope.closeThisDialog();
+
+				//alert('Balance Adjusted');
+
+			}
+			vm.t.is_submit_error_message = true;
+			//alert(result.total_clicks);
+			//alert('here');
+			//alert(result);
+			//$scope.data = result;
+		});
+	};
+
+	vm.reject_loh = function(is_redo) {
+		//alert($scope.t.form_data.amount);
+		//alert($scope.data.name);
+		// console.info('in here');
+		
+		
+		var redo_reason = "";
+		//alert(angular.toJson($scope.data));
+
+		$http({
+			method: 'POST',
+			url: '/platform/loh/reject_loh' + "/" + vm.t.loh_id,
+			data: { is_redo: is_redo, redo_reason: vm.t.form_data.redo_reason }
+		}).success(function (result) {
+			if (result.is_success) {
+				$index = $scope.ngDialogData.index;
+				//$scope.ngDialogData.parent_vm.refresh_ph_orders();
+				if (is_redo) {
+				}
+				$scope.ngDialogData.vm_parent.arr_data[$index].is_loh_rejected = "Y";
+				$scope.ngDialogData.vm_parent.arr_data[$index].is_completed_loh = "N";
+				$scope.closeThisDialog();
+
+				//alert('Balance Adjusted');
+
+			} else {
+				vm.t.is_submit_error_message = true;
+			}
+			//alert(result.total_clicks);
+			//alert('here');
+			//alert(result);
+			//$scope.data = result;
+		});
+	};
+}]);
+
+</script>
+
+<script type="text/ng-template" id="loh_approve_dialog">
+		<div style="padding-left:5px; padding-right:5px;">
+			<div style="padding-top:8px;">
+				<label class="form-label">Review LOH</label>
+			</div>
+			<div style="padding-top:8px;">
+				Letter:<br>
+				{{loh_ctrl.t.data.letter_contents}}
+			</div>
+			<div style="padding-top:8px;">
+				Video Link:<br>
+				{{loh_ctrl.t.data.video_link}}
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+
+		<div ng-show="loh_ctrl.t.data.is_rejected == 'Y' || loh_ctrl.t.data.is_redo == 'Y'">
+			<div style="padding-left:5px; padding-right:5px;">
+				<div style="color:red; font-weight:900;">
+					MEMBER IS RE-DOING LOH
+				</div>
+			</div>
+		</div>
+		<div ng-show="loh_ctrl.t.data.is_rejected == 'N' && loh_ctrl.t.data.is_redo == 'N'">
+			<div style="padding-bottom:4px; padding-top:4px;">
+				RE-DO Reason:
+				<textarea class="form-control" rows="5" ng-model="loh_ctrl.t.form_data.redo_reason" placeholder="Enter Your Reason for RE-DO" ></textarea>
+			</div>
+			<div>
+				<div style="padding-bottom:8px; padding-top:8px;float:left; padding-left:5px; padding-right:5px;">
+					<button type="button" ng-click="loh_ctrl.reject_loh(false)" class="btn btn-primary">REJECT</button>
+				</div>
+				<div style="padding-bottom:8px; padding-top:8px;float:left; padding-left:5px; padding-right:5px;">
+					<button type="button" ng-click="loh_ctrl.reject_loh(true)" class="btn btn-primary">REDO</button>
+				</div>
+				<div style="padding-bottom:8px; padding-top:8px;float:left; padding-left:5px; padding-right:5px;">
+					<button type="button" ng-click="loh_ctrl.approve_loh(0)" class="btn btn-primary">APPROVE FOR REGULR NO BONUS</button>
+				</div>
+				<div style="padding-bottom:8px; padding-top:8px;float:left; padding-left:5px; padding-right:5px;">
+					<button type="button" ng-click="loh_ctrl.approve_loh(5)" class="btn btn-primary">APPROVE FOR 5% BONUS</button>
+				</div>
+				<div style="padding-bottom:8px; padding-top:8px;float:left; padding-left:5px; padding-right:5px;">
+					<button type="button" ng-click="loh_ctrl.approve_loh(10)" class="btn btn-primary">APPROVE FOR 10% BONUS</button>
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+		</div>
+</script>

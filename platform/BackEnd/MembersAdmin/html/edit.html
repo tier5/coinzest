@@ -1,0 +1,1246 @@
+
+<script src="/platform/js/BTCAddresses.js"></script>
+
+<style>
+</style>
+
+
+<script>
+
+app.controller('SuspendController', ['$scope', '$http', '$window', 'ngDialog', function($scope, $http, $window, ngDialog) {
+
+	$scope.t = {};
+	$scope.t.form_data = {};
+
+	$scope.suspend_account = function() {
+		//alert($scope.t.form_data.amount);
+		//alert($scope.data.name);
+		
+		
+		//alert(angular.toJson($scope.data));
+		$http({
+		    method: 'POST',
+		    url: '/platform/membersadmin/suspend_account' + "/" + $scope.ngDialogData.user_id,
+			data: { data: $scope.t.form_data }
+		}).success(function (result) {
+			if (result.is_success) {
+				$window.location = "/platform/membersadmin/";
+				$scope.closeThisDialog();
+				//alert('Balance Adjusted');
+
+			}
+			//alert(result.total_clicks);
+			//alert('here');
+			//alert(result);
+			//$scope.data = result;
+		});
+	};
+}]);
+
+app.controller('BlockController', ['$scope', '$http', '$window', 'ngDialog', function($scope, $http, $window, ngDialog) {
+
+	$scope.t = {};
+	$scope.t.form_data = {};
+
+	$scope.block_account = function() {
+		//alert($scope.t.form_data.amount);
+		//alert($scope.data.name);
+		
+		
+		//alert(angular.toJson($scope.data));
+		$http({
+		    method: 'POST',
+		    url: '/platform/membersadmin/block_account' + "/" + $scope.ngDialogData.user_id,
+			data: { data: $scope.t.form_data }
+		}).success(function (result) {
+			if (result.is_success) {
+				$window.location = "/platform/membersadmin/";
+				$scope.closeThisDialog();
+				//alert('Balance Adjusted');
+
+			}
+			//alert(result.total_clicks);
+			//alert('here');
+			//alert(result);
+			//$scope.data = result;
+		});
+	};
+}]);
+
+app.controller('CreateGhController', ['$scope', '$http', '$window', 'ngDialog', function($scope, $http, $window, ngDialog) {
+	var vm = this;
+	
+
+	$scope.t = {};
+
+	//alert($scope.ngDialogData.wallet_name);
+	$scope.t.form_data = {};
+	$scope.t.is_submit_error_message = false;
+
+	//alert($scope.ngDialogData.user_id);
+	$scope.create_gh = function() {
+		//alert($scope.t.form_data.amount);
+		//alert($scope.data.name);
+		
+		
+		//alert(angular.toJson($scope.data));
+		$http({
+		    method: 'POST',
+		    url: '/platform/membersadmin/create_gh' + "/" + $scope.ngDialogData.user_id,
+			data: { data: $scope.t.form_data }
+		}).success(function (result) {
+			if (result.is_success) {
+				$scope.closeThisDialog();
+				$scope.ngDialogData.parent_vm.refresh_gh_orders();
+				//alert('Balance Adjusted');
+
+			}
+			$scope.t.is_submit_error_message = true;
+			//alert(result.total_clicks);
+			//alert('here');
+			//alert(result);
+			//$scope.data = result;
+		});
+	};
+}]);
+
+app.controller('CreatePhController', ['$scope', '$http', '$window', 'ngDialog', function($scope, $http, $window, ngDialog) {
+	var vm = this;
+	
+
+	$scope.t = {};
+
+	//alert($scope.ngDialogData.wallet_name);
+	$scope.t.form_data = {};
+
+	$scope.t.is_submit_error_message = false;
+
+	//alert($scope.ngDialogData.user_id);
+	$scope.create_ph = function() {
+		//alert($scope.t.form_data.amount);
+		//alert($scope.data.name);
+		
+		
+		//alert(angular.toJson($scope.data));
+		$http({
+		    method: 'POST',
+		    url: '/platform/membersadmin/create_ph' + "/" + $scope.ngDialogData.user_id,
+			data: { data: $scope.t.form_data }
+		}).success(function (result) {
+			if (result.is_success) {
+				$scope.ngDialogData.parent_vm.refresh_ph_orders();
+				$scope.closeThisDialog();
+
+				//alert('Balance Adjusted');
+
+			}
+			$scope.t.is_submit_error_message = true;
+			//alert(result.total_clicks);
+			//alert('here');
+			//alert(result);
+			//$scope.data = result;
+		});
+	};
+}]);
+
+app.controller('UpdatePasswordController', ['$scope', '$http', '$window', 'ngDialog', function($scope, $http, $window, ngDialog) {
+	var vm = this;
+	
+
+	$scope.t = {};
+
+	//alert($scope.ngDialogData.wallet_name);
+	$scope.t.form_data = {};
+
+	$scope.t.is_submit_error_message = false;
+
+	//alert($scope.ngDialogData.user_id);
+	$scope.update_password = function() {
+		//alert($scope.t.form_data.amount);
+		//alert($scope.data.name);
+		
+		
+		//alert(angular.toJson($scope.data));
+		$http({
+		    method: 'POST',
+		    url: '/platform/membersadmin/update_password' + "/" + $scope.ngDialogData.user_id,
+			data: { data: $scope.t.form_data }
+		}).success(function (result) {
+			if (result.is_success) {
+				//$scope.ngDialogData.parent_vm.refresh_ph_orders();
+				$scope.closeThisDialog();
+
+				//alert('Balance Adjusted');
+
+			}
+			$scope.t.is_submit_error_message = true;
+			//alert(result.total_clicks);
+			//alert('here');
+			//alert(result);
+			//$scope.data = result;
+		});
+	};
+}]);
+
+
+app.controller('UpdateController', ['$scope', '$http', '$window','$timeout', 'ngDialog', function($scope, $http, $window, $timeout, ngDialog) {
+
+	var current_location = String($window.location);
+
+	var arr_split = [];
+	var arr_split = current_location.split("/");
+
+	var param_value = "";
+
+	var vm = this;
+
+	vm.t = [];
+
+	vm.t.arr_status_options = [];
+	
+	param_value = arr_split[arr_split.length-1];
+	if (param_value == "") {
+		param_value = arr_split[arr_split.length-2];
+	}
+
+	var user_id = param_value
+
+	vm.t.user_id = user_id;
+
+
+	vm.t.PHRequests = PHRequests;
+	vm.t.GHRequests = GHRequests;
+	vm.t.BTCAddresses = BTCAddresses;
+
+	vm.t.arr_btc_a_data = [];
+	vm.t.is_loading = true;
+
+	$scope.is_add = false;
+
+
+	$http({
+	    method: 'GET',
+	    url: '/platform/membersadmin/get/' + user_id,
+		data: { }
+	}).success(function (result) {
+		if (result.is_success) {
+			vm.t.data = result.data;
+			//vm.t.old_data = result.data.slice();
+			vm.t.old_data = jQuery.extend({}, result.data);
+			console.info(vm.t.data);
+			vm.t.arr_btc_a_data = result.arr_btc_a_data;
+			//alert(result.data);
+		}
+		vm.t.is_loading = false;
+	});
+
+	vm.t.arr_gh_data = {};
+	vm.t.arr_ph_data = {};
+
+
+	vm.refresh_ph_orders = function() {
+		vm.t.toggle_is_show_active_ph = true;
+		$http({
+		    method: 'POST',
+			url: '/platform/phrequests/get_phrequests_for_user/' + vm.t.user_id,
+			data: { }
+			}).success(function (result) {
+			if (result.is_success) {
+				vm.t.arr_ph_data = result.arr_data;
+				//alert(result.data);
+			}
+		});
+	};
+
+	vm.refresh_gh_orders = function() {
+		vm.t.toggle_is_show_active_gh = true;
+		$http({
+			method: 'POST',
+			url: '/platform/ghrequests/get_ghrequests_for_user/' + vm.t.user_id,
+			data: {}
+		}).success(function (result) {
+			vm.t.arr_gh_data = result.arr_data;
+		});
+	};
+
+	vm.refresh_gh_orders();
+	vm.refresh_ph_orders();
+		
+
+
+	vm.submit = function() {
+		vm.t.is_submit_error_message = false;
+		vm.t.is_submit_success_message = false;
+		$http({
+		    method: 'POST',
+		    url: '/platform/membersadmin/save/' + user_id,
+			data: { data: vm.t.data, old_data:vm.t.old_data }
+		}).success(function (result) {
+			if (result.is_success) {
+				vm.t.is_submit_success_message = true;
+				//alert('in here');
+			} else {
+				vm.t.is_submit_error_message = true;
+			}
+		});
+	};
+
+	vm.t.toggle_is_show_active_ph = true;
+	vm.t.toggle_is_show_active_gh = true;
+
+	vm.get_cancelled_and_completed_ph = function() {
+		vm.t.toggle_is_show_active_ph = false;
+		$http({
+		    method: 'POST',
+			url: '/platform/phrequests/get_cancelled_and_completed_phrequests_for_user/' + vm.t.user_id,
+			data: { }
+			}).success(function (result) {
+			if (result.is_success) {
+				vm.t.arr_ph_data = result.arr_data;
+				//alert(result.data);
+			}
+		});
+		
+	};
+
+	vm.get_cancelled_and_completed_gh = function() {
+		vm.t.toggle_is_show_active_gh = false;
+		$http({
+			method: 'POST',
+			url: '/platform/ghrequests/get_cancelled_and_completed_ghrequests_for_user/' + vm.t.user_id,
+			data: {}
+		}).success(function (result) {
+			vm.t.arr_gh_data = result.arr_data;
+		});
+	};
+
+	// cancel
+	vm.cancel_ph = function(ph_id, $index) {
+		
+		//alert($index);
+		var result = $window.confirm('Are you sure you want to cancel?');
+
+		if (result) {
+			$http({
+			    method: 'POST',
+			    url: '/platform/phrequests/cancel_ph/' + ph_id,
+				data: { }
+			}).success(function (result) {
+				if (result.is_success) {
+					vm.t.arr_ph_data.splice($index, 1);
+					alert("Cancelled PH");
+					//alert('in here');
+				} else {
+					alert("Unable To Cancel PH");
+				}
+			});
+		}
+	}
+
+	vm.cancel_gh = function($id, $index) {
+		//alert('in here');
+		var temp_result = confirm("Are You Sure You Want To Cancel Gh Request #" + $id + "?");
+		if (temp_result) {
+			$http({
+			    method: 'POST',
+			    url: '/platform/ghrequests/cancel_gh_simple/' + $id,
+				data: { }
+			}).success(function (result) {
+				if (result.is_success) {
+					vm.t.arr_gh_data.splice($index, 1);
+					alert("Request Cancelled");
+				} else {
+					alert("Unable To Cancel GH");
+				}
+				//alert(result.arr_data);
+			});
+		}
+		
+	};
+
+
+	vm.open_set_password_dialog = function() {
+		var new_dialog = ngDialog.open({ id: 'update_set_password_dialog_id', closeByDocument: false, showClose: true, closeByEscape: true,  className: 'ngdialog-theme-default', template: 'set_password_dialog', controller: 'UpdatePasswordController', data: { user_id: vm.t.user_id, parent_vm: vm } });
+		// example on checking whether created `new_dialog` is open
+		$timeout(function() {
+			console.log(ngDialog.isOpen(new_dialog.id));
+		}, 2000)
+	};
+
+	vm.open_ph_dialog = function() {
+		var new_dialog = ngDialog.open({ id: 'create_ph_dialog_id', closeByDocument: false, showClose: true, closeByEscape: true,  className: 'ngdialog-theme-default', template: 'create_ph_dialog', controller: 'CreatePhController', data: { user_id: vm.t.user_id, parent_vm: vm } });
+		// example on checking whether created `new_dialog` is open
+		$timeout(function() {
+			console.log(ngDialog.isOpen(new_dialog.id));
+		}, 2000)
+	};
+
+	vm.open_gh_dialog = function() {
+		var new_dialog = ngDialog.open({ id: 'create_gh_dialog_id', closeByDocument: false, showClose: true, closeByEscape: true,  className: 'ngdialog-theme-default', template: 'create_gh_dialog', controller: 'CreateGhController', data: { user_id: vm.t.user_id, parent_vm: vm } });
+		// example on checking whether created `new_dialog` is open
+		$timeout(function() {
+			console.log(ngDialog.isOpen(new_dialog.id));
+		}, 2000)
+	};
+	
+	vm.open_block_dialog = function() {
+		var new_dialog = ngDialog.open({ id: 'bonus_game_dialog_id', closeByDocument: false, showClose: true, closeByEscape: true,  className: 'ngdialog-theme-default bonus-game-custom-width-details-dialog', template: 'block_dialog', controller: 'BlockController', data: { user_id: vm.t.user_id } });
+		// example on checking whether created `new_dialog` is open
+		$timeout(function() {
+			console.log(ngDialog.isOpen(new_dialog.id));
+		}, 2000)
+	};
+
+	vm.open_suspend_dialog = function() {
+		var new_dialog = ngDialog.open({ id: 'bonus_game_dialog_id', closeByDocument: false, showClose: true, closeByEscape: true,  className: 'ngdialog-theme-default bonus-game-custom-width-details-dialog', template: 'suspend_dialog', controller: 'SuspendController', data: { user_id: vm.t.user_id } });
+		// example on checking whether created `new_dialog` is open
+		$timeout(function() {
+			console.log(ngDialog.isOpen(new_dialog.id));
+		}, 2000)
+	};
+	
+	vm.open_adjust_dialog = function(wallet_name, user_id) {
+		var new_dialog = ngDialog.open({ id: 'bonus_game_dialog_id', closeByDocument: false, showClose: true, closeByEscape: true,  className: 'ngdialog-theme-default bonus-game-custom-width-details-dialog', template: 'adjust_balance_dialog', controller: 'AdjustController', data: { wallet_name: wallet_name, user_id:user_id, user_data: vm.t.data } });
+		// example on checking whether created `new_dialog` is open
+		$timeout(function() {
+			console.log(ngDialog.isOpen(new_dialog.id));
+		}, 2000)
+	};
+
+	vm.send_signup_email = function() {
+		//alert($scope.data.name);
+		
+		//alert(angular.toJson($scope.data));
+		var return_value = confirm("Are you sure you want to send a signup email? It will reset the password.");
+		if (return_value) {
+			$http({
+			    method: 'POST',
+			    url: '/platform/membersadmin/send_signup_email/' + vm.t.user_id,
+				data: { }
+			}).success(function (result) {
+				if (result.is_success) {
+					alert("Email Sent");
+				}
+				//alert(result.total_clicks);
+				//alert('here');
+				//alert(result);
+				//$scope.data = result;
+			});
+		}
+	};
+
+	$scope.save = function() {
+		//alert($scope.data.name);
+		
+		//alert(angular.toJson($scope.data));
+		$http({
+		    method: 'POST',
+		    url: '/segments/save/' + $scope.segment_id,
+			data: { data: $scope.data }
+		}).success(function (result) {
+			$window.location = "/segments";
+			//alert(result.total_clicks);
+			//alert('here');
+			//alert(result);
+			//$scope.data = result;
+		});
+	};
+
+	$scope.delete = function() {
+		var result = $window.confirm('Are you Sure you Want to delete?');
+		//alert(result);
+		if (result) {
+			$http({
+			    method: 'get',
+			    url: '/segments/delete/' + $scope.segment_id,
+			}).success(function (result) {
+				$window.location = "/segments";
+			});
+		}
+	};
+
+}]);
+
+</script>
+
+
+
+<div ng-controller="UpdateController as update_ctrl" >
+	<div class="page-title-header">
+		Edit Member: {{update_ctrl.t.data.login}}
+	</div>
+	<div class="flex_container">
+		<div class="col-xs-12 col-ms-9 col-sm-9" style="max-width:800px;">
+			<form novalidate>
+				<div class="col-xs-12" ng-show="update_ctrl.t.data.status_id == 3" style="color:#FF0000; font-size:24px; font-weight:900;">
+					BLOCKED
+				</div>
+				<div style="clear:both;"></div>
+				<div class="col-xs-12" ng-show="update_ctrl.t.data.status_id == 4" style="color:#FF0000; font-size:24px; font-weight:900;">
+					SUSPENDED
+				</div>
+				<div style="clear:both;"></div>
+				<div ng-show="update_ctrl.t.is_submit_error_message" style="" class="alert alert-danger" role="alert">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span class="sr-only">Error:</span>
+					Unable to Update Member
+				</div>
+				<div ng-show="update_ctrl.t.is_submit_success_message" style="" class="alert alert-success" role="alert">
+					Successfully Updated Member
+				</div>
+				<div class="col-xs-12">
+					<div style="padding-bottom:20px;">Update Information Below</div>
+				</div>
+				<div class="col-xs-12" style="padding-bottom:10px;">
+					<a target="_blank" href="/platform/import_old_data/show_old_data/{{update_ctrl.t.user_id}}"><button type="button" class="btn btn-primary">VIEW OLD SYSTEM IMPORT DATA</button></a>
+					<button type="button" ng-click="update_ctrl.send_signup_email()" class="btn btn-primary">SEND SIGNUP EMAIL (WILL RESET PASSWORD)</button>
+					<button type="button" ng-click="update_ctrl.open_set_password_dialog()" class="btn btn-primary">SET PASSWORD</button>
+				</div>
+				<div style="padding-bottom:10px;">
+					<div class="col-xs-12 col-ms-4 col-sm-4">
+						<div class="form-group" style="">
+							<div style="float:left;">
+								<button ng-click="update_ctrl.submit()" class="btn btn-primary">SUBMIT</button>
+							</div>
+							<div style="float:left; padding-left:5px;">
+								<a href="/platform/membersadmin/"><input type="button" value="CANCEL" class="btn btn-default"></a>
+							</div>
+							<div style="clear:both;"></div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-ms-8 col-sm-8" style="text-align:right;">
+						
+						<!--
+						<div ng-show="update_ctrl.t.is_show_approve_for_matching">
+							<button type="button" ng-click="update_ctrl.toggle_approve_for_matching()" class="btn btn-primary">APPROVED FOR MATCHING</button>
+						</div>
+						-->
+
+						<button type="button" ng-click="update_ctrl.open_ph_dialog()" class="btn btn-primary">CREATE PH</button>
+						<button type="button" ng-click="update_ctrl.open_gh_dialog()" class="btn btn-primary">CREATE GH</button>
+						<button type="button" ng-click="update_ctrl.open_block_dialog()" class="btn btn-primary">BLOCK</button>
+						<button type="button" ng-click="update_ctrl.open_suspend_dialog()" class="btn btn-primary">SUSPEND</button>
+					</div>
+				</div>
+				<div style="clear:both;"></div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Login</label>
+						<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty)}" ng-model="update_ctrl.t.data.login" name="login" type="text" class="form-control" placeholder="Login" required>
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Full Name</label>
+						<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty)}" ng-model="update_ctrl.t.data.fullname" name="fullname" type="text" class="form-control" placeholder="Enter Your Real Name" required>
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Country</label>
+						<select class="form-control" ng-model="update_ctrl.t.data.country" required name="Country" >
+								<?=$t->countries_drop_down_html?>
+							</select>
+
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+							<div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">BTC Address</label>
+						<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty)}" ng-model="update_ctrl.t.data.btc_address" name="btc_address" type="text" class="form-control" placeholder="BTC Address" required>
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Date Of Birth</label>
+						<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty)}" ng-model="update_ctrl.t.data.date_of_birth" name="date_of_birth" type="text" class="form-control" placeholder="DOB" required>
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Street Address</label>
+						<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty)}" ng-model="update_ctrl.t.data.complete_street_address" name="complete_street_address" type="text" class="form-control" placeholder="Street Address" required>
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Phone</label>
+						<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty)}" ng-model="update_ctrl.t.data.phone" name="fullname" type="text" class="form-control" placeholder="Phone" required>
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Approved For Matching</label>
+						<select class="form-control" ng-model="update_ctrl.t.data.is_approved_for_matching" required name="Approved For Matching" >
+							<option value="Y">Yes</option>
+							<option value="N">No</option>
+						</select>
+
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Is Manager</label>
+						<select class="form-control" ng-model="update_ctrl.t.data.is_manager" required name="is_manager" >
+							<option value="Y">Yes</option>
+							<option value="N">No</option>
+						</select>
+
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Is Admin</label>
+						<select class="form-control" ng-model="update_ctrl.t.data.is_admin" required name="is_admin" >
+							<option value="Y">Yes</option>
+							<option value="N">No</option>
+						</select>
+
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Is Registration Reviewed</label>
+						<select class="form-control" ng-model="update_ctrl.t.data.is_registration_reviewed" required name="is_admin" >
+							<option value="Y">Yes</option>
+							<option value="N">No</option>
+						</select>
+
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.is_registration_reviewed.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Status</label>
+						<select class="form-control" ng-model="update_ctrl.t.data.status_id" required name="status_id" >
+							<option value="1">ACTIVE STATUS</option>
+							<option value="3">BLOCKED STATUS</option>
+							<option value="4">SUSPENDED STATUS</option>
+						</select>
+
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Is Import Old Data Verified</label>
+						<select class="form-control" ng-model="update_ctrl.t.data.is_old_data_verified" required name="is_old_data_verified" >
+							<option value="Y">Yes</option>
+							<option value="N">No</option>
+						</select>
+
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.is_old_data_verified.$error" ng-if="profile_form.is_registration_reviewed.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">OTP</label>
+						<input ng-class="{field_error:(!profile_form.otp.$valid && profile_form.fullname.$dirty)}" ng-model="update_ctrl.t.data.otp" name="otp" type="text" class="form-control" placeholder="OTP" required>
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.otp.$error" ng-if="profile_form.otp.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<div style="clear:both;"></div>
+
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Sponsor</label>
+						<input ng-class="{field_error:(!profile_form.sponsor_email.$valid && profile_form.sponsor_email.$dirty)}" ng-model="update_ctrl.t.data.sponsor_email" name="otp" type="text" class="form-control" placeholder="Email" disabled>
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.sponsor_email.$error" ng-if="profile_form.sponsor_email.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+				</div>
+				<div style="clear:both;"></div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Is Allow GH To Match Restricted Countries</label>
+						<select class="form-control" ng-model="update_ctrl.t.data.is_allow_gh_to_match_restricted_countries" required name="is_admin" >
+							<option value="Y">Yes</option>
+							<option value="N">No</option>
+						</select>
+
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.is_allow_gh_to_match_restricted_countries.$error" ng-if="profile_form.is_allow_gh_to_match_restricted_countries.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Is Allow PH To Match Restricted Countries</label>
+						<select class="form-control" ng-model="update_ctrl.t.data.is_allow_ph_to_match_restricted_countries" required name="is_admin" >
+							<option value="Y">Yes</option>
+							<option value="N">No</option>
+						</select>
+
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.is_allow_ph_to_match_restricted_countries.$error" ng-if="profile_form.is_allow_ph_to_match_restricted_countries.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<div style="clear:both;"></div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">PH Completed Level</label>
+						<input ng-class="{field_error:(!profile_form.otp.$valid && profile_form.fullname.$dirty)}" ng-model="update_ctrl.t.data.ph_completed_level" name="ph_completed_level" type="text" class="form-control" placeholder="PH Completed Level" required>
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.ph_completed_level.$error" ng-if="profile_form.ph_completed_level.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+				</div>
+				<div style="clear:both;"></div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Is Test Match Account</label>
+						<select class="form-control" ng-model="update_ctrl.t.data.is_test_match_account" required name="is_test_match_account" >
+							<option value="Y">Yes</option>
+							<option value="N">No</option>
+						</select>
+
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.is_test_match_account.$error" ng-if="profile_form.is_test_match_account.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Is View Import Old Data Form</label>
+						<select class="form-control" ng-model="update_ctrl.t.data.is_view_old_data_form" required name="is_view_old_data_form" >
+							<option value="Y">Yes</option>
+							<option value="N">No</option>
+						</select>
+
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.is_view_old_data_form.$error" ng-if="profile_form.is_view_old_data_form.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<!--<div class="col-xs-12 col-ms-6 col-sm-6">
+				</div>
+				-->
+
+				<div style="clear:both;"></div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Photo ID</label>
+						<div style="max-width:500px;">
+							<img ng-src="/platform/membersadmin/get_photo_id/{{update_ctrl.t.data.id}}/" style="max-width:100%;">
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Government ID</label>
+						<div style="max-width:500px;">
+							<img ng-src="/platform/membersadmin/get_government_id/{{update_ctrl.t.data.id}}/" style="max-width:100%">
+						</div>
+					</div>
+				</div>
+				<div style="clear:both;"></div>
+				<div class="col-xs-12">
+					<h2>Bitcoin Addresses</h2>
+				</div>
+				<style>
+					.primary_btc_address {
+						color:green;
+						font-weight:900;
+					}
+					.archived_btc_address {
+						border: 2px solid red;
+					}
+				</style>
+				<div class="col-xs-12">
+					<table class="general_data_table" border=0 cellpadding=0 cellspacing=0 style="width:100%;">
+					<tr>
+						<th class="general_table_header">
+							BTC Address
+						</th>
+						<th class="general_table_header">
+							Created
+						</th>
+						<th class="general_table_header">
+							Is Archived
+						</th>
+					</tr>
+					<tr ng-if="!update_ctrl.t.is_loading && update_ctrl.t.arr_btc_a_data.length == 0" class="standard_fade">
+						<div class="col-xs-12 col-ms-6 col-sm-6">
+							No Additional BTC Addresses Found
+						</div>
+					</tr>
+		
+					<tr ng-repeat="data in update_ctrl.t.arr_btc_a_data" class="have_hover standard_fade">
+						<td class="general_table_cell">
+						
+							<div ng-class="{primary_btc_address: data.is_primary == 'Y'}">
+								{{data.btc_address}}
+							</div>
+						</td>
+						<td class="general_table_cell">
+							{{data.gm_created}} UTC
+						</td>
+						<td class="general_table_cell">
+							<div ng-show="data.status_id == update_ctrl.t.BTCAddresses.ARCHIVED_STATUS_ID">
+								YES
+							</div>
+							<div ng-show="data.status_id == update_ctrl.t.BTCAddresses.ACTIVE_STATUS_ID">
+								NO
+							</div>
+						</td>
+					</tr>
+					</table>
+				</div>
+				
+
+				<div style="clear:both; padding-top:20px;"></div>
+				<div class="col-xs-12">
+					<h2>Wallets</h2>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Level Income</label>
+						<div>
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="padding-left:0px;">
+								<input ng-model="update_ctrl.t.data.level_income_balance" type="text" class="form-control" disabled placeholder="Amount">
+							</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="padding-left:2px;">
+								<button type="button" ng-click="update_ctrl.open_adjust_dialog('level_income', update_ctrl.t.user_id)" class="btn btn-primary">ADJUST</button>
+								<a href="/platform/wallets/view/{{update_ctrl.t.user_id}}/level_income/" target="_blank">
+									<button type="button" class="btn btn-primary">VIEW</button>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Daily Growth</label>
+						<div>
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="padding-left:0px;">
+								<input ng-model="update_ctrl.t.data.daily_growth_balance" type="text" class="form-control" disabled placeholder="Amount">
+							</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="padding-left:2px;">
+								<button type="button" ng-click="update_ctrl.open_adjust_dialog('daily_growth', update_ctrl.t.user_id)" class="btn btn-primary">ADJUST</button>
+								<a href="/platform/wallets/view/{{update_ctrl.t.user_id}}/daily_growth/" target="_blank">
+									<button type="button" class="btn btn-primary">VIEW</button>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Daily Bonus Earnings</label>
+						<div>
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="padding-left:0px;">
+								<input ng-model="update_ctrl.t.data.daily_bonus_earning_balance" type="text" class="form-control" disabled placeholder="Amount">
+							</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="padding-left:2px;">
+								<button type="button" ng-click="update_ctrl.open_adjust_dialog('daily_bonus_earnings', update_ctrl.t.user_id)" class="btn btn-primary">ADJUST</button>
+								<a href="/platform/wallets/view/{{update_ctrl.t.user_id}}/daily_bonus_earnings/" target="_blank">
+									<button type="button" class="btn btn-primary">VIEW</button>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+					<div class="form-group">
+						<label class="form-label">Task Earnings</label>
+						<div>
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="padding-left:0px;">
+								<input ng-model="update_ctrl.t.data.task_earning_balance" type="text" class="form-control" disabled placeholder="Amount">
+							</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="padding-left:2px;">
+								<button type="button" ng-click="update_ctrl.open_adjust_dialog('task_earnings', update_ctrl.t.user_id)" class="btn btn-primary">ADJUST</button>
+								<a href="/platform/wallets/view/{{update_ctrl.t.user_id}}/task_earnings/" target="_blank">
+									<button type="button" class="btn btn-primary">VIEW</button>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6">
+				</div>
+				<div style="clear:both;"></div>
+				<!--
+				<div class="form-group" style="padding-top:10px;">
+						<div style="float:left; padding-left:10px;">
+							<button ng-click="update_ctrl.submit()" class="btn btn-primary">SUBMIT</button>
+						</div>
+						<div style="float:left; padding-left:10px;">
+							<a href="/platform/membersadmin/"><input type="button" value="CANCEL" class="btn btn-default"></a>
+						</div>
+				</div>
+				<div style="clear:both;"></div>
+				-->
+
+				<div style="float:left; padding-bottom:10px; padding-top:10px;">
+					<h3 style="margin:0px; padding-top:4px;">PH Orders</h3>
+				</div>
+
+				<div style="float:right; padding-bottom:10px; padding-top:10px;">
+					<div ng-show="update_ctrl.t.toggle_is_show_active_ph">
+						<button ng-click="update_ctrl.get_cancelled_and_completed_ph()" class="btn btn-primary">VIEW CANCELLED AND COMPLETED</button>
+					</div>
+					<div ng-show="!update_ctrl.t.toggle_is_show_active_ph">
+						<button ng-click="update_ctrl.refresh_ph_orders()" class="btn btn-primary">VIEW ACTIVE</button>
+					</div>
+				</div>
+				<div style="clear:both;"></div>
+				<div ng-repeat="ph_data in update_ctrl.t.arr_ph_data" class="standard_fade">
+					<div style="" class="ph_order_container">
+						
+						<div style="width:100%; padding-left:2px; padding-right:2px;">
+							<div class="col-xs-2 col-ms-2 col-sm-2" style="text-align:left; padding-left:0px;"><img width="40" ng-src="/platform/images/forward_button.png"></div>
+							<div class="col-xs-10 col-ms-8 col-sm-8" style="text-align:center;">Request to BMHPH{{ph_data.id}}</div>
+							<div class="col-xs-12 col-ms-2 col-sm-2" style="text-align:right;">
+								<div ng-show="ph_data.status_id == update_ctrl.t.PHRequests.ACTIVE_STATUS_ID">
+									<button type="button" ng-click="update_ctrl.cancel_ph(ph_data.id, $index)" class="btn btn-primary">CANCEL</button>
+								</div>
+								<div ng-show="ph_data.status_id == update_ctrl.t.PHRequests.COMPLETED_STATUS_ID">
+									COMPLETED
+								</div>
+								<div ng-show="ph_data.status_id == update_ctrl.t.PHRequests.CANCELLED_STATUS_ID">
+									CANCELLED
+								</div>
+							</div>
+							<div style="clear:both;"></div>
+						</div>
+						<div style="padding-top:20px;">
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="float:left;">Participant:</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="float:left;">{{ph_data.fullname}}</div>
+							<div style="clear:both;"></div>
+
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="float:left;">PH Amount:</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="float:left;">{{ph_data.amount}} USD</div>
+							<div style="clear:both;"></div>
+
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="float:left;">PH Date:</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="float:left;">{{ph_data.gm_created}} UTC</div>
+							<div ng-show="ph_data.status_id == update_ctrl.t.PHRequests.COMPLETED_STATUS_ID">
+								<div class="col-xs-12 col-ms-6 col-sm-6" style="float:left;">PH Date Completed:</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6" style="float:left;">{{ph_data.completed_gm_date_time}} UTC</div>
+							</div>
+							<div style="clear:both;"></div>
+						</div>
+					</div>
+				</div>
+
+				<div style="float:left; padding-bottom:10px; padding-top:10px;">
+					<h3 style="margin:0px; padding-top:4px;">GH Orders</h3>
+				</div>
+				<div style="float:right; padding-bottom:10px; padding-top:10px;">
+					<div ng-show="update_ctrl.t.toggle_is_show_active_gh">
+						<button ng-click="update_ctrl.get_cancelled_and_completed_gh()" class="btn btn-primary">VIEW CANCELLED AND COMPLETED</button>
+					</div>
+					<div ng-show="!update_ctrl.t.toggle_is_show_active_gh">
+						<button ng-click="update_ctrl.refresh_gh_orders()" class="btn btn-primary">VIEW ACTIVE</button>
+					</div>
+				</div>
+				<div style="clear:both;"></div>
+
+				<div ng-repeat="gh_data in update_ctrl.t.arr_gh_data track by $index">
+					<div style="" class="gh_order_container">
+						<div class="col-xs-2" style="padding-left:0px;"><img width="40" ng-src="/platform/images/forward_button.png"></div>
+						<div class="col-xs-8" style="text-align:center;">Request to BMHGH{{gh_data.id}}</div>
+						<div class="col-xs-2" style="text-align:right;">
+								<div ng-show="gh_data.status_id == update_ctrl.t.GHRequests.ACTIVE_STATUS_ID">
+									<button type="button" ng-click="update_ctrl.cancel_gh(gh_data.id, $index)" class="btn btn-primary">CANCEL</button>
+								</div>
+								<div ng-show="gh_data.status_id == update_ctrl.t.GHRequests.COMPLETED_STATUS_ID">
+									COMPLETED
+								</div>
+								<div ng-show="gh_data.status_id == update_ctrl.t.GHRequests.CANCELLED_STATUS_ID">
+									CANCELLED
+								</div>
+						</div>
+
+						<div style="clear:both;"></div>
+						<div style="padding-top:20px;">
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="float:left;">Participant:</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="float:left;">{{gh_data.fullname}}</div>
+							<div style="clear:both;"></div>
+
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="float:left;">GH Amount:</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="float:left;">{{gh_data.amount}} USD</div>
+							<div style="clear:both;"></div>
+
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="float:left;">GH Date:</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6" style="float:left;">{{gh_data.gm_created}} UTC</div>
+							<div style="clear:both;"></div>
+						</div>
+					</div>
+				</div>
+
+
+			</form>
+		</div>
+	</div>
+</div>
+
+<script type="text/ng-template" id="create_gh_dialog">
+		<div style="padding-top:8px;">
+			<label class="form-label">Create GH</label>
+		</div>
+
+		<div ng-show="t.is_submit_error_message" style="margin-bottom:0px !important;" class="alert alert-danger" role="alert">
+			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+			<span class="sr-only">Error:</span>
+			Invalid GH Amount
+		</div>
+		<div style="padding-top:8px;">
+			<label class="form-label">Level Income</label>
+		</div>
+		<div style="padding-bottom:4px;">
+			<input ng-model="t.form_data.level_income_amount" type="text" class="form-control" placeholder="Amount">
+		</div>
+		<div style="padding-top:8px;">
+			<label class="form-label">Daily Bonus Earnings</label>
+		</div>
+		<div style="padding-bottom:4px;">
+			<input ng-model="t.form_data.daily_bonus_earnings_amount" type="text" class="form-control" placeholder="Amount">
+		</div>
+		<div style="padding-top:8px;">
+			<label class="form-label">Daily Growth</label>
+		</div>
+		<div style="padding-bottom:4px;">
+			<input ng-model="t.form_data.daily_growth_amount" type="text" class="form-control" placeholder="Amount">
+		</div>
+		<div style="padding-top:8px;">
+			<label class="form-label">Task Earnings</label>
+		</div>
+		<div style="padding-bottom:4px;">
+			<input ng-model="t.form_data.task_earnings_amount" type="text" class="form-control" placeholder="Amount">
+		</div>
+		<div style="padding-bottom:8px; padding-top:8px;">
+			<button type="button" ng-click="create_gh()" class="btn btn-primary">CREATE</button>
+		</div>
+		<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+			<div ng-message="required">Required</div>
+		</div>
+</script>
+
+<script type="text/ng-template" id="create_ph_dialog">
+		<div style="padding-top:8px;">
+			<label class="form-label">Create PH</label>
+		</div>
+		<div ng-show="t.is_submit_error_message" style="margin-bottom:10px !important;" class="alert alert-danger" role="alert">
+			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+			<span class="sr-only">Error:</span>
+			Invalid PH Amount
+		</div>
+		<div style="padding-bottom:4px;">
+			<input ng-model="t.form_data.amount" type="text" class="form-control" placeholder="Amount">
+		</div>
+		<div style="padding-bottom:8px; padding-top:8px;">
+			<button type="button" ng-click="create_ph()" class="btn btn-primary">CREATE</button>
+		</div>
+		<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+			<div ng-message="required">Required</div>
+		</div>
+</script>
+
+<script>
+app.controller('AdjustController', ['$scope', '$http', '$window', 'ngDialog', function($scope, $http, $window, ngDialog) {
+	var vm = this;
+	
+
+	$scope.t = {};
+
+	//alert($scope.ngDialogData.wallet_name);
+	var form_data = {};
+	if ($scope.ngDialogData.wallet_name == 'task_earnings' ) {
+		$scope.t.wallet_name = "Task Earnings";
+	} else if ($scope.ngDialogData.wallet_name == 'level_income' ) {
+		$scope.t.wallet_name = "Level Income";
+	} else if ($scope.ngDialogData.wallet_name == 'daily_bonus_earnings' ) {
+		$scope.t.wallet_name = "Daily Bonus Earnings";
+	} else if ($scope.ngDialogData.wallet_name == 'daily_growth' ) {
+		$scope.t.wallet_name = "Daily Growth";
+	}
+
+	$scope.form_data = {};
+
+	$scope.adjust_reason = "";
+
+	
+	$scope.form_data.is_frozen = "N";
+	$scope.form_data.number_days_frozen = "30";
+	$scope.form_data.is_release_part_of_balance_on_ph_complete = "N";
+
+	//alert($scope.ngDialogData.user_id);
+	$scope.make_adjustment = function() {
+		//alert($scope.data.name);
+		
+		
+		//alert(angular.toJson($scope.data));
+		$http({
+		    method: 'POST',
+		    url: '/platform/membersadmin/adjust_wallet/' + $scope.ngDialogData.wallet_name + "/" + $scope.ngDialogData.user_id,
+			data: { data: $scope.form_data }
+		}).success(function (result) {
+			if (result.is_success) {
+				if ($scope.form_data.is_frozen == "N") { 
+					if ($scope.ngDialogData.wallet_name == 'task_earnings' ) {
+						$scope.ngDialogData.user_data.task_earning_balance = (+$scope.ngDialogData.user_data.task_earning_balance) + (+$scope.form_data.amount);
+					} else if ($scope.ngDialogData.wallet_name == 'level_income' ) {
+						$scope.ngDialogData.user_data.level_income_balance = (+$scope.ngDialogData.user_data.level_income_balance) + (+$scope.form_data.amount);
+					} else if ($scope.ngDialogData.wallet_name == 'daily_bonus_earnings' ) {
+						$scope.ngDialogData.user_data.daily_bonus_earning_balance = (+$scope.ngDialogData.user_data.daily_bonus_earning_balance) + (+$scope.form_data.amount);
+					} else if ($scope.ngDialogData.wallet_name == 'daily_growth' ) {
+						$scope.ngDialogData.user_data.daily_growth_balance = (+$scope.ngDialogData.user_data.daily_growth_balance) + (+$scope.form_data.amount);
+					}
+				}
+				
+				$scope.closeThisDialog();
+				//alert('Balance Adjusted');
+
+			}
+			//alert(result.total_clicks);
+			//alert('here');
+			//alert(result);
+			//$scope.data = result;
+		});
+	};
+}]);
+</script>
+<script type="text/ng-template" id="adjust_balance_dialog">
+		<div style="padding-top:8px;">
+			<label class="form-label">Adjust {{t.wallet_name}}</label>
+		</div>
+		<div style="padding-bottom:4px;">
+			<input ng-model="form_data.amount" type="text" class="form-control" placeholder="Amount">
+		</div>
+		<div style="padding-bottom:4px; padding-top:4px;">
+			<textarea class="form-control" rows="3" ng-model="form_data.adjust_reason" placeholder="Enter Your Reason Here" ></textarea>
+		</div>
+		<div style="padding-bottom:4px; padding-top:4px;">
+			<div>Is Frozen?</div>
+			<select class="form-control" ng-model="form_data.is_frozen" name="is_frozen" >
+				<option value="N">No</option>
+				<option value="Y">Yes</option>
+			</select>
+		</div>
+		<div ng-show="form_data.is_frozen == 'Y'" style="padding-bottom:4px; padding-top:4px;">
+			<div>Number Days Frozen</div>
+			<select class="form-control" ng-model="form_data.number_days_frozen" name="number_days_frozen">
+				<option value="">No Expiration</option>
+				<option value="90">90</option>
+				<option value="60">60</option>
+				<option value="45">45</option>
+				<option value="30">30</option>
+				<option value="25">25</option>
+				<option value="20">20</option>
+				<option value="15">15</option>
+				<option value="10">10</option>
+				<option value="5">5</option>
+				<option value="4">4</option>
+				<option value="3">3</option>
+				<option value="2">2</option>
+				<option value="1">1</option>
+			</select>
+		</div>
+		<div ng-show="form_data.is_frozen == 'Y'" style="padding-bottom:4px; padding-top:4px;">
+			<div>Release Part Of Balance On PH Complete?</div>
+			<select class="form-control" ng-model="form_data.is_release_part_of_balance_on_ph_complete" name="is_release_part_of_balance_on_ph_complete" >
+				<option value="N">No</option>
+				<option value="Y">Yes</option>
+			</select>
+		</div>
+		<div style="padding-bottom:8px; padding-top:8px;">
+			<button type="button" ng-click="make_adjustment()" class="btn btn-primary">ADJUST</button>
+		</div>
+		<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+		    <div ng-message="required">Required</div>
+		</div>
+</script>
+
+<script type="text/ng-template" id="block_dialog">
+		<div style="padding-top:8px;">
+			<label class="form-label">Block Account</label>
+		</div>
+		<div style="padding-bottom:4px; padding-top:4px;">
+			<textarea class="form-control" rows="3" ng-model="t.form_data.block_reason" placeholder="Enter Your Reason Here" ></textarea>
+		</div>
+		<div style="padding-bottom:8px; padding-top:8px;">
+			<button type="button" ng-click="block_account()" class="btn btn-primary">BLOCK</button>
+		</div>
+		<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+		    <div ng-message="required">Required</div>
+		</div>
+
+</script>
+
+<script type="text/ng-template" id="suspend_dialog">
+		<div style="padding-top:8px;">
+			<label class="form-label">Suspend Account</label>
+		</div>
+		<div style="padding-bottom:4px; padding-top:4px;">
+			<textarea class="form-control" rows="3" ng-model="t.form_data.suspend_reason" placeholder="Enter Your Reason Here" ></textarea>
+		</div>
+		<div style="padding-bottom:8px; padding-top:8px;">
+			<button type="button" ng-click="suspend_account()" class="btn btn-primary">SUSPEND</button>
+		</div>
+		<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+		    <div ng-message="required">Required</div>
+		</div>
+
+</script>
+
+<script type="text/ng-template" id="set_password_dialog">
+		<div style="padding-top:8px;">
+			<label class="form-label">Set Password</label>
+		</div>
+		<div style="padding-bottom:4px;">
+			<input ng-model="t.form_data.password" type="text" class="form-control" placeholder="Password">
+		</div>
+		<div style="padding-bottom:8px; padding-top:8px;">
+			<button type="button" ng-click="update_password()" class="btn btn-primary">UPDATE PASSWORD</button>
+		</div>
+		<div style="color:red; font-weight:bold" ng-messages="profile_form.password.$error" ng-if="profile_form.password.$dirty">
+			<div ng-message="required">Required</div>
+		</div>
+</script>

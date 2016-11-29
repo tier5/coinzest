@@ -1,0 +1,314 @@
+<script>
+
+	  app.controller('PageController', ['$scope', '$http', '$window', function($scope, $http, $window) {
+
+		var vm = this;
+		vm.arr_data = [];
+
+
+		vm.t = {};
+
+		vm.search = "";
+	
+		
+		vm.t.is_loading_data = true;
+		vm.t.is_initial_loading = true;
+
+		$http({
+		    method: 'POST',
+		    url: '/platform/membersadmin/get_data/',
+			data: { search: vm.search }
+		}).success(function (result) {
+			if (result.is_success) {
+				vm.arr_data = result.arr_data;
+				
+			}
+			vm.t.is_loading_data = false;
+			vm.t.is_initial_loading = false;
+		});
+
+
+		$scope.edit_click = function(index) {
+			$window.location = "/platform/membersadmin/edit/" + index;
+			
+		};
+
+		$scope.delete_click = function(index) {
+			var result = $window.confirm('Are you sure you want to delete?');
+                        if (result) {
+                                $http({
+                                    method: 'get',
+                                    url: '/segments/delete/' + index,
+                                }).success(function (result) {
+                                        $window.location = "/segments";
+                                });
+                        }
+		};
+
+
+		vm.t.is_have_old_data = "";
+		vm.t.is_registration_reviewed = "";
+		vm.t.btc_address = "";
+
+		vm.search_submission = function() {
+			vm.t.is_loading_data = true;
+			//alert('in here');
+			$http({
+			    method: 'POST',
+			    url: '/platform/membersadmin/get_data/',
+				data: { search: vm.search, btc_address: vm.t.btc_address, is_have_old_data: vm.t.is_have_old_data, is_registration_reviewed: vm.t.is_registration_reviewed }
+			}).success(function (result) {
+				if (result.is_success) {
+					vm.arr_data = result.arr_data;
+				}
+				vm.t.is_loading_data = false;
+				//alert(result.arr_data);
+			});
+			
+		};
+
+
+	}]);
+
+	app.controller('UploaderController',['$scope', 'Upload', '$timeout', function ($scope, Upload, $timeout) {
+		$scope.$watch('file', function () {
+			if ($scope.file != null) {
+			    $scope.files = [$scope.file]; 
+				$scope.upload($scope.files);
+			}
+		});
+		$scope.log = '';
+		var temp = '';
+		$scope.is_uploading = false;
+		$scope.percentage_complete = "";
+		$scope.is_processing_upload = false;
+
+		$scope.upload = function (files) {
+			console.log('starting upload');
+			if (files && files.length) {
+				for (var i = 0; i < files.length; i++) {
+					var file = files[i];
+					console.log('starting file');
+					if (!file.$error) {
+						Upload.upload({
+							url: '/platform/membersadmin/csv_import/',
+							data: {
+								file: file  
+							}
+						}).then(function (resp) {
+							$timeout(function() {
+								$scope.log = 'file: ' +
+								resp.config.data.file.name +
+								', Response: ' + JSON.stringify(resp.data) +
+								'\n' + $scope.log;
+								var response = 'Response: ' + JSON.stringify(resp.data);
+								if (resp.data.unable_to_find_proper_fields) {
+									alert('Unable to parse csv file. Make sure it is tab delimited.');
+								} else {
+									var m = "";
+									/*
+									if (resp.data.arr_missing_segments.length > 0) {
+										m = "Could not find the following segments: ";
+										for(var i =0; i < resp.data.arr_missing_segments.length;i++) {
+											m = m + resp.data.arr_missing_segments[i] + ", ";
+										}
+									}
+									*/
+									m = m.replace(/[, ]+$/,'');
+									//alert(resp.data.arr_missing_segments);
+									var s = resp.data.number_records_processed + " records processed. " + resp.data.number_records_inserted + " new records and " + resp.data.number_records_updated + " records updated and " + resp.data.number_records_skipped + " records skipped. " + resp.data.number_emails_sent + " emails sent. " + resp.data.number_sending_emails_skipped + " emails skipped.";
+									if (m != "") {
+										s += " " + m;
+									}
+									alert(s);
+								}
+							});
+							$scope.is_uploading = false;
+							$scope.is_processing_upload = false;
+						}, null, function (evt) {
+							var progressPercentage = parseInt(100.0 *
+							evt.loaded / evt.total);
+							$scope.is_uploading = true;
+							if (progressPercentage == 100) {
+								$scope.is_uploading = false;
+								$scope.is_processing_upload = true;
+								//$scope.percentage_complete = "<div style='color:#ff0000; font-weight:900;'>processing csv file. p</div>";
+							} else {
+								$scope.percentage_complete = "file uploading: " + progressPercentage + "%";
+							}
+							$scope.log = 'progress: ' + progressPercentage + 
+							'% ' + evt.config.data.file.name + '\n' + 
+							$scope.log;
+							//temp = 'progress: ' + progressPercentage + '% ' + evt.config.data.file.name + '\n';
+							//temp = 'progress: ' + evt.loaded + '\n';
+							//console.log(temp);
+						});
+					}
+				}
+			}
+		};
+	}]);
+
+
+
+</script>
+
+<style>
+
+	.table_header {
+		font-weight:900;
+	}
+	td {
+		padding-left:10px;
+		padding-right:10px;
+	}
+
+	.data_table_odd_cell {
+
+		background-color: #f8f8f8;
+		border-bottom:1px solid  #d8d8d8;
+		padding-top:13px;
+		padding-bottom:13px;
+	}
+
+
+	.data_table_even_cell {
+		background-color: #ffffff;
+		border-bottom:1px solid  #d8d8d8;
+		padding-top:13px;
+		padding-bottom:13px;
+	}
+
+	.data_table > tr:hover > td {
+		background-color: #ffff99;
+	}
+
+	tr.have_hover:hover > td {
+		background-color: #add8e6;
+	}
+
+	td.clickable:hover {
+		cursor:pointer;
+	}
+
+	th {
+		padding-left:10px !important;
+		padding-right:10px !important;
+	}
+</style>
+<div class="page-title-header">
+	Member Admin
+</div>
+
+<div ng-controller="PageController as page_ctrl">
+
+	<div style="clear:both;"></div>
+
+
+<div class="flex_container">
+	<div ng-show="!page_ctrl.t.is_initial_loading" class="full-standard-fade">
+		<div style="display:table; width:100%;">
+			<div style="display:table-cell; padding-left:20px;">
+				<div class="form-group">
+				<div style="clear:both;"></div>
+				<div style="float:left; width:290px;">
+					<label for="search">Search:</label>
+					<div style="clear:both;"></div>
+					<div style="float:left;">
+						<input type="text" ng-model="page_ctrl.search" class="form-control" ng-keyup="$event.keyCode == 13 && page_ctrl.search_submission()" placeholder="Enter Your Search">
+					</div>
+					<div style="float:left; padding-left:10px;">
+					  <button type="btn" ng-click="page_ctrl.search_submission()" class="btn btn-primary">Search</button>
+					</div>
+					<div style="clear:both;"></div>
+				</div>
+				<div style="float:left; width:220px;">
+					<label for="is_have_old_data">Is Have Old Data & Unverified:</label>
+					
+					<select class="form-control" ng-model="page_ctrl.t.is_have_old_data" required name="is_have_old_data" >
+						<option value="Y">Yes</option>
+						<option value="N">No</option>
+					</select>
+				</div>
+
+				<div style="float:left; width:220px; padding-left:20px;">
+					<label for="is_have_old_data">Needs Review</label>
+					<select class="form-control" ng-model="page_ctrl.t.is_registration_reviewed" required name="is_registration_reviewed" >
+						<option value="Y">Yes</option>
+						<option value="N">No</option>
+					</select>
+
+				</div>
+				<div style="float:left; width:220px; padding-left:20px;">
+					<label for="btc_address">BTC Address</label>
+					<input type="text" name="btc_address" ng-model="page_ctrl.t.btc_address" class="form-control" ng-keyup="$event.keyCode == 13 && page_ctrl.search_submission()" placeholder="Enter A BTC Address">
+				</div>
+
+				<div style="float:right; vertical-align:bottom; padding-right:40px;">
+					<label for="email">&nbsp;</label>
+					<div ng-controller="UploaderController">
+						<div>
+						<button type="btn" ngf-select ng-model="file" ngf-multiple="false" class="btn btn-primary">CSV Import</button>
+						</div>
+						<div ng-show="is_uploading" style="color:#000000;">
+							{{percentage_complete}}
+						</div>
+						<div ng-show="is_processing_upload" style="color:#ff0000; font-weight:900;">
+							Processing Upload.<br>Please Wait.<br>It could take a few minutes.
+						</div>
+					</div>
+				</div>
+				<div style="clear:both;"></div>
+				</div>
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+
+		<table  style="border-collapse: collapse; margin:10px;"  class="data_table">
+		<tr>
+		<th class="table_header">Sr. No</th>
+		<th class="table_header">Login</th>
+		<th class="table_header">Full Name</th>
+		<th class="table_header">Mobile</th>
+		<th class="table_header">GH Balance</th>
+		<th class="table_header">PH Confirmed</th>
+		<th class="table_header">PH Unconfirmed</th>
+		<th class="table_header">PH Total</th>
+		<th class="table_header" width="150">Join Date</th>
+		<th colspan="1"></th>
+		</tr>
+		<tr ng-if="!page_ctrl.t.is_loading_data && page_ctrl.arr_data.length == 0">
+			<td colspan="11">
+			      <strong>No results found...</strong>
+			</td>
+		</tr>
+		<tr ng-if="page_ctrl.t.is_loading_data">
+			<td colspan="11">
+			      <strong>Loading Data...</strong>
+			</td>
+		</tr>
+
+		<tr class="have_hover" ng-show="!page_ctrl.t.is_loading_data" ng-repeat="data in page_ctrl.arr_data track by $index">
+		<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{$index+1}}</td>
+		<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{data.login}}</td>
+		<td ng-class-odd="'data_table_odd_cell clickable'" ng-class-even="'data_table_even_cell clickable'" ng-click="edit_click(data.id)" ><a href="/platform/membersadmin/edit/{{data.id}}">{{data.fullname}}</a></td>
+		<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">+{{data.phone}}</td>
+		<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">$ {{data.gh_balance}}</td>
+		<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">$ {{data.confirmed_ph}}</td>
+		<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">$ {{data.unconfirmed_ph}}</td>
+		<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">$ {{data.total_ph}}</td>
+		<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="width:200px !important;">{{data.gm_created}} UTC</td>
+		<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
+			<a href="/platform/membersadmin/edit/{{data.id}}"><button ng-click="edit_click(data.id)" type = "button" class = "btn btn-success">Edit</button></a>
+		</td>
+		<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
+		</td>
+			
+		</td>
+		</tr>
+		</table>
+	</div>
+</div>
+
+
+</div>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<head profile="http://gmpg.org/xfn/11">
+<link rel="shortcut icon" href="/images/ico/bookmark.ico" type="image/vnd.microsoft.icon"/>
+<link rel="icon" href="/images/ico/bookmark.ico" type="image/x-ico"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Estimator Tool</title>
+
+<link rel="stylesheet" href="/BackEnd/Template/css/style.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="/css/table.css">
+
+<!--<script src="/js/libs/angular.min.js"></script>-->
+
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-sanitize.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-messages.js"></script>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!--<script src="/js/libs/jquery-3.0.0.min.js" type="text/javascript"></script>-->
+<link rel="stylesheet" href="/js/libs/jquery-ui.css">
+<script src="/js/libs/jquery-ui.js"></script>
+<script src="/js/ui-select/select.js"></script>
+<link rel="stylesheet" href="/js/ui-select/select.css">
+
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<style type="text/css" media="all">
+
+
+body {
+	background-color:#FFFFFF;
+}
+</style>
+
+ </head>
+
+<body id="home" ng-app="myApp">
+
+	<script>
+	 var app = angular.module('myApp', ['ngSanitize', 'ui.select','ngMessages']);
+
+	 app.controller('headerController', ['$scope', '$location','$window', function($scope, $location, $window) {
+		//alert($location.url());
+		//alert($window.location);
+		var current_location = String($window.location);
+		//alert(current_location);
+
+		var arr_split = [];
+		var arr_split = current_location.split("/");
+
+		var current_path = "";
+		if (arr_split.length >= 4) {
+			current_path = arr_split[3];
+		}
+		//alert(arr_split[3]);
+		//alert(current_path);
+		$scope.active_state = "";
+		//alert(current_location);
+		//alert(path);
+		if (current_path == "constants") {
+			$scope.active_state = "constants";
+		} else if (current_path == "segments") {
+			$scope.active_state = "segments";
+		} else if (current_path == "servicegroups") {
+			$scope.active_state = "service_groups";
+		} else if (current_path == "zipcodepopulations") {
+			$scope.active_state = "zipcode_populations";
+			//alert($window.location);
+		} else {
+			$scope.active_state = "master";
+			//alert($window.location);
+		}
+		/*
+		if (current_location.match(/constants(\/)*$/) !== null) {
+			$scope.active_state = "constants";
+			//alert($window.location);
+		} else if (current_location.match(/segments(\/)*$/) !== null) {
+			$scope.active_state = "segments";
+		} else if (current_location.match(/servicegroups(\/)*$/) !== null) {
+			$scope.active_state = "service_groups";
+		} else if (current_location.match(/zipcodepopulations(\/)*$/) !== null) {
+			$scope.active_state = "zipcode_populations";
+			//alert($window.location);
+		} else {
+			$scope.active_state = "master";
+			//alert($window.location);
+		}
+		*/
+		//alert($scope.active_state);
+		
+		
+	}]);
+
+		angular.element(document).ready(function() {
+			//angular.bootstrap(document, ['headerState']);
+		});
+
+	</script>
+
+<!-- Fixed navbar -->
+    <nav ng-controller="headerController" class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Estimator</a>
+        </div>
+      </div>
+    </nav>
+	<div style="padding-top:60px;">
+
+		<?=$t->contents_html?>
+	</div>
+</body>  
+</html> 

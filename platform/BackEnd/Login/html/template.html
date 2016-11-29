@@ -1,0 +1,96 @@
+
+
+<style>
+	td {
+		padding-left: 20px;
+	}
+</style>
+
+
+<script>
+
+	// this is the directive you add to any element you want to highlight after creation
+	app.directive('autoFocus', function() {
+	    return {
+		link: {
+		    pre: function preLink(scope, element, attr) {
+			//console.debug('prelink called');
+			// this fails since the element hasn't rendered
+			//element[0].focus();
+		    },
+		    post: function postLink(scope, element, attr) {
+			//console.debug('postlink called');
+			// this succeeds since the element has been rendered
+			element[0].focus();
+		    }
+		}
+	    }
+	});
+
+
+	  app.controller('Controller', ['$scope', '$http', '$window', function($scope, $http, $window) {
+
+		var vm = this;
+		//alert(angular);
+		//angular.element('.login-field').focus()
+		$scope.login = '';
+		$scope.password = '';
+		$scope.is_display_auth_error = false;
+		$scope.is_authenticating = false;
+		$scope.submit = function() {
+			// submit process login
+			// if successful redirect to main page
+			$scope.is_authenticating = true;
+			$http({
+			    method: 'POST',
+			    url: '/login/authenticate/' + $scope.login + '/' + $scope.password,
+				data: { 
+					login: $scope.login,
+					password: $scope.password,
+				 }
+			}).success(function (result) {
+				//alert(result.total_clicks);
+				if (result.is_auth_success) {
+					$window.location = '/';
+					//alert('auth successful');
+				} else {
+					$scope.is_display_auth_error = true;
+					$scope.is_authenticating = false;
+					//alert('auth not successful');
+				}
+			});
+
+		};
+	    }]);
+
+	</script>
+
+<div ng-controller="Controller" style="width:800px; padding-left:10px;float:left;">
+	<table  style="border-collapse: collapse;">
+	<tr>
+	<td>
+		<div class="form-group">
+			<label class="form-label">Login</label>
+			<input ng-model="login" type="text" class="form-control login-field" auto-focus placeholder="Login">
+		</div>
+	</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="form-group">
+				<label class="form-label">Password</label>
+				<input ng-model="password"  type="password" class="form-control" ng-keyup="$event.keyCode == 13 && submit()" placeholder="Password">
+			</div>
+		</td>
+	</tr>
+	<tr ng-show="is_display_auth_error">
+	<td>
+		<div style="padding-bottom:10px; weight:900; color: red;">Login and Password do not match</div>
+	</td>
+	</tr>
+	</table>
+	<div style="float:left; padding-left:20px;">
+		<input type="button" ng-click="submit()" value="Login" class="btn btn-primary">
+	</div>
+	<div ng-show="is_authenticating" style="line-height:35px; padding-left:10px; float:left;padding-bottom:10px; weight:900; color: green;">Please Wait Authenticating....</div>
+</div>

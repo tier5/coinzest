@@ -1,0 +1,42 @@
+$scope.uploader = Upload.upload({
+							url: '/platform/matchedrequests/image_receipt_upload/',
+							data: {
+								file: file,
+								matchedrequest_id: matchedrequest_id
+							}
+						}).then(function (resp) {
+							$timeout(function() {
+								/*
+								$scope.log = 'file: ' +
+								resp.config.data.file.name +
+								', Response: ' + JSON.stringify(resp.data) +
+								'\n' + $scope.log;
+								var response = 'Response: ' + JSON.stringify(resp.data);
+								*/
+								//$scope.closeThisDialog();
+								if (resp.data.is_success) {
+									$timeout(function() {
+										$scope.t.upload_image_url = "/platform/matchedrequests/get_image_receipt/" + $scope.ngDialogData.mr_data.id + "/";
+										$scope.t.is_confirm_image = true;
+									}, 1000);
+									//$scope.ngDialogData.mr_data.is_have_image_receipt = 'Y';
+								} else {
+								}
+							});
+							$scope.is_uploading = false;
+							$scope.is_processing_upload = false;
+						}, null, function (evt) {
+							var progressPercentage = parseInt(100.0 *
+							evt.loaded / evt.total);
+							$scope.is_uploading = true;
+							if (progressPercentage == 100) {
+								$scope.is_uploading = false;
+								$scope.is_processing_upload = true;
+							} else {
+								$scope.percentage_complete = "file uploading: " + progressPercentage + "%";
+							}
+							$scope.log = 'progress: ' + progressPercentage + 
+							'% ' + evt.config.data.file.name + '\n' + 
+							$scope.log;
+						});
+

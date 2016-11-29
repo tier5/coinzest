@@ -1,0 +1,278 @@
+<script>
+
+	  app.controller('PageController', ['$scope', '$http', '$window','$filter', function($scope, $http, $window, $filter) {
+
+		var vm = this;
+		vm.arr_data = [];
+
+		$scope.search = "";
+		$scope.number_per_page = 100;
+
+
+	
+		// view data
+		vm.t = {};
+		vm.t.arr_balance = [];
+		vm.t.is_loading_results = true;
+
+		vm.WalletLogs = WalletLogs;
+
+		var current_location = String($window.location);
+		//alert(current_location);
+
+
+		var arr_split = [];
+		var arr_split = current_location.split("/");
+
+		var wallet_name = "";
+		var current_user_id = 0;
+		
+		console.log(arr_split[3]);
+		wallet_name = arr_split[arr_split.length-1];
+		current_user_id = arr_split[arr_split.length-2];
+		if (wallet_name == "") {
+			wallet_name = arr_split[arr_split.length-2];
+			current_user_id = arr_split[arr_split.length-3];
+		}
+
+		vm.t.header_name = "";
+
+		if (wallet_name == "level_income") {
+			vm.t.header_name = "Level Income Wallet";
+		} else if (wallet_name == "daily_growth") {
+			vm.t.header_name = "Daily Growth Wallet";
+		} else if (wallet_name == "daily_bonus_earnings") {
+			vm.t.header_name = "Daily Bonus Wallet";
+		} else if (wallet_name == "task_earnings") {
+			vm.t.header_name = "Task Earnings Wallet";
+		} else {
+
+		}
+
+		console.log("current user id " + current_user_id);
+
+		if (current_user_id == "view") {
+			current_user_id = 0;
+		}
+		
+		console.log(wallet_name);
+		console.log("current user id " + current_user_id);
+
+		
+
+		$http({
+		    method: 'POST',
+		    url: '/platform/wallets/get_data/' + current_user_id,
+			data: { wallet_name: wallet_name }
+		}).success(function (result) {
+			if (result.is_success) {
+				vm.arr_data = result.arr_data;
+				for(var i=0;i<vm.arr_data.length;i++) {
+					if (vm.arr_data[i].is_available == 'Y') {
+						vm.total_amount = (+vm.total_amount) + (+vm.arr_data[i].amount);
+					}
+					vm.t.arr_balance[i] = vm.total_amount;
+				}
+				vm.t.is_loading_results = false;
+			}
+		});
+
+		$scope.add = function() {
+			$window.location = "/segments/edit/0";
+			
+		};
+
+		$scope.edit_click = function(index) {
+			$window.location = "/segments/edit/" + index;
+			
+		};
+
+		vm.total_amount = 0;
+
+		vm.temp_amount = 0;
+
+		vm.build_amount = function($index) {
+			var s = "";
+			//vm.total_amount = (+vm.total_amount) + (+data.amount);
+			//console.log(vm.total_amount + ' data being added ' + data.amount);
+			//console.log(vm.temp_amount);
+			//console.log(data.amount);
+			
+			return vm.t.arr_balance[$index];
+		};
+
+		
+
+		vm.build_description = function(data) {
+			var s= "";
+			if (data.log_type_id == vm.WalletLogs.GH_CREATE_WITHDRAWAL_LOG_TYPE_ID) {
+				return "GH WALLET WITHDRAWAL";
+			} else if (data.log_type_id == vm.WalletLogs.DAILY_BONUS_GAME_DEPOSIT_LOG_TYPE_ID) {
+				return "DAILY BONUS GAME DEPOSIT";
+			} else if (data.log_type_id == vm.WalletLogs.DAILY_TASK_EARNING_FOR_PH_COMPLETED) {
+				return "DAILY TASK EARNING FOR PH COMPLETED";
+			} else if (data.log_type_id == vm.WalletLogs.SYSTEM_ERROR_CORRECTION_LOG_TYPE_ID) {
+				return data.custom_remark;
+			} else if (data.log_type_id == vm.WalletLogs.ADMIN_ADJUSTMENT_LOG_TYPE_ID) {
+				s =  "Admin Adjustment: " + data.custom_remark;
+				if (data.is_available == "N") {
+					if (data.available_on_gm_create_date_time != null) {
+						s = s + "<br>AVAILABLE ON " + data.available_gm_create_date_time + " UTC";
+					}
+				}
+
+				if (data.is_release_part_of_funds_on_ph_complete == "Y") {
+					/*
+					if (data.amount_available > 0) {
+					}
+					*/
+					var temp_number = $filter('number')(data.amount_available, 2)
+					s = s + "<br>$ " + temp_number + " AVAILABLE";
+				}
+				return s;
+
+			} else if (data.log_type_id == vm.WalletLogs.DAILY_GROWTH_DEPOSIT_LOG_TYPE_ID) {
+				return "DAILY GROWTH DEPOSIT";
+			} else if (data.log_type_id == vm.WalletLogs.LOH_BONUS_LOG_TYPE_ID) {
+				s =  "LOH BONUS";
+				if (data.is_available == "N") {
+					s = s + "<br>AVAILABLE ON " + data.available_gm_create_date_time + " UTC";
+				}
+				return s;
+			} else if (data.log_type_id == vm.WalletLogs.NEW_MEMBER_BONUS_FOR_FIRST_PH_LOG_TYPE_ID) {
+				if (data.is_available == "N") {
+					s = "BONUS FOR FIRST PH. AVAILABLE ON " + data.available_gm_create_date_time + " UTC. PH MUST BE COMPLETED. FOR PH: " + data.reference_id;
+				} else {
+					s = "BONUS FOR FIRST PH. COMPLETED";
+				}
+				return s;
+			} else if (data.log_type_id == vm.WalletLogs.NEW_SPONSOR_BONUS_FOR_FIRST_10K_LOG_TYPE_ID) {
+				if (data.is_available == "N") {
+					//s = "BONUS FOR REFERRAL PH. FOR FIRST 10K USERS. AVAILABLE ON " + data.available_gm_create_date_time + " UTC. PH MUST BE COMPLETED. FOR PH: " + data.reference_id + "";
+					s = "First 10,000 Bonus Frozen for 30 days";
+				} else {
+					s = "BONUS FOR REFERRAL FOR FIRST 10K USERS. PH. COMPLETED";
+				}
+				return s;
+			} else {
+				if (data.amount > 0) {
+					return "WALLET DEPOSIT";
+				} else {
+					return "WALLET WITHDRAWAL";
+				}
+			}
+		};
+			
+	}]);
+
+
+	app.filter('sumByKey', function () {
+		return function (data, key) {
+			if (typeof (data) === 'undefined' || typeof (key) === 'undefined') {
+				return 0;
+			}
+
+			/*
+			var sum = 0;
+			for (var i = data.length - 1; i >= 0; i--) {
+			    sum += parseInt(data[i][key]);
+			}
+			*/
+			vm.temp_amount = parseFloat(vm.temp_amount) + parseFloat(data[key].amount);
+			console.log(key);
+			console.log(data[key].amount);
+			console.log($);
+
+			return vm.temp_amount;
+		    };
+	});
+</script>
+
+<style>
+
+	.table_header {
+		font-weight:900;
+	}
+	td {
+		padding-left:10px;
+		padding-right:10px;
+	}
+
+</style>
+
+
+<div ng-controller="PageController as page_ctrl">
+	<div class="page-title-header">
+		{{page_ctrl.t.header_name}}
+	</div>
+
+
+	<div class="flex_container">
+		<div>
+			<div class="col-xs-12 col-ms-12 col-sm-12" style="display:block; width:100% !important;">
+				<div style="padding-left:10px; font-weight:900;">
+					All Transaction ( Your Current Balance: $ {{page_ctrl.total_amount | number:2}} )
+				</div>
+				<table style="border-collapse: collapse; margin:10px; width:100%;"  class="general_data_table">
+				<tr>
+					<th class="general_table_header">Sr. No</th>
+					<th class="general_table_header">Trans Date</th>
+					<th class="general_table_header">Description</th>
+					<th class="general_table_header">Amount</th>
+					<th class="general_table_header">Balance</th>
+				</tr>
+
+				<tr ng-if="page_ctrl.arr_data.length == 0">
+					<td colspan="5">
+						<div ng-show="!page_ctrl.t.is_loading_results">
+						      <strong>No results found...</strong>
+						</div>
+						<div ng-show="page_ctrl.t.is_loading_results">
+						      <strong>RETRIEVING DETAILS...</strong>
+						</div>
+					</td>
+				</tr>
+				<tr class="have_hover" ng-repeat="data in page_ctrl.arr_data track by $index">
+					<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{$index+1}}</td>
+					<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
+						<div ng-show="data.is_available == 'N'" style="color:blue;">
+							{{data.gm_date}} UTC
+						</div>
+						<div ng-show="data.is_available == 'Y'">
+							{{data.gm_date}} UTC
+						</div>
+					</td>
+					<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" width="300">
+						<div ng-show="data.is_available == 'N'" style="color:blue;">
+							<p ng-bind-html="page_ctrl.build_description(data)"></p>
+							<!--{{page_ctrl.build_description(data)}}-->
+						</div>
+						<div ng-show="data.is_available == 'Y'">
+							{{page_ctrl.build_description(data)}}
+						</div>
+					</td>
+					<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
+						<div ng-show="data.is_available == 'N'" style="color:blue;">
+							$ {{data.amount | number:2 }}	
+						</div>
+						<div ng-show="data.is_available == 'Y'">
+							$ {{data.amount | number:2 }}	
+						</div>
+					</td>
+					<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
+						<div ng-show="data.is_available == 'N'" style="color:blue;">
+						$ {{page_ctrl.build_amount($index) | number: 2}}
+						</div>
+						<div ng-show="data.is_available == 'Y'">
+							$ {{page_ctrl.build_amount($index) | number: 2}}
+						</div>
+					</td>
+				</tr>
+				</table>
+			</div>
+			
+		</div>
+	</div>
+
+
+</div>

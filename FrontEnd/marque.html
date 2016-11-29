@@ -1,0 +1,144 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<Script>
+///////////////////
+//www.fortochka.com
+//Alexander Babichev 2006 Coopyright
+//This script is free for private use. Otherwise a $10 fee per a site is required.
+//the script can be modified but the copyright notice should be left unchanged.
+///////////////////
+
+
+var pic = new Array()
+ 
+
+function banner(name, width, link){
+	this.name = name
+	this.width = width
+	this.link = link
+   }
+
+pic[0] = new banner('img/f1.png',320,'')
+pic[1] = new banner('img/f2.png',320,'')
+pic[2] = new banner('img/f3.png',320,'')
+pic[3] = new banner('img/f4.png',320,'')
+pic[4] = new banner('img/f5.png',420,'')
+pic[5] = new banner('img/f6.png',170,'')
+pic[6] = new banner('img/f7.png',400,'')
+pic[7] = new banner('img/f8.png',270,'')
+pic[8] = new banner('img/f9.png',270,'')
+pic[9] = new banner('img/f10.png',170,'')
+pic[10] = new banner('img/f11.png',170,'')
+pic[11] = new banner('img/f12.png',170,'')
+pic[12] = new banner('img/f14.png',320,'')
+pic[13] = new banner('img/f15.png',330,'')
+pic[14] = new banner('img/f16.png',170,'')
+pic[15] = new banner('img/f17.png',170,'')
+
+
+
+
+
+
+var speed = 20
+
+var kk = pic.length
+var ii
+var hhh
+var nnn
+var myInterval
+var myPause
+var mode = 0
+
+
+var imgArray = new Array(kk)
+var myLeft = new Array(kk)
+
+for (ii=0;ii<kk;ii++){
+imgArray[ii] = new Image()
+imgArray[ii].src = pic[ii].name
+imgArray[ii].width = pic[ii].width
+
+	hhh=0 
+	for (nnn=0;nnn<ii;nnn++){
+		hhh=hhh+pic[nnn].width
+	}
+	myLeft[ii] = hhh
+}
+
+function ready(){
+	for (ii=0;ii<kk;ii++){ 
+		if (document.images[ii].complete == false){
+			return false	
+			break
+		}
+	}
+return true
+}
+
+
+function startScrolling(){
+	if (ready() == true){		
+		window.clearInterval(myPause)
+		myInterval = setInterval("autoScroll()",speed)	
+	}
+}	
+	
+
+function autoScroll(){
+	for (ii=0;ii<kk;ii++){
+		myLeft[ii] = myLeft[ii] - 1
+		
+	if (myLeft[ii] == -(pic[ii].width)){
+		hhh = 0
+		for (nnn=0;nnn<kk;nnn++){
+			if (nnn!=ii){
+				hhh = hhh + pic[nnn].width
+			}			
+		}
+		myLeft[ii] =  hhh
+	}
+		
+				
+		document.images[ii].style.left = myLeft[ii]
+	}
+	mode = 1
+}
+
+function stop(){
+	if (mode == 1){
+		window.clearInterval(myInterval)
+	}
+	if (mode == 0){
+		window.clearInterval(myPause)
+	}	
+}
+
+function go(){
+	if (mode == 1){
+		myInterval = setInterval("autoScroll()",speed)
+	}
+	if (mode == 0){
+		myPause = setInterval("startScrolling()",3000)
+	}	
+}
+
+myPause = setInterval("startScrolling()",3000)
+</Script>
+</head>
+<body>
+ 				<p>&nbsp;</p>
+ 				<Script>
+                  
+					for (ii=0;ii<kk;ii++)
+					{
+						document.write('<a href = ' + pic[ii].link + ' target="_blank"><img space=0 hspace=0 vspace=0 border=0   style=position:absolute;top:0;width=100;left:10;' + myLeft[ii]  + '; src=' + pic[ii].name + ' onMouseOver=stop() onMouseOut=go()></a>')
+					}
+				
+				</Script>
+
+
+</body>
+</html>
+

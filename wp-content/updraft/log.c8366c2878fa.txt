@@ -1,0 +1,10 @@
+0000.000 (0) Opened log file at time: Thu, 04 Aug 2016 05:58:26 +0000 on http://thebitcoinbeast.serverdatahost.com
+0000.001 (0) UpdraftPlus WordPress backup plugin (https://updraftplus.com): 2.12.16 WP: 4.5.3 PHP: 5.3.3 (Linux prometheus 2.6.32-573.22.1.el6.x86_64 #1 SMP Wed Mar 23 03:35:39 UTC 2016 x86_64) MySQL: 5.1.73 WPLANG: en_US Server: Apache/2.2.22 (@RELEASE@) safe_mode: 0 max_execution_time: 900 memory_limit: 256M (used: 44.2M | 46M) multisite: N openssl: OpenSSL 1.0.1e-fips 11 Feb 2013 mcrypt: Y LANG: C ZipArchive::addFile: Y
+0000.002 (0) Free space on disk containing Updraft's temporary directory: 50907.8 MB
+0000.005 (0) Tasks: Backup files:  (schedule: daily) Backup DB: 1 (schedule: daily)
+0000.006 (0) Processed schedules. Combining jobs from identical schedules. Tasks now: Backup files:  Backup DB: 
+0000.007 (0) Decremented the semaphore (fd) by 1
+0000.008 (0) Semaphore (fd) still locked (0)
+0000.009 (0) An email has been scheduled for this job, because we are in debug mode
+0000.009 (0) No email will be sent - this backup set was empty.
+0000.010 (0) The backup apparently succeeded and is now complete

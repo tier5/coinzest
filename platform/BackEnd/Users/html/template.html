@@ -1,0 +1,114 @@
+<script>
+
+	  app.controller('Controller', ['$scope', '$http', '$window', function($scope, $http, $window) {
+		$scope.arr_data = [];
+		$scope.search = "";
+		$scope.number_per_page = 100;
+		$http({
+		    method: 'POST',
+		    url: '/users/get_arr_search_results/',
+			data: { search: $scope.search }
+		}).success(function (result) {
+			$scope.arr_data = result.arr_data;
+			//alert(result.arr_data);
+		});
+
+		$scope.add = function() {
+			$window.location = "/users/edit/0";
+			
+		};
+		$scope.edit_click = function(index) {
+			$window.location = "/users/edit/" + index;
+			
+		};
+
+		$scope.delete_click = function(index) {
+                        var result = $window.confirm('Are you sure you want to delete?');
+                        if (result) {
+                                $http({
+                                    method: 'get',
+                                    url: '/users/delete/' + index,
+                                }).success(function (result) {
+                                        $window.location = "/users";
+                                });
+                        }
+                };
+
+		$scope.search_submission = function() {
+			//alert('in here');
+			$http({
+			    method: 'POST',
+			    url: '/users/get_arr_search_results/',
+				data: { search: $scope.search }
+			}).success(function (result) {
+				$scope.arr_data = result.arr_data;
+			});
+			
+		};
+
+
+	}]);
+</script>
+
+<style>
+
+	.table_header {
+		font-weight:900;
+	}
+	td {
+		padding-left:10px;
+		padding-right:10px;
+	}
+</style>
+<div ng-controller="Controller">
+
+	<div style="clear:both;"></div>
+
+<div style="width:100%; padding-left:20px;">
+  <div class="form-group">
+	<label for="email">Search:</label>
+	<div style="clear:both;"></div>
+	<div style="float:left; width:250px;">
+	    <input type="text" ng-model="search" class="form-control" placeholder="Enter Your Search" ng-keyup="$event.keyCode == 13 && search_submission()">
+	</div>
+	<div style="float:left; padding-left:10px;">
+	  <button type="btn" ng-model="search" ng-click="search_submission()" class="btn btn-primary">Search</button>
+	</div>
+	<div style="padding-left:10px;float:right; padding-right:50px;">
+	  <button type="btn"  ng-click="add()" class="btn btn-primary">Add User</button>
+	</div>
+
+	<div style="clear:both;"></div>
+  </div>
+</div>
+<div style="clear:both;"></div>
+
+<table  style="border-collapse: collapse; width:389px; margin:10px;">
+<tr>
+<th class="table_header" width="100" >Login</th>
+<th class="table_header" >Email</th>
+<th class="table_header" >First Name</th>
+<th class="table_header" >Last Name</th>
+<th colspan="2"></th>
+</tr>
+<tr ng-if="arr_data.length == 0">
+        <th colspan="10">
+              <strong>No results found...</strong>
+        </th>
+</tr>
+<tr class="have_hover" ng-repeat="item in arr_data track by $index">
+<td ng-class-odd="'data_table_odd_cell clickable'" ng-class-even="'data_table_even_cell clickable'" ng-click="edit_click(item.id)" ><a href="/users/edit/{{item.id}}">{{item.login}}</a></td>
+<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{item.email}}</td>
+<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{item.first_name}}</td>
+<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{item.last_name}}</td>
+<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
+        <button ng-click="edit_click(item.id)" type = "button" class = "btn btn-success">Edit</button>
+</td>
+<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
+        <button ng-click="delete_click(item.id)" type = "button" class = "btn btn-danger">Delete</button>
+</td>
+</tr>
+</table>
+
+
+</div>

@@ -1,0 +1,137 @@
+
+
+<style>
+	td {
+		padding-left: 20px;
+	}
+</style>
+
+
+<script>
+
+
+
+
+	  app.controller('UpdateController', ['$scope', '$http', '$window', function($scope, $http, $window) {
+		$scope.id = <?=$t->id?>;
+		$scope.data = new Object();
+		$scope.is_add = false;
+		if ($scope.id > 0) {
+			$http({
+			    method: 'GET',
+			    url: '/users/get/' + $scope.id,
+				data: { id: $scope.id }
+			}).success(function (result) {
+				//alert(result.total_clicks);
+				//alert('here');
+				//alert(result);
+				$scope.data = result;
+				$scope.data.password = '';
+			});
+		} else {
+			$scope.is_add = true;
+			$scope.data = new Object();
+			$scope.data.is_admin = "Y";
+			$('.submission_button').attr('value','Add');
+		}
+
+		$scope.save = function() {
+			//alert($scope.data.name);
+			
+			//alert(angular.toJson($scope.data));
+			$http({
+			    method: 'POST',
+			    url: '/users/save/' + $scope.id,
+				data: { data: $scope.data }
+			}).success(function (result) {
+				$window.location = "/users";
+				//alert(result.total_clicks);
+				//alert('here');
+				//alert(result);
+				//$scope.data = result;
+			});
+		};
+
+		$scope.delete = function() {
+			var result = $window.confirm('Are you sure you want to delete?');
+			//alert(result);
+			if (result) {
+				$http({
+				    method: 'get',
+				    url: '/users/delete/' + $scope.id,
+				}).success(function (result) {
+					$window.location = "/users";
+				});
+			}
+		};
+
+		}]);
+
+	</script>
+
+<div ng-controller="UpdateController" style="width:800px; padding-left:10px;float:left;">
+	<form name="update_form">
+	<table  style="border-collapse: collapse;">
+	<tr>
+	<td>
+		<div class="form-group">
+			<label class="form-label">Login</label>
+			<input ng-model="data.login" type="text" class="form-control" placeholder="login" required>
+		</div>
+	</td>
+	<td>
+		<div class="form-group">
+			<label class="form-label">Password</label>
+			<input ng-model="data.password" type="password" class="form-control" placeholder="Password" ng-required="is_add">
+		</div>
+	</td>
+	</tr>
+	<tr>
+	<td>
+		<div class="form-group">
+			<label class="form-label">Email</label>
+			<input ng-model="data.email" type="email" class="form-control" placeholder="Email">
+		</div>
+	</td>
+	<td>
+		<div class="form-group">
+			<label class="form-label">Have Admin</label>
+			<select class="form-control" name="is_admin" ng-model="data.is_admin">
+				<option value="Y">Yes</option>
+				<option value="N">No</option>
+			</select>
+		</div>
+	</td>
+	<td>
+	</td>
+	</tr>
+	<tr>
+	<td>
+		<div class="form-group">
+			<label class="form-label">First Name</label>
+			<input ng-model="data.first_name" type="text" class="form-control" placeholder="First Name">
+		</div>
+	</td>
+	<td>
+		<div class="form-group">
+			<label class="form-label">Last Name</label>
+			<input ng-model="data.last_name" type="text" class="form-control" placeholder="Last Name">
+		</div>
+	</td>
+	<td>
+	</td>
+	</tr>
+	</table>
+	<div style="float:left; padding-left:10px;">
+		<input  type="button" ng-disabled="update_form.$invalid" ng-click="save()" value="Update" class="btn btn-primary submission_button">
+	</div>
+	<div style="float:left; padding-left:10px;">
+		<a href="/users"><input type="button" value="Cancel" class="btn btn-default"></a>
+	</div>
+	<div style="float:left; padding-left:150px;">
+		<input ng-hide="is_add"  ng-click="delete()" type="button" value="Delete" class="btn btn-danger"></a>
+	</div>
+	</form>
+</div>
+
+

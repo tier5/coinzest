@@ -1,0 +1,122 @@
+<script>
+
+	  app.controller('PageController', ['$scope', '$http', '$window', function($scope, $http, $window) {
+
+		var vm = this;
+		vm.arr_data = [];
+
+		vm.search = "";
+	
+		
+		var data = [];
+
+		data['human_name'] = "Daily Tasks";
+		data['name'] = "daily_tasks";
+		vm.arr_data[vm.arr_data.length] = data;
+
+		data = [];
+		data['human_name'] = "Support";
+		data['name'] = "support";
+		vm.arr_data[vm.arr_data.length] = data;
+
+		data = [];
+		data['human_name'] = "Letters of Happiness";
+		data['name'] = "loh";
+		vm.arr_data[vm.arr_data.length] = data;
+
+
+		/*
+		$http({
+		    method: 'POST',
+		    url: '/platform/membersadmin/get_data/',
+			data: { search: vm.search }
+		}).success(function (result) {
+			if (result.is_success) {
+				//vm.arr_data = result.arr_data;
+				
+			}
+		});
+		*/
+
+
+		$scope.edit_click = function(name) {
+			$window.location = "/platform/sitecontents/edit/" + name;
+			
+		};
+
+		$scope.delete_click = function(index) {
+			var result = $window.confirm('Are you sure you want to delete?');
+                        if (result) {
+                                $http({
+                                    method: 'get',
+                                    url: '/segments/delete/' + index,
+                                }).success(function (result) {
+                                        $window.location = "/segments";
+                                });
+                        }
+		};
+
+	}]);
+
+</script>
+
+<style>
+
+	.table_header {
+		font-weight:900;
+	}
+	td {
+		padding-left:10px;
+		padding-right:10px;
+	}
+
+	.data_table_odd_cell {
+
+		background-color: #f8f8f8;
+		border-bottom:1px solid  #d8d8d8;
+		padding-top:13px;
+		padding-bottom:13px;
+	}
+
+
+	.data_table_even_cell {
+		background-color: #ffffff;
+		border-bottom:1px solid  #d8d8d8;
+		padding-top:13px;
+		padding-bottom:13px;
+	}
+
+	.data_table > tr:hover > td {
+		background-color: #ffff99;
+	}
+
+	tr.have_hover:hover > td {
+		background-color: #add8e6;
+	}
+
+	td.clickable:hover {
+		cursor:pointer;
+	}
+
+	th {
+		padding-left:10px !important;
+		padding-right:10px !important;
+	}
+</style>
+<div class="page-title-header">
+	Support
+</div>
+
+<div ng-controller="PageController as page_ctrl">
+
+	<div style="clear:both;"></div>
+
+
+<div class="flex_container">
+	<div>
+		<?=$t->contents_html?>
+	</div>
+</div>
+
+
+</div>

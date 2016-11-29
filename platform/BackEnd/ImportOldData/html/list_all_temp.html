@@ -1,0 +1,138 @@
+<script>
+
+	  app.controller('PageController', ['$scope', '$http', '$window', function($scope, $http, $window) {
+
+		var vm = this;
+		vm.arr_data = [];
+
+		$scope.search = "";
+		$scope.number_per_page = 100;
+
+
+		vm.t = {};
+
+
+
+		$http({
+		    method: 'POST',
+		    url: '/platform/import_old_data/get_all_old_data_temp/',
+			data: { }
+		}).success(function (result) {
+			if (result.is_success) {
+				vm.arr_data = result.arr_data;
+				for(var i=0;i<vm.arr_data.length;i++) {
+					vm.arr_data[i].user_temp_data = $.parseJSON(vm.arr_data[i].stored_data);
+				}
+				//console.info(vm.arr_data);
+			}
+		});
+
+	}]);
+
+
+</script>
+
+<style>
+
+	td {
+		padding-left:10px;
+		padding-right:10px;
+	}
+</style>
+
+<div class="page-title-header">
+	Old Data
+</div>
+
+<div ng-controller="PageController as page_ctrl">
+
+	<div style="clear:both;"></div>
+
+
+	<div class="flex_container">
+		<div>
+
+			<div class="have_hover full-standard-fade" ng-repeat="data in page_ctrl.arr_data track by $index">
+				<div class="col-xs-12">
+					
+				
+					<h1>{{data.login}}</h1>
+				</div>
+				<div class="col-xs-12" style="padding-top:10px;">
+					<h1>PH History Proof for {{data.login}}</h1>
+					<div ng-show="data.is_have_gh_history_proof_image == 'Y'">
+						<img style="max-width:100%" ng-src="/platform/Usertemp/get_proof_image/is_have_gh_history_proof_image/{{data.user_id}}/">
+					</div>
+				</div>
+				<div class="col-xs-12" style="padding-top:10px;">
+					<h1>Level Income GH Status for {{data.login}}</h1>
+					<div ng-show="data.is_have_income_level_gh_status_proof_image == 'Y'">
+						<img style="max-width:100%" ng-src="/platform/Usertemp/get_proof_image/is_have_income_level_gh_status_proof_image/{{data.user_id}}/">
+					</div>
+				</div>
+				<div class="col-xs-12" style="padding-top:10px;">
+					<h1>Daily Growth Proof for {{data.login}}</h1>
+					<div ng-show="data.is_have_daily_growth_status_proof_image == 'Y'">
+						<img style="max-width:100%" ng-src="/platform/Usertemp/get_proof_image/is_have_daily_growth_status_proof_image/{{data.user_id}}/">
+					</div>
+				</div>
+				<div style="clear:both;"></div>
+				<div class="col-xs-12" style="padding-top:10px;">
+					<h1>GH History Proof for {{data.login}}</h1>
+					<div ng-show="data.is_have_gh_history_proof_image == 'Y'">
+						<img style="max-width:100%" ng-src="/platform/Usertemp/get_proof_image/is_have_gh_history_proof_image/{{data.user_id}}/">
+					</div>
+				</div>
+				<div style="clear:both;"></div>
+				<div class="col-xs-12" style="padding-top:10px;">
+					<h1>GH Request Available for {{data.login}}</h1>
+					<div ng-show="data.is_have_gh_request_available_balance_proof_image == 'Y'">
+						<img style="max-width:100%" ng-src="/platform/Usertemp/get_proof_image/is_have_gh_request_available_balance_proof_image/{{data.user_id}}/">
+					</div>
+				</div>
+				<div style="clear:both; margin-bottom:60px;"></div>
+			</div>
+
+
+			<!--
+			<table  style="border-collapse: collapse; margin:10px;"  class="general_data_table">
+			<tr>
+			<th class="general_table_header">No</th>
+			<th class="general_table_header">User</th>
+			<th class="general_table_header">Image 1</th>
+			<th class="general_table_header">Image 2</th>
+			<th class="general_table_header">Image 3</th>
+			<th class="general_table_header">Image 4</th>
+			<th class="general_table_header" width="150">Action</th>
+			</tr>
+
+			<tr ng-if="arr_data.length == 0">
+				<td colspan="9">
+				      <strong>No results found...</strong>
+				</td>
+			</tr>
+			<tr class="have_hover full-standard-fade" ng-repeat="data in page_ctrl.arr_data track by $index">
+				<td class="table_cell" ng-class="{'bg-red-color': data.user_status_id == page_ctrl.t.Users.BLOCKED_STATUS_ID}" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{$index+1}}</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="word-break: break-all"><a target="_blank" href="/platform/membersadmin/edit/{{data.user_id}}/">{{data.login}}</a></td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
+				</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
+				</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
+				</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
+				</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">${{data.amount_matched_completed | number:2}}</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="word-break: break-all">{{data.gm_created}} UTC</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="width:240px !important;">
+					<div style="clear:both;"></div>
+				</td>
+			</tr>
+			</table>
+			-->
+		</div>
+	</div>
+
+
+</div>
+

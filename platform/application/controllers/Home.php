@@ -1,0 +1,53 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Home extends CI_Controller {
+
+	/**
+	 * Index Page for this controller.
+	 *
+	 * Maps to the following URL
+	 * 		http://example.com/index.php/welcome
+	 *	- or -
+	 * 		http://example.com/index.php/welcome/index
+	 *	- or -
+	 * Since this controller is set as the default controller in
+	 * config/routes.php, it's displayed at http://example.com/
+	 *
+	 * So any other public methods not prefixed with an underscore will
+	 * map to /index.php/welcome/<method_name>
+	 * @see https://codeigniter.com/user_guide/general/urls.html
+	 */
+	public function index() {
+		Library_Auth_Common::check_allowed_request();
+		print_r($_SESSION);
+		//print BackEnd_Segments_View::build_html();
+		//$this->load->view('welcome_message');
+	}
+
+	public function is_show_notifications_pop_up() {
+		$obj_result = new Stdclass();
+		$obj_result->is_success = false;
+
+		Library_Auth_Common::check_allowed_request();
+		$obj_result->is_show_notifications_pop_up = false;
+		session_start();
+		if (!isset($_SESSION['has_shown_notification_pop_up'])) {
+			$obj_result->is_show_notifications_pop_up = true;
+		}
+
+		$obj_result->is_success = true;
+		print json_encode($obj_result);
+	}
+
+	public function set_has_shown_notifications_pop_up() {
+		Library_Auth_Common::check_allowed_request();
+		$obj_result = new Stdclass();
+		$obj_result->is_success = false;
+
+		session_start();
+		$_SESSION['has_shown_notification_pop_up'] = true;
+		$obj_result->is_success = true;
+		print json_encode($obj_result);
+	}
+}

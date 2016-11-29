@@ -1,0 +1,304 @@
+
+
+<style>
+	td {
+		padding-left: 20px;
+	}
+</style>
+
+
+<script>
+
+
+
+	  app.controller('CreateGHRequestController', ['$scope', '$http', function($scope, $http) {
+
+		var vm = this;
+		vm.data = {};
+		vm.data.create_member_login = "";
+		vm.data.create_member_country = "";
+		vm.data.create_member_fullname = "";
+
+		vm.data.total_gh_amount = 0;
+		vm.data.wallet_magic_bonus = 0;
+
+		vm.data.gh_amount = "";
+		vm.data.is_submit_error_message = false;
+		vm.data.submit_error_message = "";
+		vm.data.is_submit_success_message = false;
+
+		vm.data.allocated_amount = "";
+
+
+
+		obj_data = {};
+
+		vm.t = {};
+
+		vm.t.wallet_total = 0;
+
+		vm.data.level_income_amount = "";
+		vm.data.level_income_balance = 0;
+
+		vm.data.task_earning_amount = "";
+		vm.data.task_earning_balance = 0;
+
+		vm.data.daily_growth_amount = "";
+		vm.data.daily_growth_balance = 0;
+
+		vm.data.daily_bonus_amount = "";
+		vm.data.daily_bonus_balance = 0;
+
+		vm.data.total_amount_to_withdraw = 0;
+		vm.t.is_show_form = true;
+		vm.t.is_not_have_minimum = false;
+
+		$http({
+			method: 'POST',
+			url: '/platform/ghrequests/get_user_info/',
+			data: {data:obj_data}
+		}).success(function (result) {
+
+			//alert(result);
+			//vm.data.wallet_amount = result.gh_balance;
+			vm.data.btc_address = result.btc_address;
+
+			vm.data.daily_bonus_balance = result.daily_bonus_earning_balance;
+			vm.data.level_income_balance = result.level_income_balance;
+			vm.data.daily_growth_balance = result.daily_growth_balance;
+			vm.data.task_earning_balance = result.task_earning_balance;
+
+			vm.t.wallet_total  = 0;
+			vm.t.wallet_total = (+vm.t.wallet_total) + (+result.daily_bonus_earning_balance);
+			vm.t.wallet_total = (+vm.t.wallet_total) + (+result.level_income_balance);
+			vm.t.wallet_total =  (+vm.t.wallet_total) + (+result.daily_growth_balance);
+			vm.t.wallet_total =  (+vm.t.wallet_total) + (+result.task_earning_balance);
+
+			if (vm.t.wallet_total < 20) {
+				vm.t.is_not_have_minimum = true;
+				vm.data.is_submit_error_message = true;
+				vm.data.submit_error_message = "THE MINIMUM AMOUNT TO CREATE A GH REQUEST IS $20";
+			}
+
+			
+			
+			//alert(result.btc_address);
+		});
+		
+
+		//alert(vm.config.state.MIN_BUDGET);
+		vm.update_total_amount_to_withdraw = function() {
+			
+			vm.data.total_amount_to_withdraw = 0;
+
+			if ($.isNumeric(vm.data.daily_bonus_amount)) {
+				vm.data.total_amount_to_withdraw += (+vm.data.daily_bonus_amount);
+			}
+			if ($.isNumeric(vm.data.daily_growth_amount)) {
+				vm.data.total_amount_to_withdraw += (+vm.data.daily_growth_amount);
+			}
+			if ($.isNumeric(vm.data.level_income_amount)) {
+				vm.data.total_amount_to_withdraw += (+vm.data.level_income_amount);
+			}
+
+			if ($.isNumeric(vm.data.task_earning_amount)) {
+				vm.data.total_amount_to_withdraw += (+vm.data.task_earning_amount);
+			}
+			
+			//vm.total_amount_to_withdraw = (+vm.data.daily_bonus_amount) + "";
+		};
+
+		vm.submit = function() {
+			var obj_data = {};
+			//obj_data = vm.data;
+
+			$http({
+				method: 'POST',
+				url: '/platform/ghrequests/create_ghrequest/',
+				data: {data:vm.data}
+			}).success(function (result) {
+				if (!result.is_success) {
+					vm.data.is_submit_error_message = true;
+					vm.data.is_submit_success = false;
+					vm.data.is_submit_success_message = false;
+					if (!result.is_twenty_or_multiple_of_10) {
+						//vm.data.submit_error_message = "GH Amount Not Equal To 20 or Multiple's of 50 e.g. $20, $50, $100, $150";
+						vm.data.submit_error_message = "GH Amount Not Equal To 20 or Multiple's of 10 e.g. $20, $30, $40, $50";
+					} else if (result.is_over_max) {
+						vm.data.submit_error_message = "GH Amount is Over $ 2000 limit";
+					} else if (result.is_not_enough_balance) {
+						if (result.is_not_enough_daily_bonus_balance) {
+							vm.data.submit_error_message = "Not Enough Daily Bonus Balance";
+						} else if (result.is_not_enough_level_income_balance) {
+							vm.data.submit_error_message = "Not Enough Level Income Balance";
+						} else if (result.is_not_enough_daily_growth_balance) {
+							vm.data.submit_error_message = "Not Enough Daily Growth Balance";
+						} else if (result.is_not_enough_task_earning_balance ) {
+							vm.data.submit_error_message = "Not Enough Task Earning Balance";
+						} else {
+							vm.data.submit_error_message = "Not Enough Balance";
+						}
+					} else if (result.is_no_active_ph) {
+						vm.data.submit_error_message = "TO CREATE A NEW GH REQUEST YOU MUST FIRST MAKE A NEW PH RE COMMIT REQUEST";
+					} else if (result.is_account_suspended) {
+						vm.data.submit_error_message = "Account Is Suspended. Cannot Create Any new GH.";
+					} else if (result.is_have_active_gh) {
+						vm.data.submit_error_message = "You must complete your current active GH and complete Letter of Happiness, which must be approved.";
+					} else if (!result.is_able_to_allocate) {
+						vm.data.submit_error_message = "Unable to Allocate Funds. Please check with Manager.";
+					} else if (result.is_invalid_gh_amount) {
+						vm.data.submit_error_message = "Invalid GH Amount";
+					}
+					/*
+					is_invalid_gh_amount
+					is_not_enough_balance
+					is_success
+					is_twenty_or_multiple_of_50
+					*/
+				} else {
+					//vm.data.wallet_amount = vm.data.wallet_amount - vm.data.gh_amount;
+					vm.data.allocated_amount = vm.data.total_amount_to_withdraw;
+
+					vm.data.daily_bonus_amount = "";
+					vm.data.daily_growth_amount = "";
+					vm.data.level_income_amount = "";
+					vm.data.task_earning_amount = "";
+
+					vm.data.daily_bonus_balance = result.daily_bonus_earning_balance;
+					vm.data.level_income_balance = result.level_income_balance;
+					vm.data.daily_growth_balance = result.daily_growth_balance;
+					vm.data.task_earning_balance = result.task_earning_balance;
+
+					vm.t.is_show_form = false;
+					vm.data.is_submit_error_message = false;
+					vm.data.is_submit_success_message = true;
+
+				}
+				//alert(result);
+			});
+
+		};
+	    }]);
+
+	</script>
+
+	<style>
+		.table_inner_cell {
+			padding-top:15px;
+			padding-bottom:15px;
+			font-weight:900;
+			display:table-cell;
+			vertical-align:middle;
+		}
+
+		.table_cell_border_top {
+			border-top:1px solid #e3e1e5;
+		}
+	</style>
+	<div class="page-title-header">
+		Create GH
+	</div>
+
+
+	<div ng-controller="CreateGHRequestController as create_gh_ctrl" style="">
+		<div class="flex_container">
+			<div style="width:80%">
+				<div ng-show="create_gh_ctrl.data.is_submit_error_message" style="" class="alert alert-danger" role="alert">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span class="sr-only">Error:</span>
+					{{create_gh_ctrl.data.submit_error_message}}
+				</div>
+				<div ng-show="create_gh_ctrl.data.is_submit_success_message" style="" class="alert alert-success" role="alert">
+					Successfully created GH for $ {{create_gh_ctrl.data.allocated_amount | number: 2}}
+				</div>
+				<div style="clear:both;"></div>
+				<div ng-show="create_gh_ctrl.t.is_show_form" style="display:table; width:100%; border:1px solid #e3e1e5; padding-top:10px; padding-bottom:10px;">
+					<div style="display:table-row;">
+						<div style="display:table-cell;font-weight:900; padding-left:10px;">
+							WALLET
+						</div>
+						<div style="display:table-cell;font-weight:900">
+							WALLET AMOUNT ($)
+						</div>
+						<div style="display:table-cell;font-weight:900; padding-right:10px;">
+							GH AMOUNT
+						</div>
+					</div>
+					<div style="display:table-row;">
+						<div class="table_inner_cell" style="padding-left:10px;">
+							Level Income
+						</div>
+						<div class="table_inner_cell">
+							<div style="width:90%">
+								<input disabled ng-model="create_gh_ctrl.data.level_income_balance" type="text" class="form-control" placeholder="">
+							</div>
+						</div>
+						<div class="table_inner_cell" style="padding-right:10px;">
+							<input ng-model="create_gh_ctrl.data.level_income_amount" ng-change="create_gh_ctrl.update_total_amount_to_withdraw()" type="text" class="form-control" placeholder="Amount">
+						</div>
+					</div>
+					<div style="display:table-row;">
+						<div class="table_inner_cell table_cell_border_top" style="padding-left:10px;">
+							Daily Bonus
+						</div>
+						<div class="table_inner_cell table_cell_border_top">
+							<div style="width:90%">
+								<input disabled ng-model="create_gh_ctrl.data.daily_bonus_balance" type="text" class="form-control" placeholder="">
+							</div>
+						</div>
+						<div class="table_inner_cell table_cell_border_top" style="padding-right:10px;">
+								<input ng-model="create_gh_ctrl.data.daily_bonus_amount" ng-change="create_gh_ctrl.update_total_amount_to_withdraw()" type="text" class="form-control" placeholder="Daily Bonus">
+						</div>
+					</div>
+					<div style="display:table-row;">
+						<div class="table_inner_cell" style="padding-left:10px;">
+							Daily Growth
+						</div>
+						<div class="table_inner_cell">
+							<div style="width:90%">
+								<input ng-model="create_gh_ctrl.data.daily_growth_balance" type="text" class="form-control" placeholder="" disabled>
+							</div>
+						</div>
+						<div class="table_inner_cell" style="padding-right:10px;">
+							<input ng-model="create_gh_ctrl.data.daily_growth_amount" ng-change="create_gh_ctrl.update_total_amount_to_withdraw()" type="text" class="form-control" placeholder="Growth">
+						</div>
+					</div>
+					<div style="display:table-row;">
+						<div class="table_inner_cell" style="padding-left:10px;">
+							Task Earning
+						</div>
+						<div class="table_inner_cell">
+							<div style="width:90%">
+								<input ng-model="create_gh_ctrl.data.task_earning_balance" type="text" class="form-control" placeholder="" disabled>
+							</div>
+						</div>
+						<div class="table_inner_cell" style="padding-right:10px;">
+							<input ng-model="create_gh_ctrl.data.task_earning_amount" ng-change="create_gh_ctrl.update_total_amount_to_withdraw()" type="text" class="form-control" placeholder="Task Earning">
+						</div>
+					</div>
+					<div style="display:table-row;">
+						<div class="table_inner_cell table_cell_border_top" style="padding-left:10px;">
+							Total
+						</div>
+						<div class="table_inner_cell table_cell_border_top">
+							<div style="width:90%">
+							</div>
+						</div>
+						<div class="table_inner_cell table_cell_border_top" style="padding-right:10px;">
+							<input ng-model="create_gh_ctrl.data.total_amount_to_withdraw" type="text" class="form-control" placeholder="Amount To Withdraw" disabled>
+						</div>
+					</div>
+					<div style="display:table-row;">
+						<div class="table_inner_cell" style="padding-left:10px;">Active BTC Address</div>
+						<div class="table_inner_cell">{{create_gh_ctrl.data.btc_address}}</div>
+						<div class="table_inner_cell" style="padding-right:10px;">
+							<button ng-click="create_gh_ctrl.submit()" class="btn btn-primary" style="padding-left:30px; padding-right:30px;">Submit</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div> <!-- flex container -->
+	</div>
+</div>
+
+

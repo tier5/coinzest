@@ -1,0 +1,598 @@
+
+
+.page-title-header {
+	padding: 10px 20px;
+	clear: both;
+	color: #333;
+	background-color: #fff;
+	color: #8a92a5;
+	background-color: #f7f7f9;
+	border-bottom: 1px solid #d8e3eb;
+	border-top: none;
+	box-shadow: inset 0 1px #fff;
+	margin-bottom:35px;
+
+	font-size: 22px;
+	font-weight: bold;
+}
+
+.create-ph-button {
+	background-color: rgba(0, 0, 0, 0) ;
+	background-image: linear-gradient(rgb(197, 253, 98) 0%, rgb(201, 253, 119) 47%, rgb(168, 234, 63) 63%, rgb(164, 228, 50) 100%);
+
+	color: #555;
+	border-right: 1px solid #9eb6ce;
+	border-top: 1px solid #688caf;
+	border-left: 1px solid #9eb6ce;
+	border-bottom: 1px solid #9eb6ce;
+
+	height:60px;
+	font-size:16px;
+	border-radius:12px;
+	font-weight:900;
+	color:#000000;
+	text-decoration:none;
+}
+
+.create-gh-button {
+	background-color: rgba(0, 0, 0, 0) ;
+	background-image:
+			linear-gradient(rgb(252, 234, 187) 0%, rgb(252, 205, 77) 46%, rgb(248, 181, 0) 60%, rgb(251, 223, 147) 100%);
+
+
+	color: #555;
+	border-right: 1px solid #9eb6ce;
+	border-top: 1px solid #688caf;
+	border-left: 1px solid #9eb6ce;
+	border-bottom: 1px solid #9eb6ce;
+	height:60px;
+
+	border-radius:12px;
+	font-weight:900;
+	color:#000000;
+	font-size:16px;
+	text-decoration:none;
+
+}
+
+
+.create-button-a span {
+	display:table-cell;
+	text-align:center;
+	vertical-align:middle;
+	height:100%;
+}
+
+
+.create-button-a:hover {
+	text-decoration:none;
+}
+
+.full-standard-fade {
+  transition: 0.5s linear all;
+  -webkit-transition: .5s linear all;
+}
+
+.full-standard-fade.ng-enter {
+  opacity: 0;
+}
+
+.full-standard-fade.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+
+.full-standard-fade.ng-leave {
+  opacity: 1;
+}
+
+.full-standard-fade.ng-leave.ng-leave-active {
+  opacity: 0;
+}
+
+
+.full-standard-ng-show {
+  transition: 0.5s linear all;
+  -webkit-transition: .5s linear all;
+}
+
+.full-standard-ng-show.ng-hide-add {
+	opacity: 0;
+}
+.full-standard-ng-show.ng-hide-add.ng-hide-add-active {
+	opacity: 1;
+}
+
+.full-standard-ng-show.ng-hide-remove {
+	opacity: 1;
+}
+.full-standard-ng-show.ng-hide-remove.ng-hide-remove-active {
+	opacity: 0;
+}
+
+
+
+
+.standard_fade {
+  transition: .8s linear all;
+  -webkit-transition: 1s linear all;
+}
+
+/*
+.standard_fade.ng-enter {
+  opacity: 0;
+}
+
+.standard_fade.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+*/
+
+.standard_fade.ng-leave {
+  opacity: 1;
+}
+
+.standard_fade.ng-leave.ng-leave-active {
+  opacity: 0;
+}
+
+
+.give_help_order_container {
+	background-color: rgba(0, 0, 0, 0) ;
+	background-image: linear-gradient(rgb(197, 253, 98) 0%, rgb(201, 253, 119) 47%, rgb(168, 234, 63) 63%, rgb(164, 228, 50) 100%);
+
+	color: #555;
+	border-right: 1px solid #9eb6ce;
+	border-top: 1px solid #688caf;
+	border-left: 1px solid #9eb6ce;
+	border-bottom: 1px solid #9eb6ce;
+/*
+	linear-gradient(rgb(197, 253, 98) 0%, rgb(201, 253, 119) 47%, rgb(168, 234, 63) 63%, rgb(164, 228, 50) 100%).orange_link
+*/
+	background-origin:
+	padding-box
+	;
+	background-size:
+	auto
+	;
+	border-bottom-color:
+	rgb(255, 255, 255)
+	;
+	border-bottom-left-radius:
+	16px
+	;
+	border-bottom-right-radius:
+	16px
+	;
+	border-bottom-style:
+	solid
+	;
+	border-bottom-width:
+	2px
+	;
+	border-image-outset:
+	0px
+	;
+	border-image-repeat:
+	stretch
+	;
+	border-image-slice:
+	100%
+	;
+	border-image-source:
+	none
+	;
+	border-image-width:
+	1
+	;
+	border-left-color:
+	rgb(255, 255, 255)
+	;
+	border-left-style:
+	solid
+	;
+	border-left-width:
+	2px
+	;
+	border-right-color:
+	rgb(255, 255, 255)
+	;
+	border-right-style:
+	solid
+	;
+	border-right-width:
+	2px
+	;
+	border-top-color:
+	rgb(255, 255, 255)
+	;
+	border-top-left-radius:
+	16px
+	;
+	border-top-right-radius:
+	16px
+	;
+	border-top-style:
+	solid
+	;
+	border-top-width:
+	2px
+	;
+
+	box-shadow: rgba(0, 0, 0, 0.74902) 0px 0px 5px 0px ;
+	box-sizing: border-box ; color: rgb(5, 5, 5) ;
+
+	display:
+	block
+	;
+	font-family:
+	"Open Sans", sans-serif
+	;
+	font-size:
+	14px
+	;
+	line-height:
+	20px
+	;
+	margin-bottom:
+	0px
+	;
+	margin-top:
+	0px
+	;
+	min-height:
+	1px
+	;
+	padding-bottom: 10px ;
+	padding-left: 10px ;
+	padding-right: 10px ;
+	padding-top: 10px ;
+	position: relative ;
+	width: 100%;
+	margin-bottom:20px;
+}
+.get_help_order_container {
+	background-color: rgba(0, 0, 0, 0) ;
+	background-image: linear-gradient(rgb(237, 199, 95) 0%, rgb(245, 179, 12) 100%);
+
+	color: #555;
+	border-right: 1px solid #9eb6ce;
+	border-top: 1px solid #688caf;
+	border-left: 1px solid #9eb6ce;
+	border-bottom: 1px solid #9eb6ce;
+/*
+	linear-gradient(rgb(197, 253, 98) 0%, rgb(201, 253, 119) 47%, rgb(168, 234, 63) 63%, rgb(164, 228, 50) 100%).orange_link
+*/
+	background-origin:
+	padding-box
+	;
+	background-size:
+	auto
+	;
+	border-bottom-color:
+	rgb(255, 255, 255)
+	;
+	border-bottom-left-radius:
+	16px
+	;
+	border-bottom-right-radius:
+	16px
+	;
+	border-bottom-style:
+	solid
+	;
+	border-bottom-width:
+	2px
+	;
+	border-image-outset:
+	0px
+	;
+	border-image-repeat:
+	stretch
+	;
+	border-image-slice:
+	100%
+	;
+	border-image-source:
+	none
+	;
+	border-image-width:
+	1
+	;
+	border-left-color:
+	rgb(255, 255, 255)
+	;
+	border-left-style:
+	solid
+	;
+	border-left-width:
+	2px
+	;
+	border-right-color:
+	rgb(255, 255, 255)
+	;
+	border-right-style:
+	solid
+	;
+	border-right-width:
+	2px
+	;
+	border-top-color:
+	rgb(255, 255, 255)
+	;
+	border-top-left-radius:
+	16px
+	;
+	border-top-right-radius:
+	16px
+	;
+	border-top-style:
+	solid
+	;
+	border-top-width:
+	2px
+	;
+
+	box-shadow: rgba(0, 0, 0, 0.74902) 0px 0px 5px 0px ;
+	box-sizing: border-box ; color: rgb(5, 5, 5) ;
+
+	display:
+	block
+	;
+	font-family:
+	"Open Sans", sans-serif
+	;
+	font-size:
+	14px
+	;
+	line-height:
+	20px
+	;
+	margin-bottom:
+	0px
+	;
+	margin-top:
+	0px
+	;
+	min-height:
+	1px
+	;
+	padding-bottom: 10px ;
+	padding-left: 10px ;
+	padding-right: 10px ;
+	padding-top: 10px ;
+	position: relative ;
+	width: 100%;
+	margin-bottom:20px;
+}
+
+.gh_order_container {
+	background-color:
+	rgba(0, 0, 0, 0)
+	;
+	background-image:
+		linear-gradient(rgb(252, 234, 187) 0%, rgb(252, 205, 77) 46%, rgb(248, 181, 0) 60%, rgb(251, 223, 147) 100%);
+
+	color: #555;
+	border-right: 1px solid #9eb6ce;
+	border-top: 1px solid #688caf;
+	border-left: 1px solid #9eb6ce;
+	border-bottom: 1px solid #9eb6ce;
+/*
+	linear-gradient(rgb(197, 253, 98) 0%, rgb(201, 253, 119) 47%, rgb(168, 234, 63) 63%, rgb(164, 228, 50) 100%).orange_link
+*/
+	background-origin:
+	padding-box
+	;
+	background-size:
+	auto
+	;
+	border-bottom-color:
+	rgb(255, 255, 255)
+	;
+	border-bottom-left-radius:
+	16px
+	;
+	border-bottom-right-radius:
+	16px
+	;
+	border-bottom-style:
+	solid
+	;
+	border-bottom-width:
+	2px
+	;
+	border-image-outset:
+	0px
+	;
+	border-image-repeat:
+	stretch
+	;
+	border-image-slice:
+	100%
+	;
+	border-image-source:
+	none
+	;
+	border-image-width:
+	1
+	;
+	border-left-color:
+	rgb(255, 255, 255)
+	;
+	border-left-style:
+	solid
+	;
+	border-left-width:
+	2px
+	;
+	border-right-color:
+	rgb(255, 255, 255)
+	;
+	border-right-style:
+	solid
+	;
+	border-right-width:
+	2px
+	;
+	border-top-color:
+	rgb(255, 255, 255)
+	;
+	border-top-left-radius:
+	16px
+	;
+	border-top-right-radius:
+	16px
+	;
+	border-top-style:
+	solid
+	;
+	border-top-width:
+	2px
+	;
+
+	box-shadow: rgba(0, 0, 0, 0.74902) 0px 0px 5px 0px ;
+	box-sizing: border-box ; color: rgb(5, 5, 5) ;
+
+	display:
+	block
+	;
+	font-family:
+	"Open Sans", sans-serif
+	;
+	font-size:
+	14px
+	;
+	line-height:
+	20px
+	;
+	margin-bottom:
+	0px
+	;
+	margin-top:
+	0px
+	;
+	min-height:
+	1px
+	;
+	padding-bottom: 10px ;
+	padding-left: 10px ;
+	padding-right: 10px ;
+	padding-top: 10px ;
+	position: relative ;
+	width: 100%;
+	margin-bottom:20px;
+}
+.ph_order_container {
+	background-color:
+	rgba(0, 0, 0, 0)
+	;
+	background-image:
+	linear-gradient(rgb(197, 253, 98) 0%, rgb(201, 253, 119) 47%, rgb(168, 234, 63) 63%, rgb(164, 228, 50) 100%)
+	;
+/*
+	linear-gradient(rgb(197, 253, 98) 0%, rgb(201, 253, 119) 47%, rgb(168, 234, 63) 63%, rgb(164, 228, 50) 100%).orange_link
+*/
+	background-origin:
+	padding-box
+	;
+	background-size:
+	auto
+	;
+	border-bottom-color:
+	rgb(255, 255, 255)
+	;
+	border-bottom-left-radius:
+	16px
+	;
+	border-bottom-right-radius:
+	16px
+	;
+	border-bottom-style:
+	solid
+	;
+	border-bottom-width:
+	2px
+	;
+	border-image-outset:
+	0px
+	;
+	border-image-repeat:
+	stretch
+	;
+	border-image-slice:
+	100%
+	;
+	border-image-source:
+	none
+	;
+	border-image-width:
+	1
+	;
+	border-left-color:
+	rgb(255, 255, 255)
+	;
+	border-left-style:
+	solid
+	;
+	border-left-width:
+	2px
+	;
+	border-right-color:
+	rgb(255, 255, 255)
+	;
+	border-right-style:
+	solid
+	;
+	border-right-width:
+	2px
+	;
+	border-top-color:
+	rgb(255, 255, 255)
+	;
+	border-top-left-radius:
+	16px
+	;
+	border-top-right-radius:
+	16px
+	;
+	border-top-style:
+	solid
+	;
+	border-top-width:
+	2px
+	;
+
+	box-shadow: rgba(0, 0, 0, 0.74902) 0px 0px 5px 0px ;
+	box-sizing: border-box ; color: rgb(5, 5, 5) ;
+
+	display:
+	block
+	;
+	font-family:
+	"Open Sans", sans-serif
+	;
+	font-size:
+	14px
+	;
+	line-height:
+	20px
+	;
+	margin-bottom:
+	0px
+	;
+	margin-top:
+	0px
+	;
+	min-height:
+	1px
+	;
+	padding-bottom: 10px ;
+	padding-top: 10px ;
+	padding-left: 10px ;
+	padding-right: 10px ;
+	position: relative ;
+	width: 100%;
+	margin-bottom:20px;
+}
+
+

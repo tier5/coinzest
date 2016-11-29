@@ -1,0 +1,306 @@
+<div class="page-title-header">
+	My Profile
+</div>
+
+<style>
+	form.submitted input.ng-invalid
+	{
+	    border:1px solid #f00;
+	}
+
+	form.submitted select.ng-invalid
+	{
+	    border:1px solid #f00;
+	}
+
+	form.submitted .ng-invalid
+	{
+	    border:1px solid #f00;
+	}
+
+
+	.field_error
+	{
+	    border:1px solid #f00;
+	}
+</style>
+
+
+<script>
+
+
+	isFormValid = function ($scope, ngForm) {
+		      var i = null;
+		      //$scope.$emit('$validate');
+		      $scope.$broadcast('$validate');
+		      
+		      if(! ngForm.$invalid) {
+			return true;
+		      } else {
+			// make the form fields '$dirty' so that the validation messages would be shown
+			ngForm.$dirty = true;
+			
+			for(i in ngForm) {
+			  if(ngForm[i] && ngForm[i].hasOwnProperty && ngForm[i].hasOwnProperty('$dirty')) { // TODO: is 'field.$invalid' test required?
+			    ngForm[i].$dirty = true;
+			  }
+			}
+		      }
+		    };
+
+	app.config(['ngDialogProvider', function (ngDialogProvider) {
+            ngDialogProvider.setDefaults({
+                className: 'ngdialog-theme-default',
+                plain: false,
+                showClose: true,
+                closeByDocument: true,
+                closeByEscape: true,
+                appendTo: false,
+                preCloseCallback: function () {
+                    //console.log('default pre-close callback');
+                }
+            });
+        }]);
+
+
+	  app.controller('PageController', ['$scope', '$http', 'Upload', '$timeout', 'ngDialog', '$window', function($scope, $http, Upload, $timeout, ngDialog, $window) {
+
+		var vm = this;
+		vm.data = {};
+
+		$scope.regex_date_of_birth = "^(\\d{1,2})\/(\\d{1,2})\/(\\d{4})$";
+		//$scope.regex_date_of_birth = "\\d{1,2}";
+
+		//$scope.new_password = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&#])[A-Za-z\\d$@$!%*#?&]{8,}$";
+		$scope.new_password = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_])[A-Za-z\\d\\W]{8,}$";
+
+		vm.data.change_password = "";
+		vm.data.change_password2 = "";
+
+		
+		vm.is_registration_complete = true;
+		vm.is_registration_complete = false;
+
+		vm.proceed_to_site_click = function() {
+			$window.location = "/platform/";
+		}
+
+		vm.submit = function($form) {
+			var ngForm = $form;
+			if(isFormValid($scope, ngForm)) { // trigger manual validation
+			} else {
+				$form.$submitted = true;
+				$form.submitted = true;
+			}
+
+			if ($form.$invalid) {
+				$form.$submitted = true;
+				$form.submitted = true;
+			} else {
+				var obj_data = {};
+
+				obj_data.data = vm.data;
+
+				/*
+				alert('in here');
+				obj_data.login = $scope.data.create_member_login;
+				obj_data.country = $scope.data.create_member_country;
+				obj_data.fullname = $scope.data.create_member_fullname;
+				*/
+				$http({
+					method: 'POST',
+					url: '/platform/registrations/update_registration/',
+					data: {data:obj_data}
+				}).success(function (result) {
+					if (result.is_success) {
+						vm.is_registration_complete = true;
+					}
+					//alert(result);
+					//$scope.form_data.get_otp_retrieve_login = '';
+				});
+			}
+
+		};
+
+		vm.file_upload = function(data, upload_file) {
+
+			//mr_data.is_have_image_receipt = 'Y';
+			//alert(upload_files);
+			/*var new_dialog = ngDialog.open({ id: 'fromAService', template: 'firstDialogId', controller: 'InsideCtrl', data: { foo: 'from a service' } });
+			*/
+			if (upload_file != null) {
+				var new_dialog = ngDialog.open({ id: 'fromAService', closeByDocument: false, template: 'uploader_dialog', controller: 'UploaderController', data: { file: upload_file, form_data: data} });
+				// example on checking whether created `new_dialog` is open
+				$timeout(function() {
+					console.log(ngDialog.isOpen(new_dialog.id));
+				}, 2000)
+			}
+		};
+
+	    }]);
+		var compareTo = function() {
+		    return {
+			require: "ngModel",
+			scope: {
+			    otherModelValue: "=compareTo"
+			},
+			link: function(scope, element, attributes, ngModel) {
+			     
+			    ngModel.$validators.compareTo = function(modelValue) {
+				//alert('trying to compare' + modelValue + ' with ' + scope.otherModelValue);
+				return modelValue == scope.otherModelValue;
+			    };
+		 
+			    scope.$watch("otherModelValue", function() {
+				ngModel.$validate();
+			    });
+			}
+		    };
+		};
+		 
+		app.directive("compareTo", compareTo);
+
+
+		app.controller('UploaderController', ['$scope', 'Upload', '$timeout', 'ngDialog', function ($scope, Upload, $timeout, ngDialog) {
+
+
+			//console.log($scope.ngDialogData);
+			//console.log($scope.ngDialogData.files);
+			var vm = this;
+			//alert($scope.ngDialogData.files);
+			vm.log = '';
+			var temp = '';
+			vm.is_uploading = false;
+			vm.percentage_complete = "";
+			vm.is_processing_upload = false;
+
+			vm.upload = function (upload_file) {
+				var files = [upload_file]; 
+				console.log('starting upload');
+				if (files && files.length) {
+					for (var i = 0; i < files.length; i++) {
+						var file = files[i];
+
+						if (!file.$error) {
+							//alert(matchedrequest_id);
+							Upload.upload({
+								url: '/platform/registrations/upload_photo_id/',
+								data: {
+									file: file
+								}
+							}).then(function (resp) {
+								$timeout(function() {
+									$scope.closeThisDialog();
+									if (resp.data.is_success) {
+										//$scope.ngDialogData.mr_data.is_have_image_receipt = 'Y';
+										$scope.ngDialogData.form_data.photo_upload = 'Y';
+									} else {
+									}
+								});
+								$scope.is_uploading = false;
+								$scope.is_processing_upload = false;
+							}, null, function (evt) {
+								var progressPercentage = parseInt(100.0 *
+								evt.loaded / evt.total);
+								$scope.is_uploading = true;
+								if (progressPercentage == 100) {
+									$scope.is_uploading = false;
+									$scope.is_processing_upload = true;
+								} else {
+									$scope.percentage_complete = "file uploading: " + progressPercentage + "%";
+								}
+								$scope.log = 'progress: ' + progressPercentage + 
+								'% ' + evt.config.data.file.name + '\n' + 
+								$scope.log;
+							});
+						}
+					} // end for
+				} // end if
+			}; // vm.upload
+			//alert($scope.ngDialogData.file);
+			//alert('in here');
+			if ($scope.ngDialogData.file != null) {
+				vm.upload($scope.ngDialogData.file);
+			} else {
+				$scope.closeThisDialog();
+			}
+		}]);
+
+
+	</script>
+
+	
+	<div class="flex_container">
+		<div ng-controller="PageController as page_ctrl" style="max-width:600px;">
+			<div ng-show="page_ctrl.is_registration_complete">
+	
+				<div ng-show="page_ctrl.view_data.is_submit_error_message" style="margin-bottom: 0px !important;" class="alert alert-danger" role="alert">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span class="sr-only">Error:</span>
+					{{page_ctrl.view_data.submit_error_message}}
+				</div>
+				<div ng-show="page_ctrl.view_data.is_submit_success_message" style="" class="alert alert-success" role="alert">
+					Successfully Created Member. An Email has been sent to them.
+				</div>
+
+
+			</div>
+			<div ng-show="!page_ctrl.is_registration_complete">
+				<form ng-class="{submitted:registration_form.$submitted}" name="profile_form" novalidate>
+				<div style="padding-bottom:20px;">Update Your Profile Information Below</div>
+				<div class="form-group">
+					<label class="form-label">Full Name</label>
+					<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty)}" ng-model="page_ctrl.data.fullname" name="fullname" type="text" class="form-control" placeholder="Enter Your Real Name" required>
+					<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+					    <div ng-message="required">Required</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="form-label">Import Downline (Must be TAB Delimited CSV)</label>
+					<div>
+						<button type="button" ngf-select ng-model="page_ctrl.data.photo_uploader" ngf-change="page_ctrl.file_upload(page_ctrl.data, page_ctrl.data.photo_uploader)" ngf-multiple="false" class="btn btn-primary">IMPORT DOWNLINE</button>
+						<input type="hidden" ng-model="page_ctrl.data.photo_upload" value="" name="photo_upload" required>
+					</div>
+					<div style="color:red; font-weight:bold" ng-messages="profile_form.photo_upload.$error" ng-if="profile_form.photo_upload.$dirty">
+					    <div ng-message="required">Required</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="form-label">GH Balance (One Time Only)</label>
+					<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.gh_balance.$dirty)}" ng-model="page_ctrl.data.gh_balance" name="gh_balance" type="text" class="form-control" placeholder="GH Balance" required>
+					<div style="color:red; font-weight:bold" ng-messages="profile_form.gh_balance.$error" ng-if="profile_form.date_of_birth.$dirty">
+					    <div ng-message="required">Required</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="form-label">Balance Proof (Upload an Image Showing Proof of your Balance)</label>
+					<div>
+						<button type="button" ngf-select ng-model="page_ctrl.data.photo_uploader" ngf-change="page_ctrl.file_upload(page_ctrl.data, page_ctrl.data.photo_uploader)" ngf-multiple="false" class="btn btn-primary">UPLOAD BALANCE PROOF</button>
+						<input type="hidden" ng-model="page_ctrl.data.photo_upload" value="" name="photo_upload" required>
+					</div>
+					<div style="color:red; font-weight:bold" ng-messages="profile_form.photo_upload.$error" ng-if="profile_form.photo_upload.$dirty">
+					    <div ng-message="required">Required</div>
+					</div>
+				</div>
+				<div style="float:left;">
+					<button ng-click="page_ctrl.submit(profile_form)" class="btn btn-primary">UPDATE</button>
+				</div>
+				</form>
+			</div> <!-- registration complete -->
+		</div>
+	</div>
+</div>
+
+
+<script type="text/ng-template" id="uploader_dialog">
+        <div class="ngdialog-message">
+		<div class="flex_container">
+			<div style="font-size:24px; font-weight:900; padding-top:10px;">
+			{{percentage_complete}}
+			</div>
+		</div>
+        </div>
+</script>
+
+
+

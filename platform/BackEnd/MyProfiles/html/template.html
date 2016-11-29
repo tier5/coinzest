@@ -1,0 +1,719 @@
+<div class="page-title-header">
+	My Profile
+</div>
+
+<style>
+	form.submitted input.ng-invalid
+	{
+	    border:1px solid #f00;
+	}
+
+	form.submitted select.ng-invalid
+	{
+	    border:1px solid #f00;
+	}
+
+	form.submitted .ng-invalid
+	{
+	    border:1px solid #f00;
+	}
+
+
+	.field_error
+	{
+	    border:1px solid #f00;
+	}
+
+	.form_sub_header_text {
+		color:#FF0000;
+		font-weight:900;
+		font-size:20px;
+		margin-bottom:20px;
+		margin-top:20px;
+	}
+
+	.form_sub_header_text_black {
+		font-weight:900;
+		font-size:16px;
+		margin-bottom:10px;
+		margin-top:10px;
+		text-decoration:underline;
+	}
+
+	.form_data_from_old_system_row {
+		margin-bottom:12px;
+		margin-top:12px;
+	}
+</style>
+
+
+<script>
+
+
+	isFormValid = function ($scope, ngForm) {
+		      var i = null;
+		      //$scope.$emit('$validate');
+		      $scope.$broadcast('$validate');
+		      
+		      if(! ngForm.$invalid) {
+			return true;
+		      } else {
+			// make the form fields '$dirty' so that the validation messages would be shown
+			ngForm.$dirty = true;
+			
+			for(i in ngForm) {
+			  if(ngForm[i] && ngForm[i].hasOwnProperty && ngForm[i].hasOwnProperty('$dirty')) { // TODO: is 'field.$invalid' test required?
+			    ngForm[i].$dirty = true;
+			  }
+			}
+		      }
+		    };
+
+	app.config(['ngDialogProvider', function (ngDialogProvider) {
+            ngDialogProvider.setDefaults({
+                className: 'ngdialog-theme-default',
+                plain: false,
+                showClose: true,
+                closeByDocument: true,
+                closeByEscape: true,
+                appendTo: false,
+                preCloseCallback: function () {
+                    //console.log('default pre-close callback');
+                }
+            });
+        }]);
+
+
+	app.controller('PageController', ['$scope', '$http', 'Upload', '$timeout', 'ngDialog', '$window', function($scope, $http, Upload, $timeout, ngDialog, $window) {
+
+		var vm = this;
+		vm.data = {};
+
+
+
+		$scope.regex_date_of_birth = "^(\\d{1,2})\/(\\d{1,2})\/(\\d{4})$";
+		//$scope.regex_date_of_birth = "\\d{1,2}";
+
+		//$scope.new_password = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&#])[A-Za-z\\d$@$!%*#?&]{8,}$";
+		$scope.new_password = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_])[A-Za-z\\d\\W]{8,}$";
+
+		vm.data.change_password = "";
+		vm.data.change_password2 = "";
+
+		
+		vm.is_registration_complete = true;
+		vm.is_registration_complete = false;
+
+		vm.proceed_to_site_click = function() {
+			$window.location = "/platform/";
+		}
+
+		vm.t = {};
+		vm.t.data = [];
+		
+
+		/*
+		vm.t.user_temp_data = {};
+
+		vm.t.set_previous_data = "N";
+
+
+		vm.t.user_temp_data.is_have_ph_history_proof_image_temp = 'N';
+		vm.t.user_temp_data.is_have_gh_history_proof_image_temp = 'N';
+		vm.t.user_temp_data.is_have_income_level_gh_status_proof_image_temp = 'N';
+		//vm.t.user_temp_data.is_have_daily_growth_status_proof_image_temp = 'N';
+		vm.t.user_temp_data.is_have_gh_status_daily_growth_image_proof_temp = 'N';
+		vm.t.user_temp_data.is_have_gh_request_available_balance_proof_image_temp = 'N';
+		vm.t.user_temp_data.gh_history_proof_image_was_it_confirmed = 'N';
+
+		vm.t.user_temp_data.arr_unconfirmed_gh = [];
+		*/
+
+
+		$http({
+		    method: 'POST',
+		    url: '/platform/myprofile/get_data/',
+			data: { }
+		}).success(function (result) {
+			if (result.is_success) {
+				vm.t.data = result.data;
+				vm.t.sponsor_data = result.sponsor_data;
+				/*
+				vm.t.user_temp_data = result.user_temp_data;
+				vm.t.user_temp_data.is_have_ph_history_proof_image_temp = 'N';
+				vm.t.user_temp_data.is_have_gh_history_proof_image_temp = 'N';
+				vm.t.user_temp_data.is_have_income_level_gh_status_proof_image_temp = 'N';
+				//vm.t.user_temp_data.is_have_daily_growth_status_proof_image_temp = 'N';
+				vm.t.user_temp_data.is_have_gh_status_daily_growth_image_proof_temp = 'N';
+				vm.t.user_temp_data.is_have_gh_request_available_balance_proof_image_temp = 'N';
+
+				vm.t.user_temp_data.gh_history_proof_image_was_it_confirmed = 'N';
+				*/
+			}
+		});
+
+
+
+
+		vm.submit = function($form) {
+			var ngForm = $form;
+			if(isFormValid($scope, ngForm)) { // trigger manual validation
+			} else {
+				$form.$submitted = true;
+				$form.submitted = true;
+			}
+
+			if ($form.$invalid) {
+				$form.$submitted = true;
+				$form.submitted = true;
+			} else {
+				var obj_data = {};
+
+				obj_data.data = vm.data;
+
+				/*
+				alert('in here');
+				obj_data.login = $scope.data.create_member_login;
+				obj_data.country = $scope.data.create_member_country;
+				obj_data.fullname = $scope.data.create_member_fullname;
+				*/
+				$http({
+					method: 'POST',
+					url: '/platform/myprofile/update/',
+					data: {data:obj_data}
+				}).success(function (result) {
+					if (result.is_success) {
+						vm.is_registration_complete = true;
+					}
+					//alert(result);
+					//$scope.form_data.get_otp_retrieve_login = '';
+				});
+			}
+
+		};
+
+		vm.t.arr_btc_addresses = {};
+		$http({
+			method: 'POST',
+			url: '/platform/myprofile/get_btc_addresses_for_user/',
+			data: {btc_address: vm.t.new_bitcoin_address}
+		}).success(function (result) {
+			if (result.is_success) {
+				vm.t.arr_btc_addresses = result.arr_data;
+				//
+				//$scope.ngDialogData.mr_data.is_have_image_receipt = 'Y';
+			}
+		});
+
+		vm.t.new_bitcoin_address = "";
+		vm.t.is_new_bitcoin_address_submit = false;
+		vm.t.is_new_bitcoin_address_error = false;
+
+
+		vm.add_new_bitcoin_address = function() {
+			vm.t.is_new_bitcoin_address_submit = false;
+			vm.t.is_new_bitcoin_address_error = false;
+			$http({
+				method: 'POST',
+				url: '/platform/myprofile/add_new_btc_address/',
+				data: {btc_address: vm.t.new_bitcoin_address}
+			}).success(function (result) {
+				if (result.is_success) {
+					vm.t.new_bitcoin_address = '';
+					vm.t.is_new_bitcoin_address_submit = true;
+					//
+					//$scope.ngDialogData.mr_data.is_have_image_receipt = 'Y';
+				} else {
+					vm.t.is_new_bitcoin_address_submit = true;
+					vm.t.is_new_bitcoin_address_error = true;
+				}
+			});
+		};
+
+
+		vm.delete_btc_address = function(id, arr_data, $index) {
+
+			var result = confirm("Are you sure you would like to archive this address?");
+			//vm.t.is_new_bitcoin_address_submit = false;
+			//vm.t.is_new_bitcoin_address_error = false;
+			if (result) {
+				$http({
+					method: 'POST',
+					url: '/platform/myprofile/delete_btc_address/' + id,
+					data: {}
+				}).success(function (result) {
+					if (result.is_success) {
+						alert('bitcoin address deleted');
+						arr_data.splice($index,1);
+						//vm.t.is_new_bitcoin_address_submit = true;
+						//
+						//$scope.ngDialogData.mr_data.is_have_image_receipt = 'Y';
+					}
+				});
+			}
+		};
+
+		vm.set_btc_address_to_primary = function(id) {
+			vm.t.is_new_bitcoin_address_submit = false;
+			vm.t.is_new_bitcoin_address_error = false;
+			$http({
+				method: 'POST',
+				url: '/platform/myprofile/set_btc_address_to_primary/' + id,
+				data: {}
+			}).success(function (result) {
+				if (result.is_success) {
+					alert("Set To Primary");
+					vm.t.arr_btc_addresses = result.arr_data;
+					//vm.t.is_new_bitcoin_address_submit = true;
+				}
+			});
+		};
+
+		vm.file_upload = function(data, upload_file) {
+
+			//mr_data.is_have_image_receipt = 'Y';
+			//alert(upload_files);
+			/*var new_dialog = ngDialog.open({ id: 'fromAService', template: 'firstDialogId', controller: 'InsideCtrl', data: { foo: 'from a service' } });
+			*/
+			if (upload_file != null) {
+				var new_dialog = ngDialog.open({ id: 'fromAService', closeByDocument: false, template: 'uploader_dialog', controller: 'UploaderController', data: { file: upload_file, form_data: data} });
+				// example on checking whether created `new_dialog` is open
+				$timeout(function() {
+					console.log(ngDialog.isOpen(new_dialog.id));
+				}, 2000)
+			}
+		};
+
+	}]);
+
+
+
+	var compareTo = function() {
+	    return {
+		require: "ngModel",
+		scope: {
+		    otherModelValue: "=compareTo"
+		},
+		link: function(scope, element, attributes, ngModel) {
+		     
+		    ngModel.$validators.compareTo = function(modelValue) {
+			//alert('trying to compare' + modelValue + ' with ' + scope.otherModelValue);
+			return modelValue == scope.otherModelValue;
+		    };
+	 
+		    scope.$watch("otherModelValue", function() {
+			ngModel.$validate();
+		    });
+		}
+	    };
+	};
+	 
+	app.directive("compareTo", compareTo);
+
+
+
+
+	</script>
+
+	
+	<div class="flex_container">
+		<div ng-controller="PageController as page_ctrl" style="max-width:700px;">
+			<div>
+	
+				<div ng-show="page_ctrl.view_data.is_submit_error_message" style="margin-bottom: 0px !important;" class="alert alert-danger" role="alert">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span class="sr-only">Error:</span>
+					{{page_ctrl.view_data.submit_error_message}}
+				</div>
+				<div ng-show="page_ctrl.view_data.is_submit_success_message" style="" class="alert alert-success" role="alert">
+					Successfully Updated Profile.
+				</div>
+
+
+			</div>
+			<div ng-show="!page_ctrl.is_registration_complete">
+				<form ng-class="{submitted:registration_form.$submitted}" name="profile_form" novalidate>
+					
+					<div class="col-xs-12 col-ms-12 col-sm-12">
+						<div style="padding-bottom:20px;">Update Your Profile Information Below</div>
+					</div>
+					<div class="col-xs-12 col-ms-6 col-sm-6">
+						<div class="form-group">
+							<label class="form-label">Login</label>
+							<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty)}" ng-model="page_ctrl.t.data.login" name="fullname" type="text" class="form-control" placeholder="Enter Your Real Name" disabled>
+							<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+							    <div ng-message="required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-ms-6 col-sm-6">
+						<div class="form-group">
+							<label class="form-label">Full Name</label>
+							<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty)}" ng-model="page_ctrl.t.data.fullname" name="fullname" type="text" class="form-control" placeholder="Enter Your Real Name" disabled>
+							<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+							    <div ng-message="required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-ms-6 col-sm-6">
+						<div class="form-group">
+							<label class="form-label">Country</label>
+							<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty)}" ng-model="page_ctrl.t.data.country" name="fullname" type="text" class="form-control" placeholder="Enter Your Real Name" disabled>
+							<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+							    <div ng-message="required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-ms-6 col-sm-6">
+						<div class="form-group">
+							<label class="form-label">BTC Address</label>
+							<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty)}" ng-model="page_ctrl.t.data.btc_address" name="fullname" type="text" class="form-control" placeholder="Enter Your Real Name" disabled>
+							<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+							    <div ng-message="required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-ms-6 col-sm-6">
+						<div class="form-group">
+							<label class="form-label">Date Of Birth</label>
+							<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty)}" ng-model="page_ctrl.t.data.date_of_birth" name="fullname" type="text" class="form-control" placeholder="DOB" disabled>
+							<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+							    <div ng-message="required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-ms-6 col-sm-6">
+						<div class="form-group">
+							<label class="form-label">Street Address</label>
+							<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty)}" ng-model="page_ctrl.t.data.complete_street_address" name="fullname" type="text" class="form-control" placeholder="DOB" disabled>
+							<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+							    <div ng-message="required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-ms-6 col-sm-6">
+						<div class="form-group">
+							<label class="form-label">Phone</label>
+							<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty)}" ng-model="page_ctrl.t.data.phone" name="fullname" type="text" class="form-control" placeholder="DOB" disabled>
+							<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+							    <div ng-message="required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-ms-6 col-sm-6">
+					</div>
+					<div style="clear:both;"></div>
+					<div class="col-xs-12 col-ms-6 col-sm-6">
+						<div class="form-group">
+							<label class="form-label">Sponsor Name</label>
+							<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty)}" ng-model="page_ctrl.t.sponsor_data.fullname" name="fullname" type="text" class="form-control" placeholder="Name" disabled>
+							<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+							    <div ng-message="required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-ms-6 col-sm-6">
+						<div class="form-group">
+							<label class="form-label">Sponsor Email</label>
+							<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty)}" ng-model="page_ctrl.t.sponsor_data.login" name="fullname" type="text" class="form-control" placeholder="Sponsor Email" disabled>
+							<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+							    <div ng-message="required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-ms-6 col-sm-6">
+						<div class="form-group">
+							<label class="form-label">Sponsor Number</label>
+							<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty)}" ng-model="page_ctrl.t.sponsor_data.phone" name="fullname" type="text" class="form-control" placeholder="Sponsor Number" disabled>
+							<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+							    <div ng-message="required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-ms-6 col-sm-6">
+					</div>
+					<div style="clear:both;"></div>
+				</form>
+			</div> <!-- registration complete -->
+			<div style="clear:both;"></div>
+			<div>
+				<form ng-class="{submitted:registration_form.$submitted}" name="bitcoin_address_form" novalidate>
+					<div class="col-xs-12">
+						<h2>Manage Bitcoin Addresses</h2>
+					</div>
+					<style>
+						.primary_btc_address {
+							border: 2px solid green;
+						}
+					</style>
+					<div ng-repeat="data in page_ctrl.t.arr_btc_addresses" class="standard_fade">
+						<div class="col-xs-12 col-ms-6 col-sm-6">
+							<div class="form-group">
+								<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty), primary_btc_address: (data.is_primary == 'Y')}" ng-model="data.btc_address" name="fullname" type="text" class="form-control" placeholder="Bitcoin Address" disabled>
+								<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+								    <div ng-message="required">Required</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12 col-ms-6 col-sm-6">
+							<div style="" ng-show="data.is_primary == 'N'">
+								<button type="button" ng-click="page_ctrl.set_btc_address_to_primary(data.id)" class="btn btn-primary">SET TO PRIMARY</button>
+								<button type="button" ng-click="page_ctrl.delete_btc_address(data.id, page_ctrl.t.arr_btc_addresses, $index)" class="btn btn-primary">ARCHIVE</button>
+							</div>
+
+						</div>
+						<div style="clear:both;"></div>
+					</div>
+
+					<div class="col-xs-12">
+						<div ng-show="page_ctrl.t.is_new_bitcoin_address_submit && !page_ctrl.t.is_new_bitcoin_address_error" style="" class="alert alert-success" role="alert">
+							You have added a new bitcoin address to your account. Please check your email to authorize this request.<br>
+						</div>
+						<div ng-show="page_ctrl.t.is_new_bitcoin_address_submit && page_ctrl.t.is_new_bitcoin_address_error"  style="" class="alert alert-danger" role="alert">
+								<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+								<span class="sr-only">Error:</span>
+								Unable To Add This Bitcoin Address to your account. Could be Invalid or a Duplicate. Please try a different address.
+							</div>
+
+
+					</div>
+
+					<div class="col-xs-12 col-ms-6 col-sm-6">
+						<div class="form-group">
+							<label class="form-label">New Bitcoin Address</label>
+							<input ng-class="{field_error:(!profile_form.date_of_birth.$valid && profile_form.fullname.$dirty)}" ng-model="page_ctrl.t.new_bitcoin_address" name="fullname" type="text" class="form-control" placeholder="Bitcoin Address">
+							<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+							    <div ng-message="required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-ms-6 col-sm-6">
+						<label class="form-label">&nbsp;</label>
+						<div style="">
+							<button type="button" ng-click="page_ctrl.add_new_bitcoin_address()" class="btn btn-primary">ADD</button>
+						</div>
+
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script type="text/ng-template" id="uploader_dialog">
+        <div class="ngdialog-message">
+		<div class="flex_container">
+			<div style="font-size:24px; font-weight:900; padding-top:10px;">
+			{{percentage_complete}}
+			</div>
+		</div>
+        </div>
+</script>
+
+
+
+<script>
+	app.controller('UploadProofImageController', ['$scope', 'Upload', '$timeout', 'ngDialog', '$http', function ($scope, Upload, $timeout, ngDialog, $http) {
+
+
+		//console.log($scope.ngDialogData);
+		//console.log($scope.ngDialogData.files);
+		var vm = this;
+		//alert($scope.ngDialogData.files);
+		vm.log = '';
+		var temp = '';
+		vm.is_uploading = false;
+		vm.percentage_complete = "";
+		vm.is_processing_upload = false;
+
+		vm.uploader = {};
+		$scope.uploader = {};
+
+		var obj_data = {};
+
+		$scope.t = {};
+		$scope.t.is_confirm_image = false;
+
+
+
+		$scope.field_name = "";
+		$scope.folder_name = "";
+		$scope.t.user_id = $scope.ngDialogData.user_id;
+
+		if ($scope.ngDialogData.field_name == 'is_have_gh_request_available_balance_proof_image') {
+			$scope.field_name = "is_have_gh_request_available_balance_proof_image";
+		} else if ($scope.ngDialogData.field_name == 'is_have_gh_history_proof_image') {
+			$scope.field_name = "is_have_gh_history_proof_image";
+		} else if ($scope.ngDialogData.field_name == 'is_have_ph_history_proof_image') {
+			$scope.field_name = "is_have_ph_history_proof_image";
+		} else if ($scope.ngDialogData.field_name == 'is_have_income_level_gh_status_proof_image') {
+			$scope.field_name = "is_have_income_level_gh_status_proof_image";
+		} else if ($scope.ngDialogData.field_name == 'is_have_daily_growth_status_proof_image') {
+			$scope.field_name = "is_have_daily_growth_status_proof_image";
+		}
+
+		$scope.accept_click = function() {
+			$http({
+				method: 'POST',
+				url: '/platform/Usertemp/accept_and_set_proof_image/' + $scope.field_name +  '/' + $scope.t.user_id +'/',
+				data: {}
+			}).success(function (result) {
+				if (result.is_success) {
+					$scope.ngDialogData.user_temp_data[$scope.field_name] = 'Y';
+					$scope.closeThisDialog();
+					//$scope.ngDialogData.mr_data.is_have_image_receipt = 'Y';
+				}
+			});
+		};
+
+		
+
+		$scope.t.upload_image_url = "";
+
+		$scope.cancel_click = function() {
+			$scope.closeThisDialog();
+		};
+
+		vm.upload = function (upload_file) {
+			var files = [upload_file]; 
+			console.log('starting upload');
+			if (files && files.length) {
+				for (var i = 0; i < files.length; i++) {
+					var file = files[i];
+					//console.log('starting file');
+					console.log($scope.t.user_id);
+
+					if (!file.$error) {
+						//alert(matchedrequest_id);
+						$scope.uploader = Upload.upload({
+							url: '/platform/Usertemp/upload_proof_image/' + $scope.field_name + '/' + $scope.t.user_id + '/' ,
+							data: {
+								file: file
+							}
+						});
+						$scope.uploader.then(function (resp) {
+							$timeout(function() {
+								/*
+								$scope.log = 'file: ' +
+								resp.config.data.file.name +
+								', Response: ' + JSON.stringify(resp.data) +
+								'\n' + $scope.log;
+								var response = 'Response: ' + JSON.stringify(resp.data);
+								*/
+								//$scope.closeThisDialog();
+								if (resp.data.is_success) {
+									$timeout(function() {
+										$scope.t.upload_image_url = "/platform/Usertemp/get_proof_image/" + $scope.field_name + '/' + $scope.t.user_id + "/";
+										$scope.t.is_confirm_image = true;
+									}, 1000);
+									//$scope.ngDialogData.mr_data.is_have_image_receipt = 'Y';
+								} else {
+								}
+							});
+							$scope.is_uploading = false;
+							$scope.is_processing_upload = false;
+						}, null, function (evt) {
+							var progressPercentage = parseInt(100.0 *
+							evt.loaded / evt.total);
+							$scope.is_uploading = true;
+							if (progressPercentage == 100) {
+								$scope.is_uploading = false;
+								$scope.is_processing_upload = true;
+							} else {
+								$scope.percentage_complete = "file uploading: " + progressPercentage + "%";
+							}
+							$scope.log = 'progress: ' + progressPercentage + 
+							'% ' + evt.config.data.file.name + '\n' + 
+							$scope.log;
+						});
+					}
+				}
+			}
+		};
+
+		$scope.cancel_upload = function() {
+			$scope.uploader.abort();
+			$scope.closeThisDialog();
+		};
+
+		if ($scope.ngDialogData.files != null) {
+			vm.upload($scope.ngDialogData.files);
+		} else {
+			$scope.closeThisDialog();
+		}
+        }]);
+
+</script>
+
+
+<script>
+
+		app.controller('ProofImageDialogCtrl', ['$scope', 'Upload', '$timeout', 'ngDialog', '$http', function ($scope, Upload, $timeout, ngDialog, $http) {
+			//console.log($scope.ngDialogData);
+			//console.log($scope.ngDialogData.files);
+			var vm = $scope;
+			//alert($scope.ngDialogData.files);
+
+
+
+		}]);
+
+
+
+</script>
+
+<script type="text/ng-template" id="upload_receipt_dialog">
+        <div class="ngdialog-message">
+		<div class="flex_container">
+			<div>
+				<div ng-show="!t.is_confirm_image">
+					<div style="font-size:24px; font-weight:900; padding-top:10px;">
+						{{percentage_complete}}
+					</div>
+				</div>
+				<div class="flex_container">
+					<div ng-show="!t.is_confirm_image" style="text-align:center; padding-top:30px;">
+						<img ng-src="/platform/images/progress_bar.gif">
+					</div>
+				</div>
+				<div class="flex_container">
+					<div ng-show="!t.is_confirm_image" style="text-align:center; padding-top:30px;">
+						<button type="button" ng-click="cancel_upload()" class="btn btn-primary">CANCEL UPLOAD</button>
+					</div>
+				</div>
+				<div ng-show="t.is_confirm_image">
+					<div class="flex_container">
+						<div style="padding-bottom:10px; padding-top:10px; font-weight:900;">IMAGE PROOF</div>
+					</div>
+					<div class="flex_container">
+						<div style="max-width:700px; padding-bottom:10px;">
+							<div class="col-xs-12 col-ms-6 col-sm-6">
+								<button type="button" ng-click="accept_click()" class="btn btn-primary">ACCEPT</button>
+							</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6" ng-click="">
+								<button type="button" class="btn btn-primary" ng-click="cancel_click()">CANCEL</button>
+							</div>
+						</div>
+					</div>
+					<div class="flex_container">
+						<img style="max-width: 90%;" ng-src="{{t.upload_image_url}}">
+					</div>
+				</div>
+			</div>
+		</div>
+        </div>
+</script>
+
+
+<script type="text/ng-template" id="view_proof_image_dialog">
+        <div class="ngdialog-message">
+		<div class="flex_container">
+			<div style="padding-bottom:10px; padding-top:10px; font-weight:900;">PROOF IMAGE</div>
+		</div>
+		<div class="flex_container">
+			<img style="max-width:90%" ng-src="/platform/Usertemp/get_proof_image/{{ngDialogData.field_name}}/{{ngDialogData.user_id}}/">
+		</div>
+        </div>
+</script>
+

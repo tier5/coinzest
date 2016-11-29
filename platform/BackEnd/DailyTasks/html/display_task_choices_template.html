@@ -1,0 +1,462 @@
+<script>
+
+	  app.controller('PageController', ['$scope', '$http', '$window', 'ngDialog', '$timeout', function($scope, $http, $window, ngDialog, $timeout) {
+
+		var vm = this;
+		vm.t = {};
+		vm.t.arr_data = [];
+
+		vm.search = "";
+	
+		
+		var data = [];
+
+		vm.t.number_active_daily_tasks = 0;
+		vm.t.is_choose_for_previous_month = false;
+		vm.t.arr_active_daily_tasks_data = [];
+
+		$http({
+		    method: 'POST',
+		    url: '/platform/dailytasks/get_user_data/',
+			data: { }
+		}).success(function (result) {
+			if (result.is_success) {
+				vm.t.arr_data = result.arr_data;
+				vm.t.number_active_daily_tasks = result.number_active_daily_tasks;
+				vm.t.arr_active_daily_tasks_data = result.arr_active_daily_tasks_data;
+			}
+		});
+
+		vm.edit_click = function(id) {
+			$window.location = "/platform/dailytasks/edit/" + id;
+			
+		};
+
+		vm.delete_click = function(index) {
+			var result = $window.confirm('Are you sure you want to delete?');
+                        if (result) {
+                                $http({
+                                    method: 'get',
+                                    url: '/segments/delete/' + index,
+                                }).success(function (result) {
+                                        $window.location = "/segments";
+                                });
+                        }
+		};
+
+		vm.open_submit_link_proof_dialog = function(user_daily_task_id, $index) {
+			var new_dialog = ngDialog.open({ id: 'open_submit_link_proof_dialog_id', closeByDocument: false, showClose: true, closeByEscape: true,  className: 'ngdialog-theme-default', template: 'submit_link_proof_dialog', controller: 'SubmitLinkProofController', data: { user_daily_task_index: $index, user_daily_task_id: user_daily_task_id, parent_vm: vm } });
+			// example on checking whether created `new_dialog` is open
+			$timeout(function() {
+				console.log(ngDialog.isOpen(new_dialog.id));
+			}, 2000)
+		};
+
+
+		vm.choose_task = function(id) {
+			var result = $window.confirm('Are you sure you want to Choose This Task?');
+                        if (result) {
+				var is_previous_month = false;
+				if (vm.t.is_choose_for_previous_month) {
+					is_previous_month = true;
+					
+				}
+	
+                                $http({
+					method: 'POST',
+					url: '/platform/dailytasks/choose_task/' + id,
+					data: {is_previous_month: is_previous_month }
+                                }).success(function (result) {
+					if (result.is_success) {
+						if (!vm.t.is_choose_for_previous_month) {
+							var confirm_result = $window.confirm('Would you like to choose a task for the previous month?');
+							if (confirm_result) {
+								vm.t.is_choose_for_previous_month = true;
+							}
+						} else {
+							vm.t.is_choose_for_previous_month = false;
+							vm.t.number_active_daily_tasks = result.number_active_daily_tasks;
+							vm.t.arr_active_daily_tasks_data = result.arr_active_daily_tasks_data;
+						}
+					}
+                                });
+                        }
+		};
+
+		vm.add = function() {
+			$window.location = "/platform/dailytasks/edit/0";
+			
+		};
+
+
+	}]);
+</script>
+
+
+<style>
+
+	.table_header {
+		font-weight:900;
+	}
+	td {
+		padding-left:10px;
+		padding-right:10px;
+	}
+
+	.data_table_odd_cell {
+
+		background-color: #f8f8f8;
+		border-bottom:1px solid  #d8d8d8;
+		padding-top:13px;
+		padding-bottom:13px;
+	}
+
+
+	.data_table_even_cell {
+		background-color: #ffffff;
+		border-bottom:1px solid  #d8d8d8;
+		padding-top:13px;
+		padding-bottom:13px;
+	}
+
+	.data_table > tr:hover > td {
+		background-color: #ffff99;
+	}
+
+	tr.have_hover:hover > td {
+		background-color: #add8e6;
+	}
+
+	td.clickable:hover {
+		cursor:pointer;
+	}
+
+	th {
+		padding-left:10px !important;
+		padding-right:10px !important;
+	}
+</style>
+
+<div ng-controller="PageController as page_ctrl">
+
+		<div style="clear:both;"></div>
+		<div ng-show="page_ctrl.t.number_active_daily_tasks == 0 || page_ctrl.t.is_choose_for_previous_month">
+			<div class="flex_container" style="max-width:1000px;">
+				<div style="margin-bottom:20px; font-size:24px; font-weight:900;">
+					Choose a Daily Task<span ng-show="page_ctrl.t.is_choose_for_previous_month">&nbsp;for previous month</span>
+				</div>
+			</div>
+			<div class="flex_container" style="max-width:1000px;">
+
+				<div class="col-xs-12" ng-if="page_ctrl.t.arr_data.length == 0">
+				      <strong>No Choices Found</strong>
+				</div>
+
+				<div class="col-xs-12" ng-repeat="data in page_ctrl.t.arr_data track by $index">
+					<div style="    
+						border-radius: 12px;
+						background-color:#f0b70f;
+						padding:10px;
+						margin-left:10px;
+						margin-right:10px;
+						">
+						<div style="text-align:center;">
+							<b>{{data.title}}</b>
+						</div>
+						<p>
+						{{data.description}}
+						</p>
+						<div style="height:200px; overflow:hidden;">
+							<p>
+							{{data.long_description}}
+							</p>
+						</div>
+						<div style="float:right; margin-top:10px;">
+							<button type="button" class="btn btn-primary" ng-click="page_ctrl.choose_task(data.id)">CHOOSE TASK</BUTTON>
+						</div>
+						<div style="clear:both;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div ng-show="page_ctrl.t.number_active_daily_tasks >= 1 && !page_ctrl.t.is_choose_for_previous_month">
+			<div class="flex_container" style="max-width:1000px;">
+				<div style="margin-bottom:20px; font-size:24px; font-weight:900;">
+					Your Current Tasks
+				</div>
+			</div>
+			<div style="clear:both;"></div>
+
+			<div class="flex_container" style="max-width:1000px;">
+				<div class="col-xs-12" ng-if="page_ctrl.t.arr_active_daily_tasks_data.length == 0">
+				      <strong>All Your Tasks have been Complete. Please Come Back Late For More Daily Tasks</strong>
+				
+				</div>
+			</div>
+			<div class="flex_container" style="max-width:1000px;">
+
+				<div class="col-xs-6" ng-repeat="data in page_ctrl.t.arr_active_daily_tasks_data track by $index" style="
+					margin-top:10px;
+					margin-bottom:10px;
+				">
+					<div class="flex_container">
+						<div class="" style="    
+							border-radius: 12px;
+							background-color:#feebb5;
+							width:140px;
+							min-height: 200px;
+							max-height: 200px;
+							overflow:hidden;
+							padding:10px;
+							margin-left:10px;
+							margin-right:10px;
+							">
+							<div style="text-align:center;">
+								<b>{{data.title}}</b>
+							</div>
+							<p>
+								{{data.description}}
+							</p>
+						</div>
+					</div>
+					<div style="clear:both;"></div>
+					<div class="flex_container">
+						<div style="text-align:middle; margin-top:10px;">
+							<button type="button" class="btn btn-primary" ng-click="page_ctrl.open_submit_link_proof_dialog(data.user_daily_task_id, $index)">SUBMIT LINK PROOF</BUTTON>
+						</div>
+					</div>
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+	app.controller('SubmitLinkProofController', ['$scope', '$http', '$window', 'ngDialog', function($scope, $http, $window, ngDialog) {
+		var vm = this;
+		
+
+		$scope.t = {};
+
+		//alert($scope.ngDialogData.wallet_name);
+		$scope.t.form_data = {};
+
+		$scope.t.is_submit_error_message = false;
+
+		//alert($scope.ngDialogData.user_id);
+		$scope.submit_link = function() {
+			//alert($scope.t.form_data.amount);
+			//alert($scope.data.name);
+			
+			
+			//alert(angular.toJson($scope.data));
+			$http({
+			    method: 'POST',
+			    url: '/platform/userdailytasks/submit_link_proof' + "/" + $scope.ngDialogData.user_daily_task_id,
+				data: { data: $scope.t.form_data }
+			}).success(function (result) {
+				if (result.is_success) {
+					//$scope.ngDialogData.parent_vm.refresh_ph_orders();
+					$scope.closeThisDialog();
+					$scope.ngDialogData.parent_vm.t.arr_active_daily_tasks_data.splice($scope.ngDialogData.user_daily_task_index, 1);
+
+					alert("Thanks for Submitting An Admin Will Verify your Link");
+					//alert('Balance Adjusted');
+
+				} else {
+					alert("Proof Already Submitted");
+					$scope.ngDialogData.parent_vm.t.arr_active_daily_tasks_data.splice($scope.ngDialogData.user_daily_task_index, 1);
+					$scope.closeThisDialog();
+				}
+				$scope.t.is_submit_error_message = true;
+				//alert(result.total_clicks);
+				//alert('here');
+				//alert(result);
+				//$scope.data = result;
+			});
+		};
+	}]);
+
+</script>
+
+<script type="text/ng-template" id="submit_link_proof_dialog">
+	<div style="padding-top:8px;">
+		<label class="form-label">Submit Link</label>
+	</div>
+	<div style="padding-bottom:4px;">
+		<input ng-model="t.form_data.submit_link" type="text" class="form-control" placeholder="Link">
+	</div>
+	<div style="padding-bottom:8px; padding-top:8px;">
+		<button type="button" ng-click="submit_link()" class="btn btn-primary">SUBMIT LINK</button>
+	</div>
+	<div style="color:red; font-weight:bold" ng-messages="profile_form.submit_link.$error" ng-if="profile_form.submit_link.$dirty">
+		<div ng-message="required">Required</div>
+	</div>
+</script>
+
+
+<script>
+	app.controller('UploadCtrl', ['$scope', 'Upload', '$timeout', 'ngDialog', '$http', function ($scope, Upload, $timeout, ngDialog, $http) {
+
+
+		//console.log($scope.ngDialogData);
+		//console.log($scope.ngDialogData.files);
+		var vm = this;
+		//alert($scope.ngDialogData.files);
+		vm.log = '';
+		var temp = '';
+		vm.is_uploading = false;
+		vm.percentage_complete = "";
+		vm.is_processing_upload = false;
+
+		vm.uploader = {};
+		$scope.uploader = {};
+
+		var obj_data = {};
+
+		$scope.t = {};
+		$scope.t.is_confirm_image = false;
+
+		$scope.accept_click = function() {
+			$http({
+				method: 'POST',
+				url: '/platform/userdailytasks/accept_and_set_upload_image_proof/',
+				data: {matchedrequest_id:$scope.ngDialogData.matchedrequest_id}
+			}).success(function (result) {
+				if (result.is_success) {
+					$scope.closeThisDialog();
+					$scope.ngDialogData.mr_data.is_have_image_receipt = 'Y';
+					var matchedrequest_id = $scope.ngDialogData.matchedrequest_id;
+				} else {
+					alert('Unable To Accept Image');
+				}
+			});
+		};
+
+		
+
+		$scope.t.upload_image_url = "";
+
+		$scope.cancel_click = function() {
+			$scope.closeThisDialog();
+		};
+
+		vm.upload = function (upload_file) {
+			var files = [upload_file]; 
+			console.log('starting upload');
+			if (files && files.length) {
+				for (var i = 0; i < files.length; i++) {
+					var file = files[i];
+					//console.log('starting file');
+					var selected_id = $scope.ngDialogData.selected_id;
+					//console.log(matchedrequest_id);
+
+					if (!file.$error) {
+						//alert(matchedrequest_id);
+						$scope.uploader = Upload.upload({
+							url: '/platform/userdailytasks/image_proof_upload/',
+							data: {
+								file: file,
+								selected_id: selected_id
+							}
+						});
+						$scope.uploader.then(function (resp) {
+							$timeout(function() {
+								/*
+								$scope.log = 'file: ' +
+								resp.config.data.file.name +
+								', Response: ' + JSON.stringify(resp.data) +
+								'\n' + $scope.log;
+								var response = 'Response: ' + JSON.stringify(resp.data);
+								*/
+								//$scope.closeThisDialog();
+								if (resp.data.is_success) {
+									$timeout(function() {
+										$scope.t.upload_image_url = "/platform/userdailytasks/get_image_proof_upload/" + $scope.ngDialogData.selected_id + "/";
+										$scope.t.is_confirm_image = true;
+									}, 1000);
+									//$scope.ngDialogData.mr_data.is_have_image_receipt = 'Y';
+								} else {
+								}
+							});
+							$scope.is_uploading = false;
+							$scope.is_processing_upload = false;
+						}, null, function (evt) {
+							var progressPercentage = parseInt(100.0 *
+							evt.loaded / evt.total);
+							$scope.is_uploading = true;
+							if (progressPercentage == 100) {
+								$scope.is_uploading = false;
+								$scope.is_processing_upload = true;
+							} else {
+								$scope.percentage_complete = "file uploading: " + progressPercentage + "%";
+							}
+							$scope.log = 'progress: ' + progressPercentage + 
+							'% ' + evt.config.data.file.name + '\n' + 
+							$scope.log;
+						});
+					}
+				}
+			}
+		};
+
+		$scope.cancel_upload = function() {
+			$scope.uploader.abort();
+			$scope.closeThisDialog();
+		};
+
+		if ($scope.ngDialogData.files != null) {
+			vm.upload($scope.ngDialogData.files);
+		} else {
+			$scope.closeThisDialog();
+		}
+        }]);
+
+
+
+</script>
+
+<script type="text/ng-template" id="upload_receipt_dialog">
+        <div class="ngdialog-message">
+		<div class="flex_container">
+			<div>
+				<div ng-show="!t.is_confirm_image">
+					<div style="font-size:24px; font-weight:900; padding-top:10px;">
+						{{percentage_complete}}
+					</div>
+				</div>
+				<div class="flex_container">
+					<div ng-show="!t.is_confirm_image" style="text-align:center; padding-top:30px;">
+						<img ng-src="/platform/images/progress_bar.gif">
+					</div>
+				</div>
+				<div class="flex_container">
+					<div ng-show="!t.is_confirm_image" style="text-align:center; padding-top:30px;">
+						<button type="button" ng-click="cancel_upload()" class="btn btn-primary">CANCEL UPLOAD</button>
+					</div>
+				</div>
+				<div ng-show="t.is_confirm_image">
+					<div class="flex_container">
+						<div style="padding-bottom:10px; padding-top:10px; font-weight:900;">IMAGE RECEIPT</div>
+					</div>
+					<div class="flex_container">
+						<div style="max-width:700px; padding-bottom:10px;">
+							<div class="col-xs-12 col-ms-6 col-sm-6">
+								<button type="button" ng-click="accept_click()" class="btn btn-primary">ACCEPT</button>
+							</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6" ng-click="">
+								<button type="button" class="btn btn-primary" ng-click="cancel_click()">CANCEL</button>
+							</div>
+						</div>
+					</div>
+					<div class="flex_container">
+						<img style="max-width: 90%;" ng-src="{{t.upload_image_url}}">
+					</div>
+				</div>
+			</div>
+		</div>
+        </div>
+</script>
+

@@ -1,0 +1,356 @@
+/*Do not remove this line! saved from http://bootstraptor.com */
+
+
+
+section{
+	padding-top:30px;
+	position:relative;
+	
+}
+.z-index-1020{
+	position:relative;
+	z-index:1020;
+}
+
+section.brand-section{
+	padding:15px 0;
+}
+
+section.support-section{
+	border-top: 1px solid #dedede;
+	/*border-bottom: 1px solid #dedede;*/
+	box-shadow: 0px -20px 20px rgba(100,100,100, 0.05) inset,  0px 30px 50px rgba(200,200,200, 0.05) inset;
+	padding-bottom:30px;
+}
+.fa-10x {
+font-size: 10em;
+}
+
+.panel .list-group-flush {
+margin: 15px 0px 0px;
+}
+
+.i-tab {
+	display:block;
+	width:100%;
+}
+.brand-section .contact-links{
+	margin-top:20px;
+}
+
+.navbar {
+position: relative;
+min-height: 20px;
+margin-bottom: 0px;
+border: 1px solid transparent;
+border-radius:0px;
+}
+
+.navbar-default {
+
+}
+
+.navbar-nav>li>a {
+padding-top: 15px;
+padding-bottom: 15px;
+line-height: 10px;
+}
+
+.navbar-brand {
+float: left;
+padding: 10px;
+font-size: 18px;
+line-height: 15px;
+height: 30px;
+
+}
+
+.navbar-btn.btn-sm {
+margin-top: 5px;
+margin-bottom: 0px;
+}
+
+#myCarousel .carousel-inner .item{
+	min-height: 300px; 
+	
+}
+
+#myCarousel .carousel-inner .item img.tobottom{
+	margin-top:60px;
+}
+.video-section {
+	background: url('../../../assets/css/bg/bg_slider.jpg') top center no-repeat;
+	background-size:cover;
+	padding-top:0px;
+}
+.video-section .pattern-overlay {
+/*background-color: rgba(71, 71, 71, 0.49);*/
+padding: 40px 0 0px;
+min-height: 350px; 
+box-shadow: 0px -50px 60px rgba(0, 0, 0, 0.1) inset;
+/* Incase of overlay problems just increase the min-height*/
+}
+.video-section h1, .video-section h3{
+font-weight: 300;
+color: #fff;
+font-size: 50px;
+line-height: 60px;
+
+}
+
+.video-section h3 {
+font-size: 17px;
+line-height: 25px;
+font-weight: 400;
+color: #fff;
+margin: 30px 0;
+letter-spacing: 0;
+padding: 0;
+transition: .3s ease-out all;
+}
+
+.video-section p{
+	color: #fff;
+}
+.video-section .buttonBar{display:none;}
+.player {font-size: 1px;}
+
+
+footer {
+  padding-top: 40px;
+  padding-bottom: 10px;
+  margin-top: 40px;
+	border-top: 1px solid rgba(217, 217, 217, 0.8);
+	background: rgba(0,0,0, .4);
+}
+
+footer hr{
+	border-top: 1px solid #DED9D9;
+}
+
+footer a{
+	color:#fff;
+}
+
+footer a i.fa{
+	color:#A2A1A1;
+	
+}	
+
+@media (max-width: 768px) {
+	#nav-carousel .nav-justified>li {
+		float: left;
+		width:50%;
+	}
+	.nav-justified>li {
+		float: left;
+		width:50%;
+		margin-left:0px;
+		margin-right:0px;
+	}
+	.nav-pills>li+li {
+		margin-left: 0px;
+	}
+	.carousel-inner {
+		text-align:center;	
+	}
+	
+	#myCarousel .carousel-inner .item img.tobottom {
+		margin-top: 30px;
+		margin-bottom:-40px;
+		max-width:100%;
+	}
+	
+	.video-section h1{
+		font-weight: 300;
+		color: #fff;
+		font-size: 32px;
+		line-height: 40px;
+
+	}
+
+}
+
+@media (min-width: 768px) {
+  .nav-justified {
+    
+  }
+  .nav-justified > li > a {
+    border-right: 1px solid rgba(0,0,0, .1);
+    border-left: 1px solid rgba(50,50,50, .4);
+  }
+  .nav-justified > li:first-child > a {
+    border-left: 0;
+    border-radius: 0px;
+	padding-left: 65px;
+  }
+  .nav-justified > li:last-child > a {
+    border-right: 0;
+    border-radius: 0px;
+	padding-right: 65px;
+  }
+
+.navbar-nav>li>a {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+.navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
+margin-left: 0px;
+}
+
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+  /* Remove the padding we set earlier */
+  .masthead,
+  .marketing,
+  .footer {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+
+/* custom carousel */
+
+#myCarousel .nav a small
+{
+    display: block;
+}
+#myCarousel .nav {
+background: #2A2B2B;
+}
+
+#myCarousel .nav li a {
+	color:#fff;
+	
+}
+#myCarousel .nav li.active a {
+	color:#fff;
+}
+.nav-justified > li > a
+{
+    border-radius: 0px;
+}
+#nav-carousel.nav-justified > li > a
+{
+    font-size: 16px;
+	text-transform: uppercase;
+	
+}
+.nav-pills>li.active a {  }
+
+
+#nav-carousel .nav-pills>li a{
+	border-radius:0px;
+}
+
+#features-panels i.fa{
+	margin-top:30px;
+}
+
+.panel-img-wrapper{
+	position:relative;
+	max-height:150px;
+	overflow:hidden;
+}
+
+/* IZOTOPE PORTFOLIO */
+
+	
+	  
+	.thumbnail{
+		position:relative;
+	  }
+	  .plus{
+		position:absolute;
+		top:20px;
+		left:20px;
+		
+		text-align:center;
+		 /* IE 8 */
+		  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+
+		  /* IE 5-7 */
+		  filter: alpha(opacity=0);
+
+		  /* Netscape */
+		  -moz-opacity: 0;
+
+		  /* Safari 1.x */
+		  -khtml-opacity: 0;
+
+		  /* Good browsers */
+		  opacity: 0;
+	  }
+	  
+	  .thumbnail:hover .plus{
+		
+		 /* IE 8 */
+		  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+
+		  /* IE 5-7 */
+		  filter: alpha(opacity=100);
+
+		  /* Netscape */
+		  -moz-opacity: 1;
+
+		  /* Safari 1.x */
+		  -khtml-opacity: 1;
+
+		  /* Good browsers */
+		  opacity: 1;
+	  }
+	  .box{
+		margin-bottom:30px;
+	  }
+	  
+	  /* isotop items animation */
+	  .isotope .isotope-item {
+		-moz-transition-property: -moz-transform, opacity;
+		-ms-transition-property: -moz-transform, opacity;
+		-o-transition-property: top, left, opacity;
+		transition-property: transform, opacity;
+		-webkit-transition-property: -webkit-transform, opacity;
+		}
+		.isotope .isotope-item {
+		-moz-transition-property: -moz-transform, opacity;
+		-ms-transition-property: -moz-transform, opacity;
+		-o-transition-property: top, left, opacity;
+		transition-property: transform, opacity;
+		-webkit-transition-property: -webkit-transform, opacity;
+		}
+		.isotope-item {
+		-moz-transition-duration: 0.8s;
+		-ms-transition-duration: 0.8s;
+		-o-transition-duration: 0.8s;
+		transition-duration: 0.8s;
+		-webkit-transition-duration: 0.8s;
+		z-index: 2;
+		}
+	  
+	  @media (max-width: 767px){
+		.thumbnail img{
+			min-width:100%;
+			height:auto;
+		}
+	  }
+	  
+/* GROUP BUTTONS http://bootsnipp.com/snippets/featured/group-buttons */
+.ui-group-buttons .or{position:relative;float:left;width:.3em;height:1.3em;z-index:3;font-size:12px}
+.ui-group-buttons .or:before{position:absolute;top:50%;left:50%;content:'or';background-color:#5a5a5a;margin-top:-.1em;margin-left:-.9em;width:1.8em;height:1.8em;line-height:1.55;color:#fff;font-style:normal;font-weight:400;text-align:center;border-radius:500px;-webkit-box-shadow:0 0 0 1px rgba(0,0,0,0.1);box-shadow:0 0 0 1px rgba(0,0,0,0.1);-webkit-box-sizing:border-box;-moz-box-sizing:border-box;-ms-box-sizing:border-box;box-sizing:border-box}
+.ui-group-buttons .or:after{position:absolute;top:0;left:0;content:' ';width:.3em;height:2.84em;background-color:rgba(0,0,0,0);border-top:.6em solid #5a5a5a;border-bottom:.6em solid #5a5a5a}
+.ui-group-buttons .or.or-lg{height:1.3em;font-size:16px}
+.ui-group-buttons .or.or-lg:after{height:2.85em}
+.ui-group-buttons .or.or-sm{height:1em}
+.ui-group-buttons .or.or-sm:after{height:2.5em}
+.ui-group-buttons .or.or-xs{height:.25em}
+.ui-group-buttons .or.or-xs:after{height:1.84em;z-index:-1000}
+.ui-group-buttons{display:inline-block;vertical-align:middle}
+.ui-group-buttons:after{content:".";display:block;height:0;clear:both;visibility:hidden}
+.ui-group-buttons .btn{float:left;border-radius:0}
+.ui-group-buttons .btn:first-child{margin-left:0;border-top-left-radius:.25em;border-bottom-left-radius:.25em;padding-right:15px}
+.ui-group-buttons .btn:last-child{border-top-right-radius:.25em;border-bottom-right-radius:.25em;padding-left:15px}
+

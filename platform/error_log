@@ -1,0 +1,2 @@
+[07-Aug-2016 03:50:45 UTC] PHP Fatal error:  Call to a member function row_array() on boolean in /home/bitmutua/public_html/coinzest/platform/classes/DB/Users.php on line 185
+[07-Aug-2016 03:52:02 UTC] PHP Fatal error:  Call to a member function row_array() on boolean in /home/bitmutua/public_html/coinzest/platform/classes/DB/Users.php on line 185

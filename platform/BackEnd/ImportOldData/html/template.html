@@ -1,0 +1,1262 @@
+<div class="page-title-header">
+	Import Old Data
+</div>
+
+<style>
+	form.submitted input.ng-invalid
+	{
+	    border:1px solid #f00;
+	}
+
+	form.submitted select.ng-invalid
+	{
+	    border:1px solid #f00;
+	}
+
+	form.submitted .ng-invalid
+	{
+	    border:1px solid #f00;
+	}
+
+
+	.field_error
+	{
+	    border:1px solid #f00;
+	}
+
+	.form_sub_header_text {
+		color:#FF0000;
+		font-weight:900;
+		font-size:20px;
+		margin-bottom:20px;
+		margin-top:20px;
+	}
+
+	.form_sub_header_text_black {
+		font-weight:900;
+		font-size:16px;
+		margin-bottom:10px;
+		margin-top:10px;
+		text-decoration:underline;
+	}
+
+	.form_data_from_old_system_row {
+		margin-bottom:12px;
+		margin-top:12px;
+	}
+
+	.ngdialog.ngdialog-theme-default .ngdialog-content {
+		width: 100% !important;
+	}
+
+
+</style>
+
+
+<script>
+
+
+	isFormValid = function ($scope, ngForm) {
+		      var i = null;
+		      //$scope.$emit('$validate');
+		      $scope.$broadcast('$validate');
+		      
+		      if(! ngForm.$invalid) {
+			return true;
+		      } else {
+			// make the form fields '$dirty' so that the validation messages would be shown
+			ngForm.$dirty = true;
+			
+			for(i in ngForm) {
+			  if(ngForm[i] && ngForm[i].hasOwnProperty && ngForm[i].hasOwnProperty('$dirty')) { // TODO: is 'field.$invalid' test required?
+				if (ngForm[i].$error.required) {
+					ngForm[i].$dirty = true;
+				} else {
+					ngForm[i].$dirty = false;
+				}
+			  }
+			}
+		      }
+		    };
+
+	app.config(['ngDialogProvider', function (ngDialogProvider) {
+            ngDialogProvider.setDefaults({
+                className: 'ngdialog-theme-default',
+                plain: false,
+                showClose: true,
+                closeByDocument: true,
+                closeByEscape: true,
+                appendTo: false,
+                preCloseCallback: function () {
+                    //console.log('default pre-close callback');
+                }
+            });
+        }]);
+
+
+		var compareTo = function() {
+		    return {
+			require: "ngModel",
+			scope: {
+			    otherModelValue: "=compareTo"
+			},
+			link: function(scope, element, attributes, ngModel) {
+			     
+			    ngModel.$validators.compareTo = function(modelValue) {
+				//alert('trying to compare' + modelValue + ' with ' + scope.otherModelValue);
+				return modelValue == scope.otherModelValue;
+			    };
+		 
+			    scope.$watch("otherModelValue", function() {
+				ngModel.$validate();
+			    });
+			}
+		    };
+		};
+		 
+		app.directive("compareTo", compareTo);
+
+
+		app.controller('OldSystemDataController', ['$scope', '$http', 'Upload', '$timeout', 'ngDialog', '$window','$filter', function($scope, $http, Upload, $timeout, ngDialog, $window, $filter) {
+
+			var vm = this;
+
+			vm.data = {};
+
+			vm.t = {};
+
+			vm.t.user_temp_data = {};
+
+			vm.t.set_previous_data = "N";
+
+			//vm.t.user_id = $scope.page_ctrl.vm.t.data.id;
+
+			vm.t.user_temp_data.arr_unconfirmed_gh = [];
+			vm.t.user_temp_data.arr_unconfirmed_income_level_gh = [];
+
+			vm.t.user_temp_data.arr_unconfirmed_daily_growth_gh = [];
+
+
+			var current_location = String($window.location);
+
+			var arr_split = [];
+			var arr_split = current_location.split("/");
+
+			var param_value = "";
+
+			param_value = arr_split[arr_split.length-1];
+			if (param_value == "") {
+				param_value = arr_split[arr_split.length-2];
+			}
+
+			var user_id = param_value
+			if (user_id == 'import_old_data') {
+				user_id = 0;
+			}
+
+			vm.t.user_id = user_id;
+
+			console.log('user id is ' + user_id);
+			console.log('vm.t.useruser id is ' + vm.t.user_id);
+
+
+
+
+			vm.t.user_temp_data.is_have_ph_history_proof_image_temp = 'N';
+			vm.t.user_temp_data.is_have_gh_history_proof_image_temp = 'N';
+			vm.t.user_temp_data.is_have_income_level_gh_status_proof_image_temp = 'N';
+			//vm.t.user_temp_data.is_have_daily_growth_status_proof_image_temp = 'N';
+			vm.t.user_temp_data.is_have_gh_status_daily_growth_image_proof_temp = 'N';
+			vm.t.user_temp_data.is_have_gh_request_available_balance_proof_image_temp = 'N';
+			vm.t.user_temp_data.gh_history_proof_image_was_it_confirmed = 'N';
+			vm.t.user_temp_data.is_cancel_old_open_ph = 'N';
+
+			$http({
+			    method: 'POST',
+			    url: '/platform/import_old_data/get_data/' + user_id + '/',
+				data: { }
+			}).success(function (result) {
+				if (result.is_success) {
+					vm.t.data = result.data;
+
+
+					vm.t.user_id = result.data.id;
+					console.log('result data is ' + vm.t.user_id);
+					console.info(result.data);
+
+					vm.t.user_temp_data = result.user_temp_data;
+					vm.t.db_user_data = result.user_temp_data;
+
+					$http({
+					    method: 'POST',
+					    url: '/platform/import_old_data/get_stored_data/' + user_id + '/',
+						data: { }
+					}).success(function (result) {
+						if(typeof result.is_success === "undefined") {
+							// get the stored data here
+							vm.t.user_temp_data = result;
+							vm.t.set_previous_data = "Y";
+
+							vm.t.user_temp_data.is_have_gh_request_available_balance_proof_image = vm.t.db_user_data.is_have_gh_request_available_balance_proof_image;
+							vm.t.user_temp_data.is_have_gh_history_proof_image = vm.t.db_user_data.is_have_gh_history_proof_image;
+							vm.t.user_temp_data.is_have_ph_history_proof_image = vm.t.db_user_data.is_have_ph_history_proof_image;
+							vm.t.user_temp_data.is_have_income_level_gh_status_proof_image = vm.t.db_user_data.is_have_income_level_gh_status_proof_image;
+							vm.t.user_temp_data.is_have_daily_growth_status_proof_image = vm.t.db_user_data.is_have_daily_growth_status_proof_image;
+							vm.t.user_temp_data.is_fields_locked = "Y";
+						} else {
+							vm.t.user_temp_data.is_have_ph_history_proof_image_temp = 'N';
+							vm.t.user_temp_data.is_have_gh_history_proof_image_temp = 'N';
+							vm.t.user_temp_data.is_have_income_level_gh_status_proof_image_temp = 'N';
+							//vm.t.user_temp_data.is_have_daily_growth_status_proof_image_temp = 'N';
+							vm.t.user_temp_data.is_have_gh_status_daily_growth_image_proof_temp = 'N';
+							vm.t.user_temp_data.is_have_gh_request_available_balance_proof_image_temp = 'N';
+
+							vm.t.user_temp_data.gh_history_proof_image_was_it_confirmed = 'N';
+							vm.t.user_temp_data.is_cancel_old_open_ph = 'N';
+							vm.t.user_temp_data.is_cancel_old_open_gh = 'N';
+							vm.t.user_temp_data.last_ph_commitment_drop_down = 20;
+
+							vm.t.user_temp_data.arr_unconfirmed_gh = [];
+							vm.t.user_temp_data.arr_unconfirmed_gh[vm.t.user_temp_data.arr_unconfirmed_gh.length] = {};
+							vm.t.user_temp_data.arr_unconfirmed_gh[vm.t.user_temp_data.arr_unconfirmed_gh.length-1].do_you_have_another_unconfirmed_gh = 'N';
+							vm.t.user_temp_data.arr_unconfirmed_gh[vm.t.user_temp_data.arr_unconfirmed_gh.length-1].is_gh_confirmed = 'N';
+
+
+							vm.t.user_temp_data.arr_unconfirmed_income_level_gh = [];
+							vm.t.user_temp_data.arr_unconfirmed_income_level_gh[vm.t.user_temp_data.arr_unconfirmed_income_level_gh.length] = {};
+							vm.t.user_temp_data.arr_unconfirmed_income_level_gh[vm.t.user_temp_data.arr_unconfirmed_income_level_gh.length-1].do_you_have_another_unconfirmed_gh = 'N';
+
+
+							vm.t.user_temp_data.arr_unconfirmed_daily_growth_gh = [];
+							vm.t.user_temp_data.arr_unconfirmed_daily_growth_gh[vm.t.user_temp_data.arr_unconfirmed_daily_growth_gh.length] = {};
+							vm.t.user_temp_data.arr_unconfirmed_daily_growth_gh[vm.t.user_temp_data.arr_unconfirmed_daily_growth_gh.length-1].do_you_have_another_unconfirmed_gh = 'N';
+						}
+					});
+				}
+			});
+
+
+			vm.change_another_unconfirmed_gh = function($index) {
+				//console.log(vm.t.user_temp_data.arr_unconfirmed_gh[$index].do_you_have_another_unconfirmed_gh);
+				if (vm.t.user_temp_data.arr_unconfirmed_gh[$index].do_you_have_another_unconfirmed_gh == 'Y') {
+					vm.t.user_temp_data.arr_unconfirmed_gh[vm.t.user_temp_data.arr_unconfirmed_gh.length] = {};
+					vm.t.user_temp_data.arr_unconfirmed_gh[vm.t.user_temp_data.arr_unconfirmed_gh.length-1].do_you_have_another_unconfirmed_gh = 'N';
+					vm.t.user_temp_data.arr_unconfirmed_gh[vm.t.user_temp_data.arr_unconfirmed_gh.length-1].is_gh_confirmed = 'N';
+				} else {
+					vm.t.user_temp_data.arr_unconfirmed_gh.splice($index, 1);
+				}
+			};
+
+			vm.change_another_income_level_unconfirmed_gh = function($index) {
+				//console.log(vm.t.user_temp_data.unconfirmed_income_level_gh_data[$index].do_you_have_another_unconfirmed_gh);
+				if (vm.t.user_temp_data.arr_unconfirmed_income_level_gh[$index].do_you_have_another_unconfirmed_gh == 'Y') {
+					vm.t.user_temp_data.arr_unconfirmed_income_level_gh[vm.t.user_temp_data.arr_unconfirmed_income_level_gh.length] = {};
+					vm.t.user_temp_data.arr_unconfirmed_income_level_gh[vm.t.user_temp_data.arr_unconfirmed_income_level_gh.length-1].do_you_have_another_unconfirmed_gh = 'N';
+				} else {
+					vm.t.user_temp_data.arr_unconfirmed_income_level_gh.splice($index, 1);
+				}
+			};
+
+			vm.change_another_daily_growth_unconfirmed_gh = function($index) {
+				//console.log(vm.t.user_temp_data.unconfirmed_daily_growth_gh_data[$index].do_you_have_another_unconfirmed_gh);
+				if (vm.t.user_temp_data.arr_unconfirmed_daily_growth_gh[$index].do_you_have_another_unconfirmed_gh == 'Y') {
+					vm.t.user_temp_data.arr_unconfirmed_daily_growth_gh[vm.t.user_temp_data.arr_unconfirmed_daily_growth_gh.length] = {};
+					vm.t.user_temp_data.arr_unconfirmed_daily_growth_gh[vm.t.user_temp_data.arr_unconfirmed_daily_growth_gh.length-1].do_you_have_another_unconfirmed_gh = 'N';
+				} else {
+					vm.t.user_temp_data.arr_unconfirmed_daily_growth_gh.splice($index, 1);
+				}
+			};
+
+			vm.open_upload_image = function(upload_files, field_name) {
+				if (upload_files != null) {
+					var new_dialog = ngDialog.open({ id: 'fromAService', showClose: false, closeByEscape: false,  closeByDocument: false, className: 'ngdialog-theme-default image-receipt-details-dialog',  template: 'upload_receipt_dialog', controller: 'UploadProofImageController', data: { files: upload_files, field_name: field_name, user_id: vm.t.user_id, user_temp_data: vm.t.user_temp_data}});
+					// example on checking whether created `new_dialog` is open
+					$timeout(function() {
+						console.log(ngDialog.isOpen(new_dialog.id));
+					}, 2000)
+				}
+			};
+
+			vm.view_proof_image = function(field_name) {
+				var new_dialog = ngDialog.open({ id: 'fromAService', showClose: true, closeByEscape: false,  closeByDocument: true, className: 'ngdialog-theme-default image-receipt-details-dialog',  template: 'view_proof_image_dialog', controller: 'ProofImageDialogCtrl', data: { field_name: field_name, user_id: vm.t.user_id}});
+				// example on checking whether created `new_dialog` is open
+				$timeout(function() {
+					console.log(ngDialog.isOpen(new_dialog.id));
+				}, 2000)
+			};
+			$scope.dateOptions = {
+			    changeYear: true,
+			    changeMonth: true,
+			    yearRange: '1900:-0',    
+			    };
+
+			vm.is_form_complete = false;
+
+
+			vm.submit = function($form) {
+				console.log('in here');
+				var ngForm = $form;
+				/*
+				if(isFormValid($scope, ngForm)) { // trigger manual validation
+				} else {
+					$form.$submitted = true;
+					$form.submitted = true;
+				}
+				*/
+				var is_valid = true;
+
+				if ($form.$invalid) {
+					console.log('invalid form');
+					//$form.$submitted = true;
+					//$form.submitted = true;
+				}
+				
+				if (is_valid) {
+					console.log('submitting');
+					var obj_data = {};
+					
+					obj_data.stored_data = $filter('json')(vm.t.user_temp_data);
+					//console.log(obj_data.stored_data);
+
+					$http({
+						method: 'POST',
+						url: '/platform/import_old_data/save/',
+						data: {data:obj_data}
+					}).success(function (result) {
+						if (result.is_success) {
+							vm.is_form_complete = true;
+						}
+						//alert(result);
+						//$scope.form_data.get_otp_retrieve_login = '';
+					});
+				}
+
+			};
+
+
+		}]);
+
+	</script>
+
+	
+	<div class="flex_container">
+		<div style="max-width:700px;">
+			<div ng-controller="OldSystemDataController as old_system_ctrl">
+				<div>
+		
+					<div ng-show="page_ctrl.view_data.is_submit_error_message" style="margin-bottom: 0px !important;" class="alert alert-danger" role="alert">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span class="sr-only">Error:</span>
+						{{page_ctrl.view_data.submit_error_message}}
+					</div>
+					<div ng-show="page_ctrl.view_data.is_submit_success_message" style="" class="alert alert-success" role="alert">
+						Imported Old Data. Please wait for admin approval.
+					</div>
+
+
+				</div>
+				<div ng-show="old_system_ctrl.is_form_complete">
+					<div  style="" class="alert alert-success" role="alert">
+						Data has been saved. Admin will review data.
+					</div>
+				</div>
+				<div ng-show="!old_system_ctrl.is_form_complete">
+					<form ng-class="{submitted:import_data_form.$submitted}" name="import_data_form" novalidate>
+						<div class="col-xs-12 col-ms-12 col-sm-12">
+							<div class="form_sub_header_text">
+								OLD SYSTEM DATA PH & GH DETAILS
+							</div>
+						</div>
+						<div style="clear:both;"></div>
+
+						<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+							<div class="form-group">
+								<label class="form-label">DO YOU WANT TO SET PREVIOUS DATA FROM OLD SYSTEM (ONE TIME ONLY)</label>
+								<select ng-disabled="old_system_ctrl.t.user_temp_data.is_fields_locked == 'Y'" class="form-control" ng-model="old_system_ctrl.t.set_previous_data" name="set_previous_data" >
+									<option value="N">No</option>
+									<option value="Y">Yes</option>
+								</select>
+
+								<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.set_previous_data.$dirty">
+								    <div ng-message="required">Required</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12 col-ms-6 col-sm-6"> </div>
+						<div style="clear:both;"></div>
+
+						<div ng-show="old_system_ctrl.t.set_previous_data == 'Y'">
+							<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+								<div class="form-group">
+									<label class="form-label">DO YOU HAVE PH HISTORY PROOF IMAGE?</label>
+									<select class="form-control" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.is_have_ph_history_proof_image_temp"  name="is_have_ph_history_proof_image_temp" >
+										<option value="N">No</option>
+										<option value="Y">Yes</option>
+									</select>
+
+									<div style="color:red; font-weight:bold" ng-messages="import_data_form.is_have_ph_history_proof_image.$error" ng-if="import_data_form.is_have_ph_history_proof_image.$dirty">
+									    <div ng-message="required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row"></div>
+							<div style="clear:both;"></div>
+							<div ng-show="old_system_ctrl.t.user_temp_data.is_have_ph_history_proof_image_temp == 'Y'">
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row" ng-show="old_system_ctrl.t.user_temp_data.is_have_ph_history_proof_image_temp == 'Y'"> 
+									<div class="form-group"> 
+										<label class="form-label">UPLOAD PH HISTORY PROOF IMAGE</label>
+										<div ng-show="old_system_ctrl.t.user_temp_data.is_have_ph_history_proof_image == 'N'  && old_system_ctrl.t.set_previous_data == 'Y'">
+											<button type="button" ngf-select ng-model="old_system_ctrl.t.ph_history_proof_image" ngf-change="old_system_ctrl.open_upload_image(old_system_ctrl.t.ph_history_proof_image,'is_have_ph_history_proof_image')" ngf-multiple="false" class="btn btn-primary">UPLOAD</button>
+										</div>
+										<div ng-show="old_system_ctrl.t.user_temp_data.is_have_ph_history_proof_image == 'Y'">
+											<button type="button" class="btn btn-primary" ng-click="old_system_ctrl.view_proof_image('is_have_ph_history_proof_image')">VIEW IMAGE</button>
+										</div>
+
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row" ng-show="old_system_ctrl.t.user_temp_data.is_have_ph_history_proof_image_temp == 'Y'"> 
+								</div>
+								<div style="clear:both;"></div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row"> 
+									<div class="form-group">
+										<label class="form-label">
+											ENTER THE TOTAL AMOUNT REQUESTED LAST PH COMMITMENT
+										</label>
+										<select ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" class="form-control" ng-model="old_system_ctrl.t.user_temp_data.last_ph_commitment_drop_down" name="last_ph_commitment_drop_down" >
+											<option value="20">$20</option>
+											<option value="50">$50</option>
+											<option value="100">$100 OR MORE</option>
+										</select>
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.last_ph_commitment_drop_down.$error" ng-if="import_data_form.last_ph_commitment_drop_down.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6"></div>
+								<div style="clear:both;"></div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group">
+										<label class="form-label">TOTAL AMOUNT DISPATCHED</label>
+										<input ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.ph_total_amount_dispatched" name="ph_total_amount_dispatched" type="text" class="form-control" placeholder="Amount" ng-pattern="/^\d+$/">
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.ph_total_amount_dispatched.$error" ng-if="import_data_form.ph_total_amount_dispatched.$dirty">
+										    <div ng-message="required">Required</div>
+										    <div ng-message="number">Must be an amount</div>
+										    <div ng-message="pattern">Must be an amount</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group">
+										<label class="form-label">TOTAL AMOUNT PAID</label>
+										<input ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-pattern="/^\d+$/" ng-model="old_system_ctrl.t.user_temp_data.ph_total_amount_paid" name="ph_total_amount_paid" type="text" class="form-control" placeholder="Amount">
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.ph_total_amount_paid.$error" ng-if="import_data_form.ph_total_amount_paid.$dirty">
+										    <div ng-message="required">Required</div>
+										    <div ng-message="pattern">Must be an amount</div>
+										</div>
+									</div>
+								</div>
+								<div style="clear:both;"></div>
+
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row" ng-show="old_system_ctrl.t.user_temp_data.last_ph_commitment_drop_down == '100'">
+									<div class="form-group">
+										<label class="form-label">20% PH Amount</label>
+										<input ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-class="{field_error:(!import_data_form.date_of_birth.$valid && import_data_form.fullname.$dirty)}" ng-model="old_system_ctrl.t.user_temp_data.ph_amount_20" name="fullname" type="text" class="form-control" placeholder="Amount" disabled>
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row" ng-show="old_system_ctrl.t.user_temp_data.last_ph_commitment_drop_down == '100'">
+									<div class="form-group">
+										<label class="form-label"> 20% PH Paid</label>
+										<select class="form-control" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.is_ph_amount_20_paid" name="is_ph_amount_20_paid" >
+											<option value="N">No</option>
+											<option value="Y">Yes</option>
+										</select>
+
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row" ng-show="old_system_ctrl.t.user_temp_data.last_ph_commitment_drop_down == '100'">
+									<div class="form-group">
+										<label class="form-label">80% PH Amount</label>
+										<input ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-class="{field_error:(!import_data_form.date_of_birth.$valid && import_data_form.fullname.$dirty)}" ng-model="old_system_ctrl.t.user_temp_data.ph_amount_80" name="fullname" type="text" class="form-control" placeholder="Amount" disabled>
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row" ng-show="old_system_ctrl.t.user_temp_data.last_ph_commitment_drop_down == '100'">
+									<div class="form-group">
+										<label class="form-label">80% PH Paid</label>
+										<select class="form-control" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.is_ph_amount_80_paid" name="is_ph_amount_20_paid" >
+											<option value="N">No</option>
+											<option value="Y">Yes</option>
+										</select>
+
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group">
+										<label class="form-label">DO YOU WANT TO CANCEL THIS PENDING PH</label>
+										<select class="form-control" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.is_cancel_old_open_ph" name="is_cancel_old_open_ph" >
+											<option value="N">No</option>
+											<option value="Y">Yes</option>
+										</select>
+
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6"></div>
+								<div style="clear:both;"></div>
+							</div>
+							<div class="col-xs-12 col-ms-12 col-sm-12">
+								<div class="form_sub_header_text">
+									GH PROOF AND DETAILS
+								</div>
+							</div>
+							<div style="clear:both;"></div>
+
+							<div class="col-xs-12 col-ms-6 col-sm-6">
+								<div class="form-group">
+									<label class="form-label">DO YOU HAVE GH HISTORY PROOF IMAGE?</label>
+									<select class="form-control" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.is_have_gh_history_proof_image_temp" name="is_have_gh_history_proof_image_temp" >
+										<option value="N">No</option>
+										<option value="Y">Yes</option>
+									</select>
+
+									<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+									    <div ng-message="required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6"></div>
+							<div style="clear:both;"></div>
+							<div ng-show="old_system_ctrl.t.user_temp_data.is_have_gh_history_proof_image_temp == 'Y'">
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group">
+										<label class="form-label">UPLOAD GH HISTORY PROOF IMAGE</label>
+										<div ng-show="old_system_ctrl.t.user_temp_data.is_have_gh_history_proof_image == 'N'  && old_system_ctrl.t.set_previous_data == 'Y'">
+											<button type="button" ngf-select ng-model="old_system_ctrl.t.gh_history_proof_image" ngf-change="old_system_ctrl.open_upload_image(old_system_ctrl.t.gh_history_proof_image,'is_have_gh_history_proof_image')" ngf-multiple="false" class="btn btn-primary">UPLOAD</button>
+										</div>
+										<div ng-show="old_system_ctrl.t.user_temp_data.is_have_gh_history_proof_image == 'Y'">
+											<button type="button" class="btn btn-primary" ng-click="old_system_ctrl.view_proof_image('is_have_gh_history_proof_image')">VIEW IMAGE</button>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6"></div>
+								<div style="clear:both;"></div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group">
+										<label class="form-label">DATE OF LAST CREATED GH REQUEST</label>
+										<input  ui-date="dateOptions" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.date_of_last_gh_request" name="fullname" type="text" class="form-control" placeholder="Date" disabled>
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group">
+										<label class="form-label">AMOUNT OF LAST CREATED GH REQUEST</label>
+										<input ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.amount_of_last_gh_request" name="gh_history_proof_image_amount_requested" type="text" class="form-control" placeholder="Amount" disabled>
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<div style="clear:both;"></div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group">
+										<label class="form-label">TOTAL AMOUNT RECEIVED FROM LAST GH</label>
+										<input ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.total_amount_received_from_last_gh" name="gh_history_proof_image_amount_requested" type="text" class="form-control" placeholder="Amount" disabled>
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group">
+										<label class="form-label">DATE OF AMOUNT RECEIVED FROM LAST GH</label>
+										<input ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.date_of_amount_received_from_last_gh" name="date_of_amount_received_from_last_gh" type="text" class="form-control" placeholder="Date" disabled>
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group">
+										<label class="form-label">WAS LAST GH CONFIRMED?</label>
+										<select class="form-control" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.is_last_gh_confirmed" name="gh_history_proof_image_was_it_confirmed" >
+											<option value="N">No</option>
+											<option value="Y">Yes</option>
+										</select>
+
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group" ng-show="old_system_ctrl.t.user_temp_data.is_last_gh_confirmed == 'Y'">
+										<label class="form-label">LAST GH CONFIRM DATE</label>
+										<input  ui-date="dateOptions" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.gh_history_proof_image_confirm_date" name="fullname" type="text" class="form-control" placeholder="CONFIRM DATE" disabled>
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<div style="clear:both;"></div>
+
+								<!-- repeat section -->
+
+								<div ng-repeat="unconfirmed_gh_data in old_system_ctrl.t.user_temp_data.arr_unconfirmed_gh">
+									<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+										<div class="form-group">
+											<label class="form-label">DO YOU HAVE ANOTHER UNCONFIRMED GH?</label>
+											<select ng-change="old_system_ctrl.change_another_unconfirmed_gh($index)" class="form-control" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="unconfirmed_gh_data.do_you_have_another_unconfirmed_gh" name="do_you_have_another_unconfirmed_gh[{{$index}}]" >
+												<option value="N">No</option>
+												<option value="Y">Yes</option>
+											</select>
+
+											<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+											    <div ng-message="required">Required</div>
+											</div>
+										</div>
+									</div>
+									<div ng-show="unconfirmed_gh_data.do_you_have_another_unconfirmed_gh == 'Y'">
+										<div class="col-xs-12 col-ms-6 col-sm-6"></div>
+										<div style="clear:both;"></div>
+										<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+											<div class="form-group">
+												<label class="form-label">DATE OF ADDITIONAL OPEN GH REQUEST</label>
+												<input  ui-date="dateOptions" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="unconfirmed_gh_data.date_of_gh_request" name="date_of_additional_gh[{{$index}}]" type="text" class="form-control" placeholder="Date" disabled>
+												<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+												    <div ng-message="required">Required</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+											<div class="form-group">
+												<label class="form-label">AMOUNT OF ADDITIONAL OPEN GH REQUEST</label>
+												<input ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="unconfirmed_gh_data.amount_of_gh_request" name="amount_additional_gh[{{$index}}]" type="text" class="form-control" placeholder="Amount" disabled>
+												<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+												    <div ng-message="required">Required</div>
+												</div>
+											</div>
+										</div>
+										<div style="clear:both;"></div>
+										<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+											<div class="form-group">
+												<label class="form-label">AMOUNT RECEIVED FROM ADDITIONAL OPEN GH</label>
+												<input ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="unconfirmed_gh_data.amount_received_from_gh" name="amount_received_from_additional_gh[{{$index}}]" type="text" class="form-control" placeholder="Amount" disabled>
+												<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+												    <div ng-message="required">Required</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+											<div class="form-group">
+												<label class="form-label">DATE AMOUNT RECEIVED FROM ADDITIONAL GH</label>
+												<input  ui-date="dateOptions" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="unconfirmed_gh_data.date_amount_received_from_gh" name="date_of_amount_received_from_additional_gh[{{$index}}]" type="text" class="form-control" placeholder="Date" disabled>
+												<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+												    <div ng-message="required">Required</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+											<div class="form-group">
+												<label class="form-label">WAS ADDITIONAL GH CONFIRMED?</label>
+												<select class="form-control" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="unconfirmed_gh_data.is_gh_confirmed" name="was_additional_gh_confirmed[{{$index}}]" >
+													<option value="N">No</option>
+													<option value="Y">Yes</option>
+												</select>
+
+												<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+												    <div ng-message="required">Required</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+											<div class="form-group" ng-show="unconfirmed_gh_data.is_gh_confirmed == 'Y'">
+												<label class="form-label">ADDITIONAL GH CONFIRM DATE</label>
+												<input  ui-date="dateOptions" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="unconfirmed_gh_data.confirm_date" name="confirm_date_additional_gh[{{$index}}]" type="text" class="form-control" placeholder="CONFIRM DATE" >
+												<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+												    <div ng-message="required">Required</div>
+												</div>
+											</div>
+										</div>
+										<div style="clear:both;"></div>
+										<div style="clear:both;"></div>
+									</div>
+								</div>
+
+								<!-- end repeat section -->
+
+
+							</div>
+
+
+							<div style="clear:both;"></div>
+							<div class="col-xs-12 col-ms-12 col-sm-12">
+								<div class="form_sub_header_text">
+									GH STATUS IMAGE PROOF AND DETAILS
+								</div>
+								<div class="form_sub_header_text_black">
+									GH STATUS INCOME LEVEL
+								</div>
+							</div>
+							<div style="clear:both;"></div>
+
+							<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+								<div class="form-group">
+									<label class="form-label">DO YOU HAVE GH STATUS INCOME LEVEL IMAGE PROOF?</label>
+									<select class="form-control" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.is_have_income_level_gh_status_proof_image_temp" name="is_have_income_level_gh_status_proof_image" >
+										<option value="N">No</option>
+										<option value="Y">Yes</option>
+									</select>
+
+									<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+									    <div ng-message="required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6"></div>
+							<div style="clear:both;"></div>
+							<div ng-show="old_system_ctrl.t.user_temp_data.is_have_income_level_gh_status_proof_image_temp == 'Y'">
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group">
+										<label class="form-label">GH STATUS INCOME LEVEL IMAGE PROOF</label>
+										<div ng-show="old_system_ctrl.t.user_temp_data.is_have_income_level_gh_status_proof_image == 'N'  && old_system_ctrl.t.set_previous_data == 'Y'">
+											<button type="button" ngf-select ng-model="old_system_ctrl.t.income_level_gh_status_proof_image" ngf-change="old_system_ctrl.open_upload_image(old_system_ctrl.t.income_level_gh_status_proof_image, 'is_have_income_level_gh_status_proof_image')" ngf-multiple="false" class="btn btn-primary">UPLOAD</button>
+										</div>
+										<div ng-show="old_system_ctrl.t.user_temp_data.is_have_income_level_gh_status_proof_image == 'Y'">
+											<button type="button" class="btn btn-primary" ng-click="old_system_ctrl.view_proof_image('is_have_income_level_gh_status_proof_image')">VIEW IMAGE</button>
+										</div>
+
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+								</div>
+								<div style="clear:both;"></div>
+
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group">
+										<label class="form-label">LAST DATE UNCONFIRMED GH USED FROM INCOME LEVEL</label>
+										<input  ui-date="dateOptions" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.last_date_unconfirmed_gh_used_from_income_level" name="fullname" type="text" class="form-control" placeholder="DATE" disabled>
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group">
+										<label class="form-label">ENTER WITHDRAWAL AMOUNT ON THAT DATE FROM INCOME LEVEL</label>
+										<input ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.income_level_amount" name="fullname" type="text" class="form-control" placeholder="Amount">
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<!-- repeat section -->
+
+								<div ng-repeat="unconfirmed_income_level_gh_data in old_system_ctrl.t.user_temp_data.arr_unconfirmed_income_level_gh">
+									<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+										<div class="form-group">
+											<label class="form-label">DO YOU NEED TO ADD ANOTHER UNCONFIRMED GH DATE WITHDRAWAL USED FROM THIS WALLET?</label>
+											<select ng-change="old_system_ctrl.change_another_income_level_unconfirmed_gh($index)" class="form-control" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="unconfirmed_income_level_gh_data.do_you_have_another_unconfirmed_gh" name="income_level_do_you_have_another_unconfirmed_gh[{{$index}}]" >
+												<option value="N">No</option>
+												<option value="Y">Yes</option>
+											</select>
+
+											<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+											    <div ng-message="required">Required</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-ms-6 col-sm-6"></div>
+									<div style="clear:both;"></div>
+									<div ng-show="unconfirmed_income_level_gh_data.do_you_have_another_unconfirmed_gh == 'Y'">
+										<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+											<div class="form-group">
+												<label class="form-label">NEXT DATE UNCONFIRMED GH USED FROM INCOME LEVEL</label>
+												<input  ui-date="dateOptions" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="unconfirmed_income_level_gh_data.date_unconfirmed_gh" name="income_level_date_unconfirmed_gh[{{$index}}]" type="text" class="form-control" placeholder="DATE" disabled>
+												<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+												    <div ng-message="required">Required</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+											<div class="form-group">
+												<label class="form-label">ENTER WITHDRAWAL AMOUNT ON THAT DATE FROM INCOME LEVEL</label>
+												<input ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="unconfirmed_income_level_gh_data.amount" name="income_level_amount_unconfirmed_gh[{{$index}}]" type="text" class="form-control" placeholder="Amount">
+												<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+												    <div ng-message="required">Required</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- end repeat -->
+								<div style="clear:both;"></div>
+							</div>
+							<div style="clear:both;"></div>
+
+							<div class="col-xs-12 col-ms-12 col-sm-12">
+								<div class="form_sub_header_text_black">
+									GH STATUS DAILY GROWTH
+								</div>
+							</div>
+							<div style="clear:both;"></div>
+
+							<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+								<div class="form-group">
+									<label class="form-label">DO YOU HAVE GH STATUS DAILY GROWTH LEVEL IMAGE PROOF?</label>
+									<select class="form-control" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.is_have_gh_status_daily_growth_image_proof_temp" name="is_have_daily_growth_status_proof_image_temp" >
+										<option value="N">No</option>
+										<option value="Y">Yes</option>
+									</select>
+
+									<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+									    <div ng-message="required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+							</div>
+							<div style="clear:both;"></div>
+							<div ng-show="old_system_ctrl.t.user_temp_data.is_have_gh_status_daily_growth_image_proof_temp =='Y'">
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group">
+										<label class="form-label">UPLOAD GH STATUS DAILY GROWTH IMAGE PROOF</label>
+										<div ng-show="old_system_ctrl.t.user_temp_data.is_have_daily_growth_status_proof_image == 'N'">
+											<button type="button" ngf-select ng-model="old_system_ctrl.t.daily_growth_status_proof_image" ngf-change="old_system_ctrl.open_upload_image(old_system_ctrl.t.daily_growth_status_proof_image,'is_have_daily_growth_status_proof_image')" ngf-multiple="false" class="btn btn-primary">UPLOAD</button>
+										</div>
+										<div ng-show="old_system_ctrl.t.user_temp_data.is_have_daily_growth_status_proof_image == 'Y'">
+											<button type="button" class="btn btn-primary" ng-click="old_system_ctrl.view_proof_image('is_have_daily_growth_status_proof_image')">VIEW IMAGE</button>
+										</div>
+
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6"></div>
+								<div style="clear:both;"></div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group">
+										<label class="form-label">LAST DATE UNCONFIRMED GH USED FROM DAILY GROWTH</label>
+										<input  ui-date="dateOptions" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.last_date_unconfirmed_gh_used_from_daily_growth" name="fullname" type="text" class="form-control" placeholder="DATE" disabled>
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group">
+										<label class="form-label">ENTER WITHDRAWAL AMOUNT ON THAT DATE FROM DAILY GROWTH</label>
+										<input ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.daily_growth_amount" name="fullname" type="text" class="form-control" placeholder="Amount">
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<div style="clear:both;"></div>
+								<!-- repeat section -->
+
+								<div ng-repeat="unconfirmed_daily_growth_gh_data in old_system_ctrl.t.user_temp_data.arr_unconfirmed_daily_growth_gh">
+									<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+										<div class="form-group">
+											<label class="form-label">DO YOU NEED TO ADD ANOTHER UNCONFIRMED GH DATE WITHDRAWAL USED FROM THIS WALLET?</label>
+											<select ng-change="old_system_ctrl.change_another_daily_growth_unconfirmed_gh($index)" class="form-control" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="unconfirmed_daily_growth_gh_data.do_you_have_another_unconfirmed_gh" name="daily_growth_do_you_have_another_unconfirmed_gh[{{$index}}]" >
+												<option value="N">No</option>
+												<option value="Y">Yes</option>
+											</select>
+
+											<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+											    <div ng-message="required">Required</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-ms-6 col-sm-6"></div>
+									<div style="clear:both;"></div>
+									<div ng-show="unconfirmed_daily_growth_gh_data.do_you_have_another_unconfirmed_gh == 'Y'">
+										<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+											<div class="form-group">
+												<label class="form-label">NEXT DATE UNCONFIRMED GH USED FROM DAILY GROWTH</label>
+												<input  ui-date="dateOptions" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="unconfirmed_daily_growth_gh_data.date_unconfirmed_gh" name="daily_growth_date_unconfirmed_gh[{{$index}}]" type="text" class="form-control" placeholder="DATE" disabled>
+												<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+												    <div ng-message="required">Required</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+											<div class="form-group">
+												<label class="form-label">ENTER WITHDRAWAL AMOUNT ON THAT DATE FROM DAILY GROWTH</label>
+												<input ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="unconfirmed_daily_growth_gh_data.amount" name="daily_growth_amount_unconfirmed_gh[{{$index}}]" type="text" class="form-control" placeholder="Amount">
+												<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+												    <div ng-message="required">Required</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- end repeat -->
+								<div style="clear:both;"></div>
+
+								<div style="clear:both;"></div>
+							</div>
+							<div style="clear:both;"></div>
+
+							<div class="col-xs-12 col-ms-12 col-sm-12">
+								<div class="form_sub_header_text_black">
+									GH REQUEST AVAILABLE BALANCES
+								</div>
+							</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+								<div class="form-group">
+									<label class="form-label">DO YOU HAVE GH REQUEST AVAILABLE BALANCES FOR WITHRAWAL IMAGE PROOF</label>
+									<select class="form-control" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.is_have_gh_request_available_balance_proof_image_temp" name="is_have_gh_request_available_balance_proof_image_temp" >
+										<option value="N">No</option>
+										<option value="Y">Yes</option>
+									</select>
+
+									<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+									    <div ng-message="required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6"></div>
+							<div style="clear:both;"></div>
+							<div ng-show="old_system_ctrl.t.user_temp_data.is_have_gh_request_available_balance_proof_image_temp == 'Y'">
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group" ng-show="old_system_ctrl.t.user_temp_data.is_have_gh_request_available_balance_proof_image_temp == 'Y'">
+										<label class="form-label">GH REQUEST AVAILABLE BALANCES FOR WITHRAWAL IMAGE PROOF</label>
+										<div ng-show="old_system_ctrl.t.user_temp_data.is_have_gh_request_available_balance_proof_image == 'N'  && old_system_ctrl.t.set_previous_data == 'Y'">
+											<button type="button" ngf-select ng-model="old_system_ctrl.t.gh_request_available_balance_proof_image" ngf-change="old_system_ctrl.open_upload_image(old_system_ctrl.t.gh_request_available_balance_proof_image,'is_have_gh_request_available_balance_proof_image')" ngf-multiple="false" class="btn btn-primary">UPLOAD</button>
+										</div>
+										<div ng-show="old_system_ctrl.t.user_temp_data.is_have_gh_request_available_balance_proof_image == 'Y'">
+											<button type="button" class="btn btn-primary" ng-click="old_system_ctrl.view_proof_image('is_have_gh_request_available_balance_proof_image')">VIEW IMAGE</button>
+										</div>
+
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6"></div>
+								<div style="clear:both;"></div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group">
+										<label class="form-label">ENTER AMOUNT AVAILABLE ON BEAST LEVEL INCOME LINE</label>
+										<input ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.beast_level_income_amount" name="fullname" type="text" class="form-control" placeholder="Amount" disabled>
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+									<div class="form-group">
+										<label class="form-label">ENTER AMOUNT AVAILABLE ON MAGIC BONUS LINE</label>
+										<input ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.magic_bonus_amount" name="fullname" type="text" class="form-control" placeholder="Amount" disabled>
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6">
+									<div class="form-group">
+										<label class="form-label">ENTER AMOUNT AVAILABLE ON BEAST GROWTH LINE</label>
+										<input ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.beast_growth_amount" name="fullname" type="text" class="form-control" placeholder="Amount" disabled>
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12 col-ms-6 col-sm-6">
+									<div class="form-group">
+										<label class="form-label">ENTER AMOUNT SHOWING ON TOTAL LINE<br><br></label>
+										<input ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.total_gh_amount" name="fullname" type="text" class="form-control" placeholder="Amount" disabled>
+										<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+										    <div ng-message="required">Required</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div style="clear:both;"></div>
+							<div class="col-xs-12 col-ms-12 col-sm-12 form_data_from_old_system_row" style="color:red;">
+								<p>** PLEASE NOTE: You may only have ONE open GH in processing.</p>
+								<p style="text-decoration:underline">If more than one unconfirmed GH from old system.</p>
+								<p>
+									1. You may select ONE GH you want to keep and cancel ALL the other pending / unconfirmed GH<br>
+									2. You may cancel all unconfirmed GH and create ONE NEW GH request.
+								</p>
+								<p>
+									ALL cancelled GH amount will revert to your available balance. Max GH amount is $2000 per transaction.
+								</p>
+							
+							</div>
+							<div style="clear:both;"></div>
+							<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+								<div class="form-group">
+									<label class="form-label">CANCEL OLD OPEN GH</label>
+									<select class="form-control" ng-disabled="old_system_ctrl.t.set_previous_data == 'N'" ng-model="old_system_ctrl.t.user_temp_data.is_cancel_old_open_gh" name="is_cancel_old_open_gh" >
+										<option value="N">No</option>
+										<option value="Y">Yes</option>
+									</select>
+
+									<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+									    <div ng-message="required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6 form_data_from_old_system_row">
+								<div class="form-group">
+									<label class="form-label">SELECT OPEN GH TO KEEP</label>
+									<!--<select class="form-control" ng-model="myPerson" ng-options="item.amount_of_gh_request disable when item.is_gh_confirmed == 'Y' for item in old_system_ctrl.t.user_temp_data.arr_unconfirmed_gh">-->
+									<select class="form-control" ng-model="old_system_ctrl.t.user_temp_data.open_gh_to_keep">
+										<option
+											ng-repeat="item in old_system_ctrl.t.user_temp_data.arr_unconfirmed_gh"
+											ng-disabled="item.is_gh_confirmed == 'Y'"
+											ng-value="item.amount_of_gh_request"
+										    >{{item.amount_of_gh_request}}</option>
+									</select>
+									<div style="color:red; font-weight:bold" ng-messages="import_data_form.date_of_birth.$error" ng-if="import_data_form.date_of_birth.$dirty">
+									    <div ng-message="required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div style="clear:both;"></div>
+						</div> <!-- ng-show if we want to set previous data -->
+
+						<div ng-show="old_system_ctrl.t.user_temp_data.is_fields_locked == 'N'" class="col-xs-12 col-ms-6 col-sm-6">
+							<div style="float:left;">
+								<button type="button" ng-click="old_system_ctrl.submit(import_data_form)" class="btn btn-primary">UPDATE</button>
+							</div>
+						</div>
+						<div class="col-xs-12 col-ms-6 col-sm-6">
+						</div>
+					</form>
+				</div> <!-- registration complete -->
+			</div> <!-- old system controller -->
+		</div> <!-- max width wrapper -->
+	</div>
+</div>
+
+
+<script type="text/ng-template" id="uploader_dialog">
+        <div class="ngdialog-message">
+		<div class="flex_container">
+			<div style="font-size:24px; font-weight:900; padding-top:10px;">
+			{{percentage_complete}}
+			</div>
+		</div>
+        </div>
+</script>
+
+
+
+<script>
+	app.controller('UploadProofImageController', ['$scope', 'Upload', '$timeout', 'ngDialog', '$http', function ($scope, Upload, $timeout, ngDialog, $http) {
+
+
+		//console.log($scope.ngDialogData);
+		//console.log($scope.ngDialogData.files);
+		var vm = this;
+		//alert($scope.ngDialogData.files);
+		vm.log = '';
+		var temp = '';
+		vm.is_uploading = false;
+		vm.percentage_complete = "";
+		vm.is_processing_upload = false;
+
+		vm.uploader = {};
+		$scope.uploader = {};
+
+		var obj_data = {};
+
+		$scope.t = {};
+		$scope.t.is_confirm_image = false;
+
+
+
+		$scope.field_name = "";
+		$scope.folder_name = "";
+		$scope.t.user_id = $scope.ngDialogData.user_id;
+
+		if ($scope.ngDialogData.field_name == 'is_have_gh_request_available_balance_proof_image') {
+			$scope.field_name = "is_have_gh_request_available_balance_proof_image";
+		} else if ($scope.ngDialogData.field_name == 'is_have_gh_history_proof_image') {
+			$scope.field_name = "is_have_gh_history_proof_image";
+		} else if ($scope.ngDialogData.field_name == 'is_have_ph_history_proof_image') {
+			$scope.field_name = "is_have_ph_history_proof_image";
+		} else if ($scope.ngDialogData.field_name == 'is_have_income_level_gh_status_proof_image') {
+			$scope.field_name = "is_have_income_level_gh_status_proof_image";
+		} else if ($scope.ngDialogData.field_name == 'is_have_daily_growth_status_proof_image') {
+			$scope.field_name = "is_have_daily_growth_status_proof_image";
+		}
+
+		$scope.accept_click = function() {
+			$http({
+				method: 'POST',
+				url: '/platform/Usertemp/accept_and_set_proof_image/' + $scope.field_name +  '/' + $scope.t.user_id +'/',
+				data: {}
+			}).success(function (result) {
+				if (result.is_success) {
+					$scope.ngDialogData.user_temp_data[$scope.field_name] = 'Y';
+					$scope.closeThisDialog();
+					//$scope.ngDialogData.mr_data.is_have_image_receipt = 'Y';
+				}
+			});
+		};
+
+		
+
+		$scope.t.upload_image_url = "";
+
+		$scope.cancel_click = function() {
+			$scope.closeThisDialog();
+		};
+
+		vm.upload = function (upload_file) {
+			var files = [upload_file]; 
+			console.log('starting upload');
+			if (files && files.length) {
+				for (var i = 0; i < files.length; i++) {
+					var file = files[i];
+					//console.log('starting file');
+					console.log($scope.t.user_id);
+
+					if (!file.$error) {
+						//alert(matchedrequest_id);
+						$scope.uploader = Upload.upload({
+							url: '/platform/Usertemp/upload_proof_image/' + $scope.field_name + '/' + $scope.t.user_id + '/' ,
+							data: {
+								file: file
+							}
+						});
+						$scope.uploader.then(function (resp) {
+							$timeout(function() {
+								/*
+								$scope.log = 'file: ' +
+								resp.config.data.file.name +
+								', Response: ' + JSON.stringify(resp.data) +
+								'\n' + $scope.log;
+								var response = 'Response: ' + JSON.stringify(resp.data);
+								*/
+								//$scope.closeThisDialog();
+								if (resp.data.is_success) {
+									$timeout(function() {
+										$scope.t.upload_image_url = "/platform/Usertemp/get_proof_image/" + $scope.field_name + '/' + $scope.t.user_id + "/";
+										$scope.t.is_confirm_image = true;
+									}, 1000);
+									//$scope.ngDialogData.mr_data.is_have_image_receipt = 'Y';
+								} else {
+								}
+							});
+							$scope.is_uploading = false;
+							$scope.is_processing_upload = false;
+						}, null, function (evt) {
+							var progressPercentage = parseInt(100.0 *
+							evt.loaded / evt.total);
+							$scope.is_uploading = true;
+							if (progressPercentage == 100) {
+								$scope.is_uploading = false;
+								$scope.is_processing_upload = true;
+							} else {
+								$scope.percentage_complete = "file uploading: " + progressPercentage + "%";
+							}
+							$scope.log = 'progress: ' + progressPercentage + 
+							'% ' + evt.config.data.file.name + '\n' + 
+							$scope.log;
+						});
+					}
+				}
+			}
+		};
+
+		$scope.cancel_upload = function() {
+			$scope.uploader.abort();
+			$scope.closeThisDialog();
+		};
+
+		if ($scope.ngDialogData.files != null) {
+			vm.upload($scope.ngDialogData.files);
+		} else {
+			$scope.closeThisDialog();
+		}
+        }]);
+
+</script>
+
+
+<script>
+
+		app.controller('ProofImageDialogCtrl', ['$scope', 'Upload', '$timeout', 'ngDialog', '$http', function ($scope, Upload, $timeout, ngDialog, $http) {
+			//console.log($scope.ngDialogData);
+			//console.log($scope.ngDialogData.files);
+			var vm = $scope;
+			//alert($scope.ngDialogData.files);
+
+
+
+		}]);
+
+
+
+</script>
+
+<script type="text/ng-template" id="upload_receipt_dialog">
+        <div class="ngdialog-message">
+		<div class="flex_container">
+			<div>
+				<div ng-show="!t.is_confirm_image">
+					<div style="font-size:24px; font-weight:900; padding-top:10px;">
+						{{percentage_complete}}
+					</div>
+				</div>
+				<div class="flex_container">
+					<div ng-show="!t.is_confirm_image" style="text-align:center; padding-top:30px;">
+						<img ng-src="/platform/images/progress_bar.gif">
+					</div>
+				</div>
+				<div class="flex_container">
+					<div ng-show="!t.is_confirm_image" style="text-align:center; padding-top:30px;">
+						<button type="button" ng-click="cancel_upload()" class="btn btn-primary">CANCEL UPLOAD</button>
+					</div>
+				</div>
+				<div ng-show="t.is_confirm_image">
+					<div class="flex_container">
+						<div style="padding-bottom:10px; padding-top:10px; font-weight:900;">IMAGE PROOF</div>
+					</div>
+					<div class="flex_container">
+						<div style="max-width:700px; padding-bottom:10px;">
+							<div class="col-xs-12 col-ms-6 col-sm-6">
+								<button type="button" ng-click="accept_click()" class="btn btn-primary">ACCEPT</button>
+							</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6" ng-click="">
+								<button type="button" class="btn btn-primary" ng-click="cancel_click()">CANCEL</button>
+							</div>
+						</div>
+					</div>
+					<div class="flex_container">
+						<img style="max-width: 90%;" ng-src="{{t.upload_image_url}}">
+					</div>
+				</div>
+			</div>
+		</div>
+        </div>
+</script>
+
+
+<script type="text/ng-template" id="view_proof_image_dialog">
+        <div class="ngdialog-message">
+		<div class="flex_container">
+			<div style="padding-bottom:10px; padding-top:10px; font-weight:900;">PROOF IMAGE</div>
+		</div>
+		<div class="flex_container">
+			<img style="max-width:90%" ng-src="/platform/Usertemp/get_proof_image/{{ngDialogData.field_name}}/{{ngDialogData.user_id}}/">
+		</div>
+        </div>
+</script>
+

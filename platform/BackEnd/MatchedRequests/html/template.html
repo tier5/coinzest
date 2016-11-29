@@ -1,0 +1,440 @@
+<script>
+
+	  app.controller('PageController', ['$scope', '$http', '$window', function($scope, $http, $window) {
+
+		var vm = this;
+		vm.arr_data = [];
+
+		$scope.search = "";
+		$scope.number_per_page = 100;
+
+
+		vm.t = {};
+
+	
+		vm.t.search_for_user_id = 0;
+		
+
+		vm.MatchedRequests = MatchedRequests;
+
+		vm.arr_status_data = [];
+
+		var data = {};
+		data.name = "ACTIVE";
+		data.value = MatchedRequests.ACTIVE_STATUS_ID;
+		vm.arr_status_data[vm.arr_status_data.length] = data;
+
+		vm.t.status_id = data.value;
+
+		data = {};
+		data.name = "CANCELLED";
+		data.value = MatchedRequests.CANCELLED_STATUS_ID;
+		vm.arr_status_data[vm.arr_status_data.length] = data;
+
+		data = {};
+		data.name = "COMPLETED";
+		data.value = MatchedRequests.COMPLETED_STATUS_ID;
+		vm.arr_status_data[vm.arr_status_data.length] = data;
+
+
+		$http({
+		    method: 'POST',
+		    url: '/platform/matchedrequests/get_data/' + vm.t.search_for_user_id,
+			data: { search: $scope.search }
+		}).success(function (result) {
+			if (result.is_success) {
+				vm.arr_data = result.arr_data;
+			}
+		});
+
+		$scope.add = function() {
+			$window.location = "/segments/edit/0";
+			
+		};
+
+		$scope.edit_click = function(index) {
+			$window.location = "/segments/edit/" + index;
+			
+		};
+
+		$scope.delete_click = function(index) {
+			var result = $window.confirm('Are you sure you want to delete?');
+                        if (result) {
+                                $http({
+                                    method: 'get',
+                                    url: '/segments/delete/' + index,
+                                }).success(function (result) {
+                                        $window.location = "/segments";
+                                });
+                        }
+		};
+
+		$scope.search_submission = function() {
+			//alert('in here');
+			$http({
+			    method: 'POST',
+			    url: '/segments/get_arr_search_results/',
+				data: { search: $scope.search }
+			}).success(function (result) {
+				$scope.arr_segments_data = result.arr_data;
+				//alert(result.arr_data);
+			});
+			
+		};
+
+		vm.clear_image_receipt = function($id, $index) {
+			//alert('in here');
+			var temp_result = confirm("Are You Sure You Want To Clear Image Request for #" + $id + "?");
+			if (temp_result) {
+				$http({
+				    method: 'POST',
+				    url: '/platform/matchedrequests/clear_image_receipt/' + $id,
+					data: { }
+				}).success(function (result) {
+					if (result.is_success) {
+						alert("Image Cleared");
+						vm.arr_data[$index].is_have_image_receipt = "N";
+						vm.arr_data[$index].image_receipt_gm_date_time = "";
+					} else {
+						alert("Unable to Clear Image");
+					}
+					//alert(result.arr_data);
+				});
+			}
+			
+		};
+
+		vm.confirm_request = function($id, $index) {
+			//alert('in here');
+			var temp_result = confirm("Are You Sure You Want To Confirm Matched Request #" + $id + "?");
+			if (temp_result) {
+				$http({
+				    method: 'POST',
+				    url: '/platform/matchedrequests/confirm_request/' + $id,
+					data: { }
+				}).success(function (result) {
+					if (result.is_success) {
+						alert("Request Confirmed");
+						vm.arr_data.splice($index, 1);
+					}
+					//alert(result.arr_data);
+				});
+			}
+			
+		};
+
+		vm.cancel_request = function($id, $index) {
+			//alert('in here');
+			var temp_result = confirm("Are You Sure You Want To Cancel Matched Request #" + $id + "?");
+			if (temp_result) {
+				$http({
+				    method: 'POST',
+				    url: '/platform/matchedrequests/admin_cancel/' + $id,
+					data: { }
+				}).success(function (result) {
+					if (result.is_success) {
+						alert("Request Cancelled");
+						vm.arr_data.splice($index, 1);
+					}
+					//alert(result.arr_data);
+				});
+			}
+			
+		};
+
+		vm.build_total_gh = function(data) {
+			var total = 0;
+			total = (+data.daily_bonus_earning_balance) + (+data.daily_growth_balance) + (+data.level_income_balance) + (+data.task_earning_balance);
+			return total;
+		}
+
+
+		vm.arr_matched_expire_timestamp = [];
+
+		vm.get_end_time = function (data) {
+			//var mm = moment().utc(data.gm_created);
+			//var end_timestamp = mm.valueOf() + 172800;
+			
+			if (typeof vm.arr_matched_expire_timestamp[data.id] === 'undefined') {
+				console.log(data.expiration_gm_date_time);
+				var mm = moment.utc(data.expiration_gm_date_time);
+				var end_timestamp = mm.valueOf();
+				//console.log(end_timestamp);
+				vm.arr_matched_expire_timestamp[data.id] = end_timestamp;
+				return vm.arr_matched_expire_timestamp[data.id];
+			} else {
+				//console.log(vm.arr_matched_expire_timestamp[data.id]);
+				return vm.arr_matched_expire_timestamp[data.id];
+			}
+		};
+
+
+		vm.t.is_show_expires_column = true;
+		vm.t.is_show_completed_column = false;
+
+		vm.user_change = function() {
+			console.log('user changed');
+			if (typeof vm.user_selected === 'undefined' || typeof vm.user_selected.selected === 'undefined') {
+				vm.t.search_for_user_id = 0;
+			} else {
+				vm.t.search_for_user_id = vm.user_selected.selected['id'];
+			}
+			//console.info(vm.t.status_id);
+
+			$http({
+			    method: 'POST',
+			    url: '/platform/matchedrequests/get_data/' + vm.t.search_for_user_id,
+				data: { search: $scope.search, status_id: vm.t.status_id }
+			}).success(function (result) {
+				if (result.is_success) {
+					if (vm.t.status_id == MatchedRequests.ACTIVE_STATUS_ID) {
+						vm.t.is_show_expires_column = true;
+						vm.t.is_show_completed_column = false;
+					} else {
+						vm.t.is_show_expires_column = false;
+						vm.t.is_show_completed_column = true;
+					}
+					vm.arr_data = result.arr_data;
+				}
+			});
+		};
+
+
+		vm.arr_users_data = [];
+
+		vm.refresh_users = function(search) {
+			//console.log('refresh users');
+			$http({
+			    method: 'POST',
+			    url: '/platform/users/get_arr_search_results',
+				data: { search: search, limit: 20 }
+			}).success(function (result) {
+				//alert(result.total_clicks);
+				//alert('here');
+				//alert(result);
+				vm.arr_users_data = result.arr_data;
+				//alert($scope.arr_segment_data);
+			});
+
+		};
+
+		vm.open_review_dialog = function(mr_id, $index) {
+			var new_dialog = ngDialog.open({ id: 'review_dialog_id', closeByDocument: false, showClose: true, closeByEscape: true,  className: 'ngdialog-theme-default loh-reject-dialog', template: 'review_dialog', controller: 'NeedsReviewController', controllerAs: 'review_ctrl', data: { mr_id: mr_id, data: vm.arr_data[$index], index: $index, vm_parent: vm } });
+			// example on checking whether created `new_dialog` is open
+			$timeout(function() {
+				console.log(ngDialog.isOpen(new_dialog.id));
+			}, 2000)
+		};
+
+
+
+
+	}]);
+
+
+</script>
+
+<style>
+
+	td {
+		padding-left:10px;
+		padding-right:10px;
+	}
+
+</style>
+
+<div class="page-title-header">
+	Matched Requests
+</div>
+
+<div ng-controller="PageController as page_ctrl">
+
+	<div style="clear:both;"></div>
+
+
+<div class="flex_container">
+	<div>
+
+		<div style="margin:10px;">
+				<div style="float:left;">
+					<ui-select ng-change="page_ctrl.user_change()" allow-clear="true" ng-model="page_ctrl.user_selected.selected" theme="bootstrap" style="width:300px;">
+					    <ui-select-match placeholder="Select or search a user in the list...">{{$select.selected.login}}</ui-select-match>
+					    <ui-select-choices repeat="item in page_ctrl.arr_users_data | filter: $select.search"
+							refresh="page_ctrl.refresh_users($select.search)"
+							     refresh-delay="1"
+							>
+					      <div ng-bind-html="item.login | highlight: $select.search"></div>
+					    </ui-select-choices>
+					  </ui-select>
+				</div>
+				<div style="float:left; width:150px; padding-left:10px;">
+					<select class="form-control" ng-model="page_ctrl.t.status_id" ng-change="page_ctrl.user_change()" ng-options="p.value as p.name for p in page_ctrl.arr_status_data">
+					</select>
+
+				</div>
+				<div style="clear:both;"></div>
+
+		</div>
+		<table  style="border-collapse: collapse; margin:10px;"  class="general_data_table">
+		<tr>
+		<th class="general_table_header">No</th>
+		<th class="general_table_header">PH User</th>
+		<th class="general_table_header">PH Country</th>
+		<th class="general_table_header">Amount</th>
+		<th class="general_table_header">GH User</th>
+		<th class="general_table_header">GH Country</th>
+		<th class="general_table_header">Create Date</th>
+		<th class="general_table_header">Image Receipt Date</th>
+		<!--
+		<th class="general_table_header">Confirm Date</th>
+		-->
+		<th class="general_table_header" ng-show="page_ctrl.t.is_show_expires_column">Expires</th>
+		<th class="general_table_header" ng-show="page_ctrl.t.is_show_completed_column">Completed Date</th>
+		<th class="general_table_header" width="150">Action</th>
+		</tr>
+
+		<tr ng-if="arr_data.length == 0">
+			<td colspan="9">
+			      <strong>No results found...</strong>
+			</td>
+		</tr>
+		<tr class="have_hover full-standard-fade" ng-repeat="data in page_ctrl.arr_data track by $index">
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{$index+1}}</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="word-break: break-all"><a href="/platform/membersadmin/edit/{{data.phrequest_user_id}}/">{{data.ph_user_tbl_login}}</a></td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="word-break: break-all">{{data.ph_user_tbl_country}}</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">${{data.amount | number:2}}</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="word-break: break-all">
+				<a href="/platform/membersadmin/edit/{{data.ghrequest_user_id}}/">{{data.gh_user_tbl_login}}</a><br>
+				{{data.gh_user_tbl_btc_address}}
+			</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="word-break: break-all">{{data.gh_user_tbl_country}}</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="word-break: break-all">{{data.gm_created}} UTC</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="">
+				<div ng-show="data.is_have_image_receipt == 'Y'">
+					<a target="_blank" href="/platform/matchedrequests/get_image_receipt/{{data.id}}/">{{data.image_receipt_gm_date_time}} UTC</a>
+				</div>
+			</td>
+			<!--
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="">
+				<div ng-show="data.is_confirmed == 'Y'">
+					{{data.completed_gm_date_time}} UTC
+				</div>
+			</td>
+			-->
+			<td ng-show="page_ctrl.t.is_show_expires_column" class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="">
+				<timer end-time="page_ctrl.get_end_time(data)" max-time-unit="'hour'" finish-callback="">{{hours}} hrs, {{minutes}} mins, {{seconds}} secs.</timer>
+
+			</td>
+			<td ng-show="page_ctrl.t.is_show_completed_column" class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="">
+				{{data.completed_gm_date_time}} UTC
+
+			</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="width:240px !important;">
+				<div ng-show="data.is_needs_review == 'Y' && data.status_id == page_ctrl.MatchedRequests.ACTIVE_STATUS_ID" style="float:left; padding-top:3px; padding-bottom:3px; padding-left:5px; padding-right:5px;">
+					<button type="button" class="btn btn-danger" ng-click="page_ctrl.open_review_dialog(data.id, $index)">NEEDS REVIEW</button>
+				</div>
+				<div ng-show="data.status_id == page_ctrl.MatchedRequests.ACTIVE_STATUS_ID" style="float:left; padding-top:3px; padding-bottom:3px; padding-left:5px; padding-right:5px;">
+					<button type="button" class="btn btn-primary" ng-click="page_ctrl.cancel_request(data.id, $index)">CANCEL</button>
+				</div>
+				<div ng-show="data.is_have_image_receipt == 'Y' && data.status_id == page_ctrl.MatchedRequests.ACTIVE_STATUS_ID"  style="float:left;padding-top:3px; padding-bottom:3px;  padding-left:5px; padding-right:5px;">
+					<button type="button" class="btn btn-primary" ng-click="page_ctrl.confirm_request(data.id, $index)">CONFIRM</button>
+				</div>
+				<div ng-show="data.is_have_image_receipt == 'Y' && data.status_id == page_ctrl.MatchedRequests.ACTIVE_STATUS_ID"  style="float:left;padding-top:3px; padding-bottom:3px; padding-left:5px; padding-right:5px; ">
+					<button type="button" class="btn btn-primary" ng-click="page_ctrl.clear_image_receipt(data.id, $index)">CLEAR IMAGE RECEIPT</button>
+				</div>
+				<div style="clear:both;"></div>
+			</td>
+		</tr>
+		</table>
+	</div>
+</div>
+
+
+</div>
+
+<script>
+
+app.controller('NeedsReviewController', ['$scope', '$http', '$window', 'ngDialog', function($scope, $http, $window, ngDialog) {
+	var vm = this;
+	
+
+	vm.ngDialogData = $scope.ngDialogData;
+	//console.info($scope.ngDialogData);
+
+	vm.t = {};
+
+	//alert($scope.ngDialogData.wallet_name);
+	vm.t.form_data = {};
+
+
+	vm.t.is_submit_error_message = false;
+
+	vm.t.mr_id = 0;
+
+	vm.t.data = {};
+
+	vm.t.data = $scope.ngDialogData.data;
+
+	vm.review_resolved = function(percent_bonus) {
+		//alert($scope.t.form_data.amount);
+		//alert($scope.data.name);
+		// console.info('in here');
+		
+		
+		//alert(angular.toJson($scope.data));
+		$http({
+			method: 'POST',
+			url: '/platform/matchedrequets/set_review_resolved' + "/" + $scope.ngDialogData.mr_id,
+			data: { resolution: vm.t.form_data.resolution }
+		}).success(function (result) {
+			if (result.is_success) {
+				$index = $scope.ngDialogData.index;
+				//console.info($index);
+				//console.info($scope.ngDialogData.vm_parent.arr_data[$index]);
+				//$scope.ngDialogData.vm_parent.arr_data[$index].is_loh_approved = "Y";
+				$scope.closeThisDialog();
+
+				//alert('Balance Adjusted');
+
+			}
+			vm.t.is_submit_error_message = true;
+			//alert(result.total_clicks);
+			//alert('here');
+			//alert(result);
+			//$scope.data = result;
+		});
+	};
+
+}]);
+
+</script>
+
+<script type="text/ng-template" id="review_dialog">
+		<div style="padding-left:5px; padding-right:5px;">
+			<div style="padding-top:8px;">
+				<label class="form-label">Review Matched Request</label>
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+
+		<div style="padding-left:5px; padding-right:5px;">
+			<div style="color:red; font-weight:900;">
+				Review Reason:
+				<div ng-show="review_ctrl.t.data.review_reason_type_id == 5">
+					GH Rejected PH even though there is an image receipt there. Please review Image Receipt to see if valid.
+				</div>
+			</div>
+		</div>
+		<div>
+			<div style="padding-bottom:4px; padding-top:4px;">
+				Resolution Description:
+				<textarea class="form-control" rows="5" ng-model="review_ctrl.t.form_data.resolution" placeholder="Enter How this REVIEW WAS RESOLVED" ></textarea>
+			</div>
+			<div>
+				<div style="padding-bottom:8px; padding-top:8px;float:left; padding-left:5px; padding-right:5px;">
+					<button type="button" ng-click="review_ctrl.review_resolved()" class="btn btn-primary">RESOLVED</button>
+				</div>
+				<div style="clear:both;"></div>
+			</div>
+		</div>
+</script>

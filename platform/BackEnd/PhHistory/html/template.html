@@ -1,0 +1,125 @@
+<script>
+
+	  app.controller('PageController', ['$scope', '$http', '$window', function($scope, $http, $window) {
+
+		var vm = this;
+		vm.arr_data = [];
+
+		$scope.search = "";
+		$scope.number_per_page = 100;
+
+
+	
+		
+
+		$http({
+		    method: 'POST',
+		    url: '/platform/ph/get_data/',
+			data: { search: $scope.search }
+		}).success(function (result) {
+			if (result.is_success) {
+				vm.arr_data = result.arr_data;
+				for(var i=0;i<vm.arr_data.length;i++) {
+					vm.total_amount = (+vm.total_amount) + (+vm.arr_data[i].amount);
+				}
+			}
+		});
+
+		$scope.add = function() {
+			$window.location = "/segments/edit/0";
+			
+		};
+
+		$scope.edit_click = function(index) {
+			$window.location = "/segments/edit/" + index;
+			
+		};
+
+		vm.total_amount = 0;
+
+		vm.build_amount = function(data) {
+			var s = "";
+			console.log(data.amount_matched_completed);
+			if (data.amount >= 100) {
+				if (data.amount_matched_completed >= data.amount*.20) {
+					s = "$ " + data.amount + " ( $" + data.amount*.20 + " - 20%";
+					s = s + " $ " + ((-data.amount*.20) + (+data.amount_matched_completed)) + " - 80% )";
+				} else {
+					s = "$ " + data.amount + " ( $" + data.amount_matched_completed + " - 20%";
+					s = s + " $ " + 0 + " - 80% )";
+				}
+			} else {
+				s = "$ " + data.amount + " ( $" + data.amount_matched_completed + " - 100%)";
+			}
+			//vm.total_amount = (+vm.total_amount) + (+data.amount);
+			//console.log(vm.total_amount + ' data being added ' + data.amount);
+			return s;
+		};
+			
+	}]);
+
+
+</script>
+
+<style>
+
+	.table_header {
+		font-weight:900;
+	}
+	td {
+		padding-left:10px;
+		padding-right:10px;
+	}
+
+</style>
+
+<div class="page-title-header">
+	PH History
+</div>
+
+<div ng-controller="PageController as page_ctrl">
+
+
+<div class="flex_container">
+	<div>
+		<table  style="border-collapse: collapse; margin:10px;"  class="general_data_table">
+		<tr>
+			<th class="general_table_header">Sr. No</th>
+			<th class="general_table_header">PH Date</th>
+			<th class="general_table_header">PH Number</th>
+			<th class="general_table_header">PH Amount</th>
+			<th class="general_table_header">Confirm Status</th>
+			<th class="general_table_header">Confirm Date</th>
+		</tr>
+
+		<tr ng-if="page_ctrl.arr_data.length == 0">
+			<td colspan="10">
+			      <strong>No results found...</strong>
+			</td>
+		</tr>
+		<tr class="have_hover" ng-repeat="data in page_ctrl.arr_data track by $index">
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{$index+1}}</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{data.gm_created}} UTC</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{data.id}}</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{page_ctrl.build_amount(data)}}</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
+				<div ng-show="data.amount_matched_completed == data.amount" style="color:green;">Confirmed</div>
+				<div ng-show="data.amount_matched_completed != data.amount" style="color: red;">Unconfirmed</div>
+			</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
+				<div ng-show="data.amount_matched_completed != data.amount">-</div>
+				<div ng-show="data.amount_matched_completed == data.amount">
+					{{data.completed_gm_date_time}} UTC
+				</div>
+			</td>
+		</tr>
+		<tr class="have_hover">
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" colspan="3" style="font-weight:900;text-align:center">TOTAL</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" colspan="3">$ {{page_ctrl.total_amount | number: 2}}</td>
+		</tr>
+		</table>
+	</div>
+</div>
+
+
+</div>

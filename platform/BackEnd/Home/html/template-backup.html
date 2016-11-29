@@ -1,0 +1,1479 @@
+<script>
+
+
+	app.factory('mySharedService', function($rootScope) {
+	    var sharedService = {};
+	    
+	    sharedService.message = '';
+	    sharedService.bonus_amount = 0;
+
+	    sharedService.prepForBroadcast = function(msg) {
+		this.message = msg;
+		this.broadcastItem();
+	    };
+
+	    sharedService.update_bonus_amount_and_refresh = function(bonus_amount) {
+		this.bonus_amount = bonus_amount;
+		$rootScope.$broadcast('update_bonus_amount_and_refresh_broadcast');
+	    };
+
+	    sharedService.broadcastItem = function() {
+		$rootScope.$broadcast('handleBroadcast');
+	    };
+
+
+	    return sharedService;
+	});
+
+	  app.controller('PHOrdersCtrl', ['$scope', '$http', '$window', function($scope, $http, $window) {
+	
+		var vm = this;
+
+		vm.data = {};
+		vm.data.amount = "";
+
+		var obj_data = {};
+
+		vm.arr_ph_data = {};
+		vm.arr_gh_data = {};
+
+		
+		$http({
+			method: 'POST',
+			url: '/platform/phrequests/get_phrequests_for_user/',
+			data: {data:obj_data}
+		}).success(function (result) {
+			vm.arr_ph_data = result.arr_data;
+		});
+
+	    }]);
+
+	  app.controller('GHOrdersCtrl', ['$scope', '$http', '$window', function($scope, $http, $window) {
+	
+		var vm = this;
+
+		vm.data = {};
+		vm.data.amount = "";
+
+		var obj_data = {};
+
+		vm.arr_gh_data = {};
+
+		
+		$http({
+			method: 'POST',
+			url: '/platform/ghrequests/get_ghrequests_for_user/',
+			data: {data:obj_data}
+		}).success(function (result) {
+			vm.arr_gh_data = result.arr_data;
+		});
+
+	    }]);
+
+
+	app.config(['ngDialogProvider', function (ngDialogProvider) {
+            ngDialogProvider.setDefaults({
+                className: 'ngdialog-theme-default',
+                plain: false,
+                showClose: true,
+                closeByDocument: true,
+                closeByEscape: true,
+                appendTo: false,
+                preCloseCallback: function () {
+                }
+            });
+        }]);
+	app.controller('BonusGameCtrl', ['$scope', 'Upload', '$timeout', 'ngDialog','mySharedService', function ($scope, Upload, $timeout, ngDialog,sharedService) {
+
+		
+
+
+		//console.log($scope.ngDialogData);
+		//console.log($scope.ngDialogData.files);
+		var vm = this;
+		//alert($scope.ngDialogData.files);
+		vm.log = '';
+		var temp = '';
+
+		vm.number_clicks = 0;
+		$scope.is_bonus_game_completed = false;
+
+
+		$scope.win_amount = $scope.ngDialogData.bonus_amount;
+		$scope.image_click = function () {
+
+			var max = 7;
+			var min = 2;
+			var numb_clicks_looking = Math.floor(Math.random() * (max - min + 1)) + min;
+			//console.log(numb_clicks_looking);
+			//console.log(vm.number_clicks);
+			if (vm.number_clicks >= numb_clicks_looking) {
+				max = 1;
+				min = .10;
+				/*
+				var bonus_amount = 0;
+				bonus_amount = Math.random() * (max - min) + min;
+					//bonus_amount = Math.floor(Math.random() * (max - min + 1)) + min;
+					//console.log(bonus_amount);
+				bonus_amount = +(Math.round(bonus_amount + "e+2")  + "e-2");
+				$scope.win_amount = bonus_amount;
+				*/
+				//$scope.refresh_dashboard();
+				//sharedService.prepForBroadcast('hello there');
+				sharedService.update_bonus_amount_and_refresh($scope.win_amount);
+
+				//$scope.$emit('someEvent', bonus_amount);
+				$scope.is_bonus_game_completed = true;
+			}
+			vm.number_clicks++;
+		};
+		
+		$scope.close_dialog = function() {
+			$scope.closeThisDialog();
+		};
+
+		$scope.bonus_close_dialog = function() {
+			$scope.closeThisDialog();
+			var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+			$('.daily_bonus_earnings_box').addClass('animated ' + 'shake').one(animationEnd, function() {
+				$('.daily_bonus_earnings_box').removeClass('animated ' + 'shake');
+			});
+		};
+
+        }]);
+	app.controller('InsideCtrl', ['$scope', 'Upload', '$timeout', 'ngDialog', '$http', function ($scope, Upload, $timeout, ngDialog, $http) {
+
+
+		//console.log($scope.ngDialogData);
+		//console.log($scope.ngDialogData.files);
+		var vm = this;
+		//alert($scope.ngDialogData.files);
+		vm.log = '';
+		var temp = '';
+		vm.is_uploading = false;
+		vm.percentage_complete = "";
+		vm.is_processing_upload = false;
+
+		vm.uploader = {};
+		$scope.uploader = {};
+
+		var obj_data = {};
+
+		$scope.t = {};
+		$scope.t.is_confirm_image = false;
+
+		$scope.accept_click = function() {
+			$http({
+				method: 'POST',
+				url: '/platform/matchedrequests/accept_and_set_image_receipt/',
+				data: {matchedrequest_id:$scope.ngDialogData.matchedrequest_id}
+			}).success(function (result) {
+				if (result.is_success) {
+					$scope.closeThisDialog();
+					$scope.ngDialogData.mr_data.is_have_image_receipt = 'Y';
+					var matchedrequest_id = $scope.ngDialogData.matchedrequest_id;
+					
+					//consol.log(matchedrequest_id);
+					var mm = moment().utc();
+					mm.add(1, 'day');
+					var end_timestamp = mm.valueOf();
+					$scope.ngDialogData.arr_matched_expire_timestamp[matchedrequest_id] = end_timestamp;
+				} else {
+					alert('Unable To Accept Image');
+				}
+			});
+		};
+
+		
+
+		$scope.t.upload_image_url = "";
+
+		$scope.cancel_click = function() {
+			$scope.closeThisDialog();
+		};
+
+		vm.upload = function (upload_file) {
+			var files = [upload_file]; 
+			console.log('starting upload');
+			if (files && files.length) {
+				for (var i = 0; i < files.length; i++) {
+					var file = files[i];
+					//console.log('starting file');
+					var matchedrequest_id = $scope.ngDialogData.matchedrequest_id;
+					console.log(matchedrequest_id);
+
+					if (!file.$error) {
+						//alert(matchedrequest_id);
+						$scope.uploader = Upload.upload({
+							url: '/platform/matchedrequests/image_receipt_upload/',
+							data: {
+								file: file,
+								matchedrequest_id: matchedrequest_id
+							}
+						});
+						$scope.uploader.then(function (resp) {
+							$timeout(function() {
+								/*
+								$scope.log = 'file: ' +
+								resp.config.data.file.name +
+								', Response: ' + JSON.stringify(resp.data) +
+								'\n' + $scope.log;
+								var response = 'Response: ' + JSON.stringify(resp.data);
+								*/
+								//$scope.closeThisDialog();
+								if (resp.data.is_success) {
+									$timeout(function() {
+										$scope.t.upload_image_url = "/platform/matchedrequests/get_image_receipt/" + $scope.ngDialogData.mr_data.id + "/";
+										$scope.t.is_confirm_image = true;
+									}, 1000);
+									//$scope.ngDialogData.mr_data.is_have_image_receipt = 'Y';
+								} else {
+								}
+							});
+							$scope.is_uploading = false;
+							$scope.is_processing_upload = false;
+						}, null, function (evt) {
+							var progressPercentage = parseInt(100.0 *
+							evt.loaded / evt.total);
+							$scope.is_uploading = true;
+							if (progressPercentage == 100) {
+								$scope.is_uploading = false;
+								$scope.is_processing_upload = true;
+							} else {
+								$scope.percentage_complete = "file uploading: " + progressPercentage + "%";
+							}
+							$scope.log = 'progress: ' + progressPercentage + 
+							'% ' + evt.config.data.file.name + '\n' + 
+							$scope.log;
+						});
+					}
+				}
+			}
+		};
+
+		$scope.cancel_upload = function() {
+			$scope.uploader.abort();
+			$scope.closeThisDialog();
+		};
+
+		if ($scope.ngDialogData.files != null) {
+			vm.upload($scope.ngDialogData.files);
+		} else {
+			$scope.closeThisDialog();
+		}
+        }]);
+
+	  app.controller('CurrentOrdersCtrl', ['$scope', '$http', '$window', 'Upload', '$timeout', 'ngDialog', function($scope, $http, $window, Upload, $timeout, ngDialog) {
+	
+		var vm = this;
+
+
+		vm.t = {};
+
+		vm.data = {};
+		vm.data.amount = "";
+
+		var obj_data = {};
+
+		vm.arr_data = {};
+		vm.user_id = "";
+
+		
+		$http({
+			method: 'POST',
+			url: '/platform/matchedrequests/get_active_matched_requests_for_user/',
+			data: {data:obj_data}
+		}).success(function (result) {
+			vm.arr_data = result.arr_data;
+			vm.user_id = result.user_id;
+		});
+
+		// check if we need to do bonus game
+		$http({
+			method: 'POST',
+			url: '/platform/dashboard/check_do_bonus_game/',
+			data: {data:obj_data}
+		}).success(function (result) {
+			if (result.is_success) {
+				if (result.is_do_game) {
+					//alert('do game');
+					//result.bonus_amount
+					vm.open_bonus_game_dialog(result.bonus_amount);
+				}
+			}
+			//vm.user_id = result.user_id;
+		});
+
+
+		
+		vm.arr_matched_expire_timestamp = [];
+
+		vm.get_end_time = function (data) {
+			//var mm = moment().utc(data.gm_created);
+			//var end_timestamp = mm.valueOf() + 172800;
+			
+			if (typeof vm.arr_matched_expire_timestamp[data.id] === 'undefined') {
+				//var mm = moment().utc(data.gm_created + ' UTC');
+				//var mm = moment(data.gm_created + ' UTC');
+				if (data.is_have_image_receipt == 'Y') {
+					var mm = moment.utc(data.image_receipt_gm_date_time);
+					//var mm = moment().utc();
+					mm.add(1, 'day');
+					var end_timestamp = mm.valueOf();
+					vm.arr_matched_expire_timestamp[data.id] = end_timestamp;
+					//console.log('setting');
+				} else {
+					var mm = moment.utc(data.gm_created);
+					//console.log( data.gm_created );
+					//console.log( mm.format('MM-DD-YYYY HH:mm:ss') );
+					//var mm = moment().utc();
+					mm.add(2, 'days');
+					var end_timestamp = mm.valueOf();
+					vm.arr_matched_expire_timestamp[data.id] = end_timestamp;
+					//console.log('setting');
+				}
+				return end_timestamp;
+			} else {
+				//console.log('here');
+				return vm.arr_matched_expire_timestamp[data.id];
+			}
+			//console.log(end_timestamp);
+			//return end_timestamp;
+			//console.log(data.gm_created);
+			//alert('in here');
+			//return 1851628000000;
+		};
+		$scope.file = null;
+		$scope.files = [];
+
+
+		/*
+		$scope.$watch('file', function () {
+			alert ($scope.file);
+			if ($scope.file != null) {
+			    $scope.files = [$scope.file]; 
+				alert ('in here');
+				$scope.open($scope.files);
+			}
+		});
+		*/
+
+
+		vm.arr_is_request_expired = [];
+
+
+		vm.is_request_expired = function(mr_data) {
+			if (typeof vm.arr_is_request_expired[mr_data.id] === 'undefined') {
+					//console.log('setting');
+
+					// only do 24 hrs from image receipt upload time
+					if (mr_data.is_have_image_receipt == 'Y') {
+						//if (vm.user_id == mr_data.gh_user_tbl_id
+
+						var mm_gm_image_receipt_gm_date_time = moment.utc(mr_data.image_receipt_gm_date_time);
+						var mm_now = moment();
+						mm_now.add(-1, 'days');
+						//console.log('id is ' + mr_data.id);
+						//console.log('mm now ' + mm_now.toISOString());
+						//console.log('gm created ' + mm_gm_created_date.toISOString());
+						if (mm_now.valueOf() > mm_gm_image_receipt_gm_date_time.valueOf()) { 
+							vm.arr_is_request_expired[mr_data.id] = true;
+						} else {
+							vm.arr_is_request_expired[mr_data.id] = false;
+						}
+					} else {
+						var mm_gm_created_date = moment.utc(mr_data.gm_created);
+						var mm_now = moment();
+						mm_now.add(-2, 'days');
+						//console.log('id is ' + mr_data.id);
+						//console.log('mm now ' + mm_now.toISOString());
+						//console.log('gm created ' + mm_gm_created_date.toISOString());
+						if (mm_now.valueOf() > mm_gm_created_date.valueOf()) { 
+							vm.arr_is_request_expired[mr_data.id] = true;
+						} else {
+							vm.arr_is_request_expired[mr_data.id] = false;
+						}
+					// reject by gh
+					}
+			} else {
+				return vm.arr_is_request_expired[mr_data.id];
+			}
+			return false;
+		};
+
+		vm.confirm_mr = function (matchedrequest_id, $index) {
+			var obj_data = {};
+			var confirm_result = confirm("Are you sure you would like to confirm this ticket?");
+
+			if (confirm_result) {
+				$http({
+					method: 'POST',
+					url: '/platform/matchedrequests/confirm_request/' + matchedrequest_id + '/',
+					data: {data:obj_data}
+				}).success(function (result) {
+					if (result.is_success) {
+						//vm.t.arr_is_hide_mr[matchedrequest_id] = true;	
+						vm.arr_data.splice($index, 1);
+						
+						alert('Request Confirmed');
+					} else {
+						if (result.is_already_confirmed) {
+							alert('Request Already Confirmed');
+						} else {
+							alert('Could not confirm request');
+						}
+					}
+				});
+			}
+		};
+
+		$scope.open = function($index, upload_files, matchedrequest_id, mr_data) {
+
+			//mr_data.is_have_image_receipt = 'Y';
+			//alert(upload_files);
+			/*var new_dialog = ngDialog.open({ id: 'fromAService', template: 'firstDialogId', controller: 'InsideCtrl', data: { mr_data: mr_data } });
+			*/
+			if (upload_files != null) {
+				var new_dialog = ngDialog.open({ id: 'fromAService', showClose: false, closeByEscape: false,  closeByDocument: false, className: 'ngdialog-theme-default image-receipt-details-dialog',  template: 'upload_receipt_dialog', controller: 'InsideCtrl', data: { arr_matched_expire_timestamp: vm.arr_matched_expire_timestamp, files: upload_files, mr_data: mr_data, matchedrequest_id: matchedrequest_id} });
+				// example on checking whether created `new_dialog` is open
+				$timeout(function() {
+					console.log(ngDialog.isOpen(new_dialog.id));
+				}, 2000)
+			}
+		};
+
+		vm.is_show_active_matches = true;
+
+		vm.toggle_active_completed_matches = function() {
+			if (vm.is_show_active_matches) {
+				vm.is_show_active_matches = false;
+			} else {
+				vm.is_show_active_matches = true;
+			}
+			if (vm.is_show_active_matches) {
+				$http({
+					method: 'POST',
+					url: '/platform/matchedrequests/get_active_matched_requests_for_user/',
+					data: {data:obj_data}
+				}).success(function (result) {
+					vm.arr_data = result.arr_data;
+				});
+			} else {
+				$http({
+					method: 'POST',
+					url: '/platform/matchedrequests/get_completed_cancelled_for_user/',
+					data: {data:obj_data}
+				}).success(function (result) {
+					vm.arr_data = result.arr_data;
+				});
+			}
+		};
+
+
+		// holds whether to hide a mr
+		vm.t.arr_is_hide_mr = [];
+		vm.is_hide_mr = function(mr_id) {
+			if (typeof vm.t.arr_is_hide_mr[mr_id] === 'undefined') {
+				vm.t.arr_is_hide_mr[mr_id] = false;	
+			} else {
+				return vm.t.arr_is_hide_mr[mr_id];
+			}
+			return false;
+		};
+
+		// still working
+		vm.cancel_request_by_gh = function(mr_id, $index) {
+			var confirm_result = confirm("Are you sure you would like to cancel this ticket?");
+
+			if (confirm_result) {
+		
+				$http({
+					method: 'POST',
+					url: '/platform/matchedrequests/cancel_request_by_gh/' + mr_id,
+					data: {mr_id:mr_id}
+				}).success(function (result) {
+					//vm.arr_data = result.arr_data;
+					vm.t.arr_is_hide_mr[mr_id] = true;
+				});
+			}
+		};
+
+		vm.cancel_request_by_ph = function(mr_id, $index) {
+			var confirm_result = confirm("Are you sure you would like to cancel this ticket?");
+
+			if (confirm_result) {
+				vm.t.arr_is_hide_mr[mr_id] = true;
+				$http({
+					method: 'POST',
+					url: '/platform/matchedrequests/cancel_request_by_ph/' + mr_id,
+					data: {mr_id:mr_id}
+				}).success(function (result) {
+					vm.t.arr_is_hide_mr[mr_id] = true;
+					//vm.arr_data = result.arr_data;
+				});
+			}
+		};
+
+		vm.open_bonus_game_dialog = function(bonus_amount) {
+			var new_dialog = ngDialog.open({ id: 'bonus_game_dialog_id', closeByDocument: false, showClose: false, closeByEscape: false,  className: 'ngdialog-theme-default bonus-game-custom-width-details-dialog', template: 'bonus_game_dialog', controller: 'BonusGameCtrl', data: { bonus_amount: bonus_amount } });
+			// example on checking whether created `new_dialog` is open
+			$timeout(function() {
+				console.log(ngDialog.isOpen(new_dialog.id));
+			}, 2000)
+		};
+
+		vm.open_mr_receipt_dialog = function(mr_data) {
+			var new_dialog = ngDialog.open({ id: 'image_receipt_dialog_id',  className: 'ngdialog-theme-default image-receipt-details-dialog', template: 'image_receipt_dialog', controller: 'DetailsCtrl', data: { mr_data: mr_data} });
+			// example on checking whether created `new_dialog` is open
+			$timeout(function() {
+				console.log(ngDialog.isOpen(new_dialog.id));
+			}, 2000)
+		};
+
+		vm.open_details_dialog = function(user_id, mr_data, $index) {
+			//$('.daily_bonus_earnings_box').addClass('animated');
+			//$('.daily_bonus_earnings_box').addClass('shake');
+			/*
+			var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+			$('.daily_bonus_earnings_box').addClass('animated ' + 'shake').one(animationEnd, function() {
+				$('.daily_bonus_earnings_box').removeClass('animated ' + 'shake');
+			});
+			*/
+
+			//vm.arr_data.splice($index, 1);
+			//alert(mr_data.id);
+			//alert(upload_files);
+			//alert('in here');
+			//alert(mr_data.phrequest_user_id);
+			if (user_id == mr_data.phrequest_user_id) {
+				var new_dialog = ngDialog.open({ id: 'details_dialog',  className: 'ngdialog-theme-default custom-width-details-dialog', template: 'ph_details_dialog', controller: 'DetailsCtrl', data: { mr_data: mr_data, other_party_user_id: mr_data.ghrequest_user_id} });
+			} else {
+				var new_dialog = ngDialog.open({ id: 'details_dialog',  className: 'ngdialog-theme-default custom-width-details-dialog', template: 'gh_details_dialog', controller: 'DetailsCtrl', data: { mr_data: mr_data, other_party_user_id: mr_data.phrequest_user_id} });
+				//alert('opening dialog');
+			}
+			// example on checking whether created `new_dialog` is open
+			$timeout(function() {
+				console.log(ngDialog.isOpen(new_dialog.id));
+			}, 2000)
+		};
+
+		vm.MR_ACTIVE_STATUS_ID = MatchedRequests.ACTIVE_STATUS_ID;
+		vm.MR_COMPLETED_STATUS_ID = MatchedRequests.COMPLETED_STATUS_ID;
+
+		vm.MatchedRequests = MatchedRequests;
+
+	    }]);
+
+		app.controller('MainController', ['$scope', 'Upload', '$timeout', 'ngDialog', '$http','mySharedService', function ($scope, Upload, $timeout, ngDialog, $http, sharedService) {
+			var vm = this;
+
+
+			vm.t = {};
+
+			vm.is_show_gh_orders = true;
+			vm.toggle_ph_orders_gh_orders = function() {
+				if (vm.is_show_gh_orders) {
+					vm.is_show_gh_orders = false;
+				} else {
+					vm.is_show_gh_orders = true;
+				}
+				
+			};
+
+			$scope.$on('someEvent', function(event, args) {
+				alert('catched emit');
+			}
+			);
+
+			vm.dashboard_data = {};
+			vm.dashboard_data.daily_bonus_earning_balance = 0;
+			vm.dashboard_data.daily_growth_balance = 0;
+			vm.dashboard_data.task_earning_balance = 0;
+			vm.dashboard_data.level_income_balance = 0;
+			vm.t.user_data = {};
+
+			var obj_data = {};
+
+
+			vm.get_user_data = function() {
+				$http({
+					method: 'POST',
+					url: '/platform/users/get_user_data/',
+					data: {}
+				}).success(function (result) {
+					if (result.is_success) {
+						//alert(result.user_data.ph_completed_level);
+						//vm.dashboard_data.beast_ph = result.user_data.beast_ph;
+						//vm.dashboard_data.wallet_amount = result.user_data.gh_balance;
+						vm.t.user_data = result.data;
+					
+
+						//console.info(result.data);
+						//alert(vm.t.user_data.last_ph_request_gm_date_time);
+						//console.log(vm.t.user_data.last_ph_request_gm_date_time);
+						var mm = moment.utc();
+						var mm_time_last_ph = moment.utc(vm.t.user_data.last_ph_request_gm_date_time);
+						if (mm.valueOf() >= mm_time_last_ph) {
+						} else {
+							//vm.t.is_show_expiration_timer = true;
+						}
+						vm.t.is_show_expiration_timer = true;
+					}
+				});
+			};
+
+			vm.get_user_data();	
+
+			vm.t.is_show_expiration_timer = false;
+			vm.t.user_expiration_time = "";
+			vm.t.is_recommit = false;
+
+			vm.get_user_expiration_time = function () {
+				//var mm = moment().utc(data.gm_created);
+				//var end_timestamp = mm.valueOf() + 172800;
+				//alert(vm.t.user_data.last_ph_request_gm_date_time);
+
+				if (vm.t.user_expiration_time != "") {
+					return vm.t.user_expiration_time;
+				}
+				
+				if (typeof vm.t.user_data.last_ph_request_gm_date_time === 'undefined') {
+					return "";
+				}
+			
+				//alert(vm.t.user_data.last_ph_request_gm_date_time);
+				if (typeof vm.t.user_data.last_ph_request_gm_date_time === 'undefined' || vm.t.user_data.last_ph_request_gm_date_time == null) {
+					console.log('do not have last_ph_request');
+					vm.t.is_recommit = false;
+					if (typeof vm.t.user_data.expiration_before_new_ph_gm_date_time === 'undefined' || vm.t.user_data.expiration_before_new_ph_gm_date_time == null) {
+						console.log('do not have expiration before new ph');
+						//alert('in here');
+						//alert('in here');
+						var mm = moment.utc(vm.t.user_data.gm_created);
+						mm.add(7, 'days');
+						//console.log('undefined undefined ' + mm.valueOf());
+						vm.t.user_expiration_time = mm.valueOf();
+						return mm.valueOf();
+					} else {
+						console.log('have expiration before new ph');
+						console.log('25 days standard');
+						var mm = moment.utc(vm.t.user_data.expiration_before_new_ph_gm_date_time);
+						//console.log(mm.valueOf());
+						vm.t.user_expiration_time = mm.valueOf();
+						return mm.valueOf();
+					}
+				} else {
+					//console.log('have last_ph_request');
+					vm.t.is_recommit = true;
+					if (typeof vm.t.user_data.expiration_before_new_ph_gm_date_time === 'undefined' || vm.t.user_data.expiration_before_new_ph_gm_date_time == null) {
+						//console.log('do not have expiration before new ph');
+						var mm = moment.utc(vm.t.user_data.last_ph_request_gm_date_time);
+						mm.add(25, 'days');
+						//console.log(mm.valueOf());
+						vm.t.user_expiration_time = mm.valueOf();
+						return mm.valueOf();
+					} else {
+						//alert('in here');
+						console.log('have expiration before new ph');
+						var mm = moment.utc(vm.t.user_data.expiration_before_new_ph_gm_date_time);
+						console.log(vm.t.user_data.expiration_before_new_ph_gm_date_time);
+						var mm_now = moment.utc();
+						// check if our expiration has expired
+						if (mm_now.valueOf() >= mm.valueOf()) {
+							console.log('acocunt is assumed suspended checking for block epiration');
+							// check if account is assumed to be suspended
+							// block expiration should be based on 25 days after initial expiration
+							var mm_blocked_expiration = mm.utc();
+							// we block at 30 days but show 25 days
+							//mm_blocked_expiration.add(30, 'days');
+							// add 25 days on top
+							mm_blocked_expiration.add(25, 'days');
+							if (mm_now.valueOf() >= mm_blocked_expiration.valueOf()) {
+								// set expiration to be 30 days from time now no other choice. or maybe we just let timer be expired
+								// we just let timer expire
+								/*
+								console.log('no other cohice');
+								var mm_expiration = moment.utc();
+								//we block at 30 days but show 25 days
+								//mm_expiration.add(30, 'days');
+								mm_expiration.add(25, 'days');
+								// do 30 days
+								vm.t.user_expiration_time = mm_expiration.valueOf();
+								return mm_expiration.valueOf();
+								*/
+
+								// just let timer expire
+								return mm_blocked_expiration.valueOf();
+							} else {
+								console.log('expiration countdown before being blocked');
+								vm.t.user_expiration_time = mm_blocked_expiration.valueOf();
+								return mm_blocked_expiration.valueOf();
+							}
+						}
+						vm.t.user_expiration_time = mm.valueOf();
+						return mm.valueOf();
+					}
+				}
+	
+			};
+
+			vm.refresh_dashboard = function() {
+				$http({
+					method: 'POST',
+					url: '/platform/dashboard/get_dashboard_data/',
+					data: {data:obj_data}
+				}).success(function (result) {
+					if (result.is_success) {
+						//alert(result.user_data.ph_completed_level);
+						//vm.dashboard_data.beast_ph = result.user_data.beast_ph;
+						//vm.dashboard_data.wallet_amount = result.user_data.gh_balance;
+
+						vm.dashboard_data.daily_bonus_earning_balance = result.user_data.daily_bonus_earning_balance;
+						vm.dashboard_data.daily_bonus_earning_balance = (+vm.dashboard_data.daily_bonus_earning_balance) + (+result.daily_bonus_earning_frozen_total);
+
+						vm.dashboard_data.daily_growth_balance = result.user_data.daily_growth_balance;
+						vm.dashboard_data.daily_growth_balance = (+vm.dashboard_data.daily_growth_balance) + (+result.daily_growth_frozen_total);
+
+						vm.dashboard_data.task_earning_balance = result.user_data.task_earning_balance;
+						vm.dashboard_data.task_earning_balance = (+vm.dashboard_data.task_earning_balance) + (+result.task_earning_frozen_total);
+
+						vm.dashboard_data.level_income_balance = result.user_data.level_income_balance;
+						console.info(result.level_income_frozen_total);
+						vm.dashboard_data.level_income_balance = (+vm.dashboard_data.level_income_balance) + (+result.level_income_frozen_total);
+
+						vm.dashboard_data.total_gh = result.total_gh;
+						vm.dashboard_data.total_ph = result.user_data.total_ph;
+					}
+				});
+			};
+			vm.refresh_dashboard();
+
+			$scope.$on('update_bonus_amount_and_refresh_broadcast', function() {
+				//alert('bonus amount: ' + sharedService.bonus_amount);
+				$http({
+					method: 'POST',
+					url: '/platform/dashboard/update_daily_bonus_earnings_from_bonus_game/',
+					data: {data:obj_data}
+				}).success(function (result) {
+					if (result.is_success) {
+						vm.refresh_dashboard();
+						
+					}
+				});
+			});        
+
+		}]);
+
+
+		app.controller('DetailsCtrl', ['$scope', 'Upload', '$timeout', 'ngDialog', '$http', function ($scope, Upload, $timeout, ngDialog, $http) {
+			//console.log($scope.ngDialogData);
+			//console.log($scope.ngDialogData.files);
+			var vm = $scope;
+			//alert($scope.ngDialogData.files);
+
+
+			vm.other_party_user_id = vm.ngDialogData.other_party_user_id;
+			
+			vm.other_party = {};
+
+			vm.other_party.fullname = "Unknown";
+			vm.other_party.login = "Unknown";
+			vm.other_party.phone = "";
+
+			//vm.upload($scope.ngDialogData.files);
+			var obj_data = {};
+
+
+			$http({
+				method: 'POST',
+				url: '/platform/users/get_user_manager/'+ vm.other_party_user_id + '/',
+				data: {data:obj_data}
+			}).success(function (result) {
+				//alert('response in here');
+				//alert(result.arr_data.fullname);
+				//alert(result.is_success);
+				//vm.arr_data = result.arr_data;
+				if (result.is_success) {
+					vm.other_party.fullname = result.arr_data.fullname;
+					vm.other_party.login = result.arr_data.login;
+					vm.other_party.phone = result.arr_data.phone;
+				} else {
+				}
+			});
+
+
+		}]);
+
+	
+
+</script>
+<style>
+
+
+	.bonus-game-custom-width-details-dialog {
+		padding-top: 0px !important;
+		/*height: 100vh !important;*/
+	}
+
+	.bonus-game-custom-width-details-dialog div.ngdialog-overlay {
+		background: rgba(0, 0, 0, 1) !important;
+	}
+
+	.ngdialog-theme-default.bonus-game-custom-width-details-dialog .ngdialog-content {
+	/*	height: 100vh !important;*/
+	}
+
+	.ngdialog.ngdialog-theme-default.bonus-game-custom-width-details-dialog .ngdialog-content {
+		width: 100% !important;
+		background-color: #000000 !important;
+		color: #ffffff;
+		/*height:100%;*/
+		padding-top: 0px !important;
+	}
+
+
+	.ngdialog.ngdialog-theme-default.custom-width-details-dialog .ngdialog-content {
+		width: 90% !important;
+		background-color: #5e5845 !important;
+		color: #ffffff;
+		/*
+		background-color: #ffffff !important;
+		padding-top: 30px !important;
+		color: #000000;
+*/
+	}
+	.custom-width-details-dialog {
+		padding-top: 30px !important;
+	}
+
+	.image-receipt-details-dialog {
+		padding-top: 30px !important;
+	}
+
+	.ngdialog.ngdialog-theme-default.image-receipt-details-dialog .ngdialog-content {
+		width: 90% !important;
+		background-color: #5e5845 !important;
+		color: #ffffff;
+		padding-top: 0px !important;
+		/*
+		background-color: #ffffff !important;
+		color: #000000;
+*/
+	}
+
+	.non-white-dialog-text-color {
+		color: #06ffa1;
+	}
+
+	.dashboard_box {
+		max-width:100%;
+		border-radius:12px;
+		background-color:#FF0000;
+		min-height:130px;
+		color:#FFFFFF;
+		font-size:14px;
+		font-weight:900;
+		font-family: 'Lato', sans-serif;
+	}
+
+	.dashboard_col {
+		padding-left:8px !important;
+		padding-right:8px !important;
+	}
+	.dashboard_box .table_div {
+		display:table;
+		text-align:middle;
+		vertical-align:middle;
+		width:100%;
+		height:130px;
+	}
+	.dashboard_box .cell_div {
+		height:100%;
+		display:table-cell;
+		vertical-align:middle;
+		text-align:middle;
+		width:100%;
+	}
+
+	
+	@media (min-width: 1200px) {
+		.matched_request_right_col_container {
+			max-width:243px;
+		}
+	}
+</style>
+
+<link href='https://fonts.googleapis.com/css?family=Lato:700,400italic,400' rel='stylesheet' type='text/css'>
+
+<div ng-controller="MainController as main_ctrl">
+	<!--
+	<div class="flex_container" style="padding-bottom:20px;">
+		<div style="max-width:800px;">
+			<div style="font-size:15px; font-weight:900; text-align:center; width:100%; color:red;">
+				USE YOUR SPARE MONEY AND ANYONE WHO BELIEVES THAT THE BITCOIN BEAST IS A BUSINESS OR INVESTMENT COMPANY AND THINKS ONLY HOW TO EARN MONEY HERE, PLEASE DO NOT PARTICIPATE IN OUR COMMUNITY
+			</div>
+		</div>
+	</div>
+	-->
+
+	<div class="flex_container">
+		<div style="text-align:center;">
+			<!--
+			<img style="max-width:98%;" ng-src="/platform/BackEnd/Home/images/bb_header.jpg">
+			-->
+		</div>
+	</div>
+	<div class="flex_container" style="padding-top:10px;">
+		<div class="dashboard_col col-xs-12 col-ms-2 col-sm-2 col-md-2" style="text-align:center; padding-top:10px;">
+			<div class="dashboard_box" style="background-color:#b7042f">
+				<div class="table_div">
+					<div class="cell_div">
+					<p>TOTAL PH</p>
+					<p>$ {{main_ctrl.dashboard_data.total_ph | number: 2}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="dashboard_col col-xs-12 col-ms-2 col-sm-2 col-md-2" style="text-align:center; padding-top:10px;">
+			<div class="dashboard_box" style="background-color:#2981c4">
+				<div class="table_div">
+					<div class="cell_div">
+						<p>TOTAL GH</p>
+						<p>$ {{main_ctrl.dashboard_data.total_gh | number: 2}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="dashboard_col col-xs-12 col-ms-2 col-sm-2 col-md-2" style="text-align:center; padding-top:10px;">
+			<div class="dashboard_box"  style="background-color:#ff5b01" >
+				<div class="table_div">
+					<div class="cell_div">
+						<p>LEVEL WALLET</p>
+						<p>$ {{main_ctrl.dashboard_data.level_income_balance | number : 2}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="dashboard_col col-xs-12 col-ms-2 col-sm-2 col-md-2" style="text-align:center; padding-top:10px;">
+			<div class="dashboard_box" style="background-color:#841059">
+				<div class="table_div">
+					<div class="cell_div">
+						<p>DAILY GROWTH</p>
+						<p>$ {{main_ctrl.dashboard_data.daily_growth_balance | number : 2}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="dashboard_col col-xs-12 col-ms-2 col-sm-2 col-md-2" style="text-align:center; padding-top:10px;">
+			<div class="dashboard_box" style="background-color:#f0b70f">
+				<div class="table_div">
+					<div class="cell_div">
+						<p>TASK EARNING</p>
+						<p>$ {{main_ctrl.dashboard_data.task_earning_balance | number : 2}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="dashboard_col col-xs-12 col-ms-2 col-sm-2 col-md-2" style="text-align:center; padding-top:10px;">
+			<div class="dashboard_box daily_bonus_earnings_box" style="background-color:#19b491">
+				<div class="table_div">
+					<div class="cell_div">
+						<p>DAILY BONUS EARNING</p>
+						<p>$ {{main_ctrl.dashboard_data.daily_bonus_earning_balance | number : 2}}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="flex_container" style="padding-top:10px;">
+		<div ng-show="main_ctrl.t.is_show_expiration_timer" class="col-xs-12" style="text-align:center; padding-top:10px; padding-bottom:10px; font-size:24px; font-weight:900;">
+			<span style="font-weight:900; color:#FF0000" ng-show="main_ctrl.t.is_recommit">RE COMMIT BEFORE:</span>
+			<span style="font-weight:900; color:#FF0000" ng-show="!main_ctrl.t.is_recommit">FREE ACCOUNT EXPIRE TIME:</span>
+			<timer style="color:blue" end-time="main_ctrl.get_user_expiration_time()" max-time-unit="'day'" finish-callback="">{{days}} days, {{hours}} hrs, {{minutes}} mins, {{seconds}} secs.</timer>
+		</div>
+	</div>
+
+	<div class="flex_container" style="padding-top:10px;">
+		<div class="col-xs-12 col-ms-6 col-sm-6" style="text-align:center; padding-top:10px; padding-bottom:10px;">
+			<a class="create-button-a" href="/platform/phrequests/">
+				<div class="create-ph-button">
+					<div style="display:table; text-align:center; height:100%; width:100%;">
+						<div style="display:table-cell;vertical-align:middle; text-align:center;">
+							CREATE PH
+						</div>
+					</div>
+				</div>
+				<!--
+				<img style="max-width:100%;" ng-src="/platform/BackEnd/Home/images/beastph.jpg">
+				-->
+			</a>
+		</div>
+		<div class="col-xs-12 col-ms-6 col-sm-6" style="text-align:center; padding-top:10px;">
+			<a class="create-button-a" href="/platform/ghrequests/">
+				<div class="create-gh-button">
+					<div style="display:table; text-align:center; height:100%; width:100%;">
+						<div style="display:table-cell;vertical-align:middle; text-align:center;">
+							CREATE GH
+						</div>
+					</div>
+				</div>
+				<!--
+				<img style="max-width:100%;" ng-src="/platform/BackEnd/Home/images/beastgh.jpg">
+				-->
+			</a>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	<div class="flex_container" style="padding-top:10px;">
+		<div class="col-xs-12 col-ms-12 col-md-9 col-lg-9" style=""> <!-- col1 -->
+			<div ng-controller="CurrentOrdersCtrl as current_orders_ctrl">
+				<div style="font-weight:900; padding-bottom:20px;">
+					<div style="float:left;">
+						<div ng-show="current_orders_ctrl.is_show_active_matches">
+							<button class="btn btn-primary" ng-click="current_orders_ctrl.toggle_active_completed_matches()" type="button">SHOW COMPLETED / CANCELLED ORDERS</button>
+						</div>
+						<div ng-show="!current_orders_ctrl.is_show_active_matches">
+							<button class="btn btn-primary" ng-click="current_orders_ctrl.toggle_active_completed_matches()" type="button">SHOW ACTIVE ORDERS</button>
+						</div>
+					</div>
+					<div style="clear:both;"></div>
+				</div>
+		
+				<div>
+					<div class="flex_container">
+						<div style="width:100% !important;">
+							<div ng-repeat="data in current_orders_ctrl.arr_data" class="full-standard-fade">
+								<div ng-show="!current_orders_ctrl.is_hide_mr(data.id)" style="" ng-class="{'get_help_order_container': (current_orders_ctrl.user_id == data.gh_user_tbl_id), 'give_help_order_container': (current_orders_ctrl.user_id == data.ph_user_tbl_id)}">
+									<div style="font-weight:900; color:#000000; font-size:17px;">
+										<div class="col-xs-12 col-ms-2 col-sm-2 col-md-2" style="">
+											<div ng-show="current_orders_ctrl.user_id == data.ph_user_tbl_id && data.is_have_image_receipt == 'N' && data.status_id == current_orders_ctrl.MatchedRequests.ACTIVE_STATUS_ID">
+												<img width="40" ng-src="/platform/images/red.png">
+											</div>
+											<div ng-show="current_orders_ctrl.user_id == data.ph_user_tbl_id && data.is_have_image_receipt == 'Y' && data.status_id == current_orders_ctrl.MatchedRequests.ACTIVE_STATUS_ID">
+												<img width="40" ng-src="/platform/images/check-icon-round-yellow.png">
+											</div>
+											<div ng-show="current_orders_ctrl.user_id == data.gh_user_tbl_id && data.is_have_image_receipt == 'N' && data.status_id == current_orders_ctrl.MatchedRequests.ACTIVE_STATUS_ID">
+												<img width="40" ng-src="/platform/images/red.png">
+											</div>
+											<div ng-show="current_orders_ctrl.user_id == data.gh_user_tbl_id && data.is_have_image_receipt == 'Y' && data.status_id == current_orders_ctrl.MatchedRequests.ACTIVE_STATUS_ID">
+												<img width="40" ng-src="/platform/images/check-icon-round-yellow.png">
+											</div>
+											<div ng-show="data.status_id == current_orders_ctrl.MatchedRequests.COMPLETED_STATUS_ID">
+												<img width="40" ng-src="/platform/images/round_green_button.png">
+											</div>
+											<div ng-show="data.status_id == current_orders_ctrl.MatchedRequests.CANCELLED_STATUS_ID">
+												<img width="40" ng-src="/platform/images/red-stop-icon.png">
+											</div>
+										</div>
+										<div class="col-xs-12 col-ms-7 col-sm-7 col-md-7" style="">
+											<span ng-show="current_orders_ctrl.user_id == data.gh_user_tbl_id">GET HELP</span>
+											<span ng-show="current_orders_ctrl.user_id == data.ph_user_tbl_id">GIVE HELP</span>
+											| 
+											<span ng-show="current_orders_ctrl.user_id == data.gh_user_tbl_id">BMHGH{{data.ghrequest_id}} | {{data.gm_created}}</span>
+											<span ng-show="current_orders_ctrl.user_id == data.ph_user_tbl_id">BMHPH{{data.phrequest_id}} | {{data.gm_created}}</span>
+											&nbsp;UTC
+										</div>
+										<div class="col-xs-12 col-ms-3 col-sm-3 col-md-3" style="">
+											<div ng-show="data.status_id == current_orders_ctrl.MatchedRequests.CANCELLED_STATUS_ID">
+												CANCELLED
+											</div>
+											<div ng-show="data.status_id == current_orders_ctrl.MR_COMPLETED_STATUS_ID">
+												COMPLETED
+											</div>
+											<div ng-show="data.status_id != current_orders_ctrl.MR_COMPLETED_STATUS_ID && current_orders_ctrl.is_request_expired(data)">
+												TIME HAS EXPIRED
+											</div>
+											<div ng-show="data.status_id != current_orders_ctrl.MR_COMPLETED_STATUS_ID && !current_orders_ctrl.is_request_expired(data) && data.status_id == current_orders_ctrl.MatchedRequests.ACTIVE_STATUS_ID">
+												<!--
+												<timer interval="1000" countdown="100">{{countdown}}</timer>
+												-->
+												Expires in:&nbsp;
+												<timer end-time="current_orders_ctrl.get_end_time(data)" max-time-unit="'hour'" finish-callback="current_orders_ctrl.finished()">{{hours}} hrs, {{minutes}} mins, {{seconds}} secs.</timer>
+											</div>
+										</div>
+										<div style="clear:both;"></div>
+									</div>
+									<div style="clear:both;"></div>
+									<div style="padding-top:10px;">
+										<div class="col-xs-12 col-ms-3 col-sm-3 col-md-3" style="float:left;">
+											<div style="font-weight:900; color:#000000; font-size:20px;">{{data.id}}</div>
+											<div style="padding-top:10px;font-weight:900; color:#000000; font-size:20px;">$ {{data.amount}}</div>
+
+										</div>
+										<div class="col-xs-12 col-ms-6 col-sm-6 col-md-6" style="float:left;">
+											<!--
+											{{current_orders_ctrl.user_id}}<br>
+											{{data.gh_user_tbl_id}}<br>
+											{{data.ph_user_tbl_id}}<br>
+											-->
+											<div ng-show="current_orders_ctrl.user_id == data.gh_user_tbl_id" style="font-weight:900; color:#FF0000;font-size:14px;">From - {{data.ph_user_tbl_login}} ( +{{data.ph_user_tbl_phone}} )</div>
+											<div ng-show="current_orders_ctrl.user_id == data.ph_user_tbl_id" style="font-weight:900; color:#FF0000; font-size:14px;">To - {{data.gh_user_tbl_login}} ( +{{data.gh_user_tbl_phone}} )</div>
+											<div style="font-weight:900; padding-top:5px; padding-bottom:5px; color:#000000; font-size:20px;">{{data.bitcoin_amount}} BTC</div>
+											<div ng-show="current_orders_ctrl.user_id == data.gh_user_tbl_id" style="font-weight:900; color:#FF0000;font-size:14px;">To - {{data.gh_user_tbl_login}} ( +{{data.gh_user_tbl_phone}} )</div>
+											<div ng-show="current_orders_ctrl.user_id == data.ph_user_tbl_id" style="font-weight:900; color:#FF0000;font-size:14px;">From - {{data.ph_user_tbl_login}} ( +{{data.ph_user_tbl_phone}} )</div>
+										</div>
+										<div class="col-xs-12 col-ms-3 col-sm-3 col-md-3 matched_request_right_col_container">
+											<div style="padding-bottom:10px;">
+												<div class="col-xs-12 col-ms-12 col-sm-6" style="padding-top:2px; padding-bottom:2px; padding-left:2px; padding-right:2px;">
+													<button class="btn btn-primary" ng-click="current_orders_ctrl.open_details_dialog(current_orders_ctrl.user_id, data, $index)">DETAILS</button>
+												</div>
+												<div class="col-xs-12 col-ms-12 col-sm-6" style="padding-top:2px; padding-bottom:2px; padding-left:2px; padding-right:2px;">
+													<div ng-show="data.is_have_image_receipt == 'Y'">
+														<button type="button" ng-click="current_orders_ctrl.open_mr_receipt_dialog(data)" class="btn btn-primary">RECEIPT</button>
+													</div>
+												</div>
+												<div style="clear:both;"></div>
+											</div>
+			
+											<div ng-show="current_orders_ctrl.user_id == data.ph_user_tbl_id && data.is_have_image_receipt == 'N' && data.status_id == current_orders_ctrl.MatchedRequests.ACTIVE_STATUS_ID">
+												<button  ngf-select ng-model="current_orders_ctrl.file[$index]" ngf-change="open($index,current_orders_ctrl.file[$index], data.id, data)" ngf-multiple="false" class="btn btn-primary">UPLOAD RECEIPT</button>
+												<!--
+												<a href="" ng-click="open()">Default theme</a>-->
+											</div>
+											<div ng-show="current_orders_ctrl.user_id == data.gh_user_tbl_id && data.is_have_image_receipt == 'Y' && data.status_id == current_orders_ctrl.MatchedRequests.ACTIVE_STATUS_ID">
+												<div class="col-xs-12" style="padding-top:2px; padding-bottom:2px; padding-left:2px; padding-right:2px;">
+													<button type="button" ng-click="current_orders_ctrl.confirm_mr(data.id, $index)" class="btn btn-primary">CONFIRM</button>
+												</div>
+											</div>
+											<!-- waiting on ph to send reject by gh-->
+											<div ng-show="current_orders_ctrl.user_id == data.gh_user_tbl_id && current_orders_ctrl.is_request_expired(data) && data.status_id == current_orders_ctrl.MatchedRequests.ACTIVE_STATUS_ID">
+												<div class="col-xs-12" style="padding-top:7px; padding-bottom:2px; padding-left:2px; padding-right:2px;">
+													<button type="button" ng-click="current_orders_ctrl.cancel_request_by_gh(data.id, $index)" class="btn btn-primary">REJECT</button>
+												</div>
+											</div>
+
+											<!--
+											{{data.status_id}}<br>
+											{{data.is_have_image_receipt}}<br>
+											{{data.is_request_expired(data)}}<br>
+											-->
+											
+											<!-- waiting on gh to confirm reject by ph-->
+											<!-- dont need it -->
+											<!--
+											<div ng-show="current_orders_ctrl.user_id == data.ph_user_tbl_id && data.is_have_image_receipt == 'Y' && current_orders_ctrl.is_request_expired(data) && data.status_id == current_orders_ctrl.MR_ACTIVE_STATUS_ID">
+												<div class="col-xs-12" style="padding-top:2px; padding-bottom:2px; padding-left:2px; padding-right:2px;">
+													<button type="button" ng-click="current_orders_ctrl.cancel_request_by_ph(data.id, $index)" class="btn btn-primary">CANCEL BY PH</button>
+												</div>
+											</div>
+											-->
+										</div>
+										<div style="clear:both;"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div> <!-- current orders controller -->
+		</div> <!-- float left col1 -->
+		<div class="col-xs-12 col-ms-12 col-md-9 col-lg-3" style=""> <!-- col2 -->
+			<div ng-show="main_ctrl.is_show_gh_orders" ng-controller="GHOrdersCtrl as ghorders_ctrl" class="" >
+				<div style="font-weight:900; padding-bottom:20px;">
+					<div style="float:left;">
+						<button class="btn btn-primary" type="button" ng-click="main_ctrl.toggle_ph_orders_gh_orders()">SHOW PH ORDERS</button>
+					</div>
+					<div style="clear:both;"></div>
+				</div>
+		
+				<div>
+					<div ng-repeat="gh_data in ghorders_ctrl.arr_gh_data">
+						<div style="" class="gh_order_container">
+							<div class="col-xs-2" style="padding-left:0px;"><img width="40" ng-src="/platform/images/forward_button.png"></div>
+							<div class="col-xs-10" style="">Request to BMHGH{{gh_data.id}}</div>
+							<div style="clear:both;"></div>
+							<div style="padding-top:20px;">
+								<div class="col-md-6 col-xs-12" style="float:left;">Participant:</div>
+								<div class="col-md-6 col-xs-12" style="float:left;">{{gh_data.fullname}}</div>
+								<div style="clear:both;"></div>
+
+								<div class="col-md-6 col-xs-12" style="float:left;">GH Amount:</div>
+								<div class="col-md-6 col-xs-12" style="float:left;">{{gh_data.amount}} USD</div>
+								<div style="clear:both;"></div>
+
+								<div class="col-md-6 col-xs-12" style="float:left;">GH Date:</div>
+								<div class="col-md-6 col-xs-12" style="float:left;">{{gh_data.gm_created}} UTC</div>
+								<div style="clear:both;"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div ng-show="!main_ctrl.is_show_gh_orders" ng-controller="PHOrdersCtrl as phorders_ctrl" class="">
+				<div>
+					<div style="font-weight:900; padding-bottom:20px;">
+						<div style="float:left;">
+							<button class="btn btn-primary" type="button" ng-click="main_ctrl.toggle_ph_orders_gh_orders()">SHOW GH ORDERS</button>
+						</div>
+						<div style="clear:both;"></div>
+					</div>
+			
+					<div>
+						<div ng-repeat="ph_data in phorders_ctrl.arr_ph_data track by $index">
+							<div style="" class="ph_order_container">
+								<div class="col-xs-2" style="padding-left:0px;"><img width="40" ng-src="/platform/images/forward_button.png"></div>
+								<div class="col-xs-10" style="">Request to BMHPH{{ph_data.id}}</div>
+								<div style="clear:both;"></div>
+								<div style="padding-top:20px;">
+									<div class="col-md-6 col-xs-12" style="float:left;">Participant:</div>
+									<div class="col-md-6 col-xs-12" style="float:left;">{{ph_data.fullname}}</div>
+									<div style="clear:both;"></div>
+
+									<div class="col-md-6 col-xs-12" style="float:left;">PH Amount:</div>
+									<div class="col-md-6 col-xs-12" style="float:left;">{{ph_data.amount}} USD</div>
+									<div style="clear:both;"></div>
+
+									<div class="col-md-6 col-xs-12" style="float:left;">PH Date:</div>
+									<div class="col-md-6 col-xs-12" style="float:left;">{{ph_data.gm_created}} UTC</div>
+									<div style="clear:both;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div style="clear:both;"></div>
+	</div> <!-- wrapper around col 1 and col 2 -->
+</div>
+
+<script type="text/ng-template" id="upload_receipt_dialog">
+        <div class="ngdialog-message">
+		<div class="flex_container">
+			<div>
+				<div ng-show="!t.is_confirm_image">
+					<div style="font-size:24px; font-weight:900; padding-top:10px;">
+						{{percentage_complete}}
+					</div>
+				</div>
+				<div class="flex_container">
+					<div ng-show="!t.is_confirm_image" style="text-align:center; padding-top:30px;">
+						<img ng-src="/platform/images/progress_bar.gif">
+					</div>
+				</div>
+				<div class="flex_container">
+					<div ng-show="!t.is_confirm_image" style="text-align:center; padding-top:30px;">
+						<button type="button" ng-click="cancel_upload()" class="btn btn-primary">CANCEL UPLOAD</button>
+					</div>
+				</div>
+				<div ng-show="t.is_confirm_image">
+					<div class="flex_container">
+						<div style="padding-bottom:10px; padding-top:10px; font-weight:900;">IMAGE RECEIPT</div>
+					</div>
+					<div class="flex_container">
+						<div style="max-width:700px; padding-bottom:10px;">
+							<div class="col-xs-12 col-ms-6 col-sm-6">
+								<button type="button" ng-click="accept_click()" class="btn btn-primary">ACCEPT</button>
+							</div>
+							<div class="col-xs-12 col-ms-6 col-sm-6" ng-click="">
+								<button type="button" class="btn btn-primary" ng-click="cancel_click()">CANCEL</button>
+							</div>
+						</div>
+					</div>
+					<div class="flex_container">
+						<img style="max-width: 90%;" ng-src="{{t.upload_image_url}}">
+					</div>
+				</div>
+			</div>
+		</div>
+        </div>
+</script>
+
+<script type="text/ng-template" id="gh_details_dialog">
+        <div class="ngdialog-message">
+		<p>Order: BMHMR{{ngDialogData.mr_data.id}}</p>
+		<p>
+			Bitcoin Participant you will get the amount of: {{ngDialogData.mr_data.amount}} USD ({{ngDialogData.mr_data.bitcoin_amount}} BTC) from the sender
+		</p>
+		<p>
+			You will receive a GH before time according to wallet details provided further:
+		</p>
+		<div class="flex_container">
+			<div style="width:95%; padding:10px; border:1px solid #cccccc;">
+				<p>Sender will send {{ngDialogData.mr_data.amount}} USD ({{ngDialogData.mr_data.bitcoin_amount}} BTC) in your below given BTC Address</p>
+
+				<p>Recipient BTC Wallet Address is:<br>{{ngDialogData.mr_data.gh_user_tbl_btc_address}}</p>
+				<p class="non-white-dialog-text-color">
+				After receiving a GH, Participant should have to verify the document which attached by sender, after verifying the attached document please confirm request of sender. If you found attached document is fake please create support ticket (with screenshot) from the dashboard immediately.</p>
+				<div class="flex_container">
+					<div style="display:table; width:90%;">
+						<div style="display:table-row;">
+							<div style="display:table-cell;" class="non-white-dialog-text-color">
+								Sender:
+							</div>
+							<div style="display:table-cell;">
+								{{ngDialogData.mr_data.ph_user_tbl_fullname}} ({{ngDialogData.mr_data.ph_user_tbl_login}})
+							</div>
+						</div>
+						<div style="display:table-row;">
+							<div style="display:table-cell;" class="non-white-dialog-text-color">
+								Phone:
+							</div>
+							<div style="display:table-cell;">
+								+{{ngDialogData.mr_data.ph_user_tbl_phone}}
+							</div>
+						</div>
+						<div style="display:table-row;">
+							<div style="display:table-cell;" class="non-white-dialog-text-color">
+								Sender's Manager:
+							</div>
+							<div style="display:table-cell;">
+								{{other_party.fullname}} ({{other_party.login}})
+							</div>
+						</div>
+						<div style="display:table-row;">
+							<div style="display:table-cell;" class="non-white-dialog-text-color">
+								Phone:
+							</div>
+							<div style="display:table-cell;">
+								+{{other_party.phone}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--
+				<div class="flex_container">
+					<div style="padding-bottom:10px; padding-top:10px; font-weight:900;">IMAGE RECEIPT</div>
+				</div>
+				<div class="flex_container">
+					<img width="90%" ng-src="/platform/matchedrequests/get_image_receipt/{{ngDialogData.mr_data.id}}/">
+				</div>
+				-->
+			</div>
+		</div>
+        </div>
+</script>
+
+<script type="text/ng-template" id="ph_details_dialog">
+        <div class="ngdialog-message">
+		<p>Order: BMHMR{{ngDialogData.mr_data.id}}</p>
+		<p>
+			Bitcoin Participant has requested assistance in the amount of: {{ngDialogData.mr_data.bitcoin_amount}} BTC ($ {{ngDialogData.mr_data.amount | number: 2}} USD)
+		</p>
+		<p>
+			You have to give PH according to wallet details provided further:
+		</p>
+		<div class="flex_container">
+			<div style="width:95%; padding:10px; border:1px solid #cccccc;">
+				<p>Please Deposit the Exact amount {{ngDialogData.mr_data.bitcoin_amount}} BTC ($ {{ngDialogData.mr_data.amount | number: 2}} USD) in the given BTC wallet</p>
+
+				<p>Recipient BTC Wallet Address is: {{ngDialogData.mr_data.gh_user_tbl_btc_address}}</p>
+				<p>(DO NOT MAKE PAYMENT FROM ALTCOINTRADER, ITS TRANSACTION IS BANNED.)</p>
+				<p>After providing PH, Participant have to attach payment confirmation document (check scan, receipt scan, or online transaction operation screen shot).</p>
+				<p class="non-white-dialog-text-color">ATTENTION!<br>
+				Make money transfer only on those wallet details, which are specified in the order! If you are asked to send to other wallet details ("card is blocked!", ETC) - do not get fooled and make a support ticket immediately these are almost certainly fraudsters.</p>
+				<div class="flex_container">
+					<div style="display:table; width:90%;">
+						<div style="display:table-row;">
+							<div style="display:table-cell;" class="non-white-dialog-text-color">
+								Recipient:
+							</div>
+							<div style="display:table-cell;" class="non-white-dialog-text-color">
+								{{ngDialogData.mr_data.gh_user_tbl_fullname}} ({{ngDialogData.mr_data.gh_user_tbl_login}})
+							</div>
+						</div>
+						<div style="display:table-row;">
+							<div style="display:table-cell;" class="non-white-dialog-text-color">
+								Phone:
+							</div>
+							<div style="display:table-cell;">
+								+{{ngDialogData.mr_data.gh_user_tbl_phone}}
+							</div>
+						</div>
+						<div style="display:table-row;">
+							<div style="display:table-cell;" class="non-white-dialog-text-color">
+								Recipient's Manager:
+							</div>
+							<div style="display:table-cell;">
+								{{other_party.fullname}} ({{other_party.login}})
+							</div>
+						</div>
+						<div style="display:table-row;">
+							<div style="display:table-cell;" class="non-white-dialog-text-color">
+								Phone:
+							</div>
+							<div style="display:table-cell;">
+								+{{other_party.phone}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--
+				<div class="flex_container">
+					<div style="padding-bottom:10px; padding-top:10px; font-weight:900;">IMAGE RECEIPT</div>
+				</div>
+				<div class="flex_container">
+					<img width="90%" ng-src="/platform/matchedrequests/get_image_receipt/{{ngDialogData.mr_data.id}}/">
+				</div>
+				-->
+			</div>
+		</div>
+        </div>
+</script>
+
+<script type="text/ng-template" id="image_receipt_dialog">
+        <div class="ngdialog-message">
+		<div class="flex_container">
+			<div style="padding-bottom:10px; padding-top:10px; font-weight:900;">IMAGE RECEIPT</div>
+		</div>
+		<div class="flex_container">
+			<img style="max-width:90%" ng-src="/platform/matchedrequests/get_image_receipt/{{ngDialogData.mr_data.id}}/">
+		</div>
+        </div>
+</script>
+
+<script type="text/ng-template" id="bonus_game_dialog">
+        <div class="ngdialog-message">
+		<div ng-show="is_bonus_game_completed">
+			<div class="flex_container">
+				<div>
+					<div style="padding-bottom:10px; padding-top:30px; text-align:center;line-height:40px; color: #cdfaff;  font-size:40px;font-weight:900;">CONGRATULATIONS!!!!!!!</div>
+				</div>
+			</div>
+			<div class="flex_container">
+				<div>
+					<div style="padding-bottom:10px; padding-top:30px; text-align:center;line-height:40px;  color: #cdfaff; font-size:40px;font-weight:900;">YOU WON A DAILY BONUS</div>
+				</div>
+			</div>
+			<div class="flex_container" style="padding-top:20px;">
+				<button type="button" ng-click="bonus_close_dialog()" class="btn btn-primary">CLICK HERE TO CONTINUE TO DASHBOARD</button>
+			</div>
+			<div class="flex_container" style="z-index:1000000;">
+				<div>
+					<div style="position:absolute; left:0px; right:0px;">
+						<div style="margin-top:70px;padding-bottom:10px;text-align:center;line-height:40px;  color: #cdfaff; font-size:40px;font-weight:900;">
+							<div class="flex_container">
+								<div style="background-color:#000000; line-height:60px; padding:30px;border:10px solid #fe0007; text-align:center;">
+									YOUR BONUS WIN<br>AMOUNT IS <span style="color: #149c2c;">$ {{win_amount | number: 2}}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="flex_container">
+				<div style="width:95%; border:5px solid #cdfaff; margin-top:20px;">
+					<img width="100%" style="max-width:100%;" ng-src="/platform/BackEnd/Home/images/bonus_game.jpg">
+				</div>
+			</div>
+		</div>
+
+		<div ng-show="!is_bonus_game_completed">
+			<div class="flex_container">
+				<div>
+					<div style="padding-bottom:10px; padding-top:30px; text-align:center;line-height:40px;  color: #cdfaff; font-size:40px;font-weight:900;">CLICK TO CATCH A BILL AND EARN A BONUS</div>
+				</div>
+			</div>
+			<div class="flex_container">
+					<div style="padding-bottom:10px; padding-top:20px; text-align:center; line-height:40px; color: #cdfaff; font-size:40px; font-weight:900;">OF $9.00 - $30.00 A MONTH</div>
+			</div>
+			<div class="flex_container">
+				<div style="width:95%; border:5px solid #cdfaff; margin-top:20px;">
+					<img width="100%" ng-click="image_click()" style="max-width:100%;" ng-src="/platform/images/bonus_game.gif">
+				</div>
+			</div>
+		</div>
+        </div>
+</script>
+

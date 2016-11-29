@@ -1,0 +1,136 @@
+
+
+<style>
+	td {
+		padding-left: 20px;
+	}
+</style>
+
+
+<script>
+
+
+
+
+	  app.controller('UpdateController', ['$scope', '$http', '$window', function($scope, $http, $window) {
+		$scope.segment_id = <?=$t->id?>;
+		$scope.data = new Object();
+		$scope.is_add = false;
+		if ($scope.segment_id > 0) {
+			$http({
+			    method: 'GET',
+			    url: '/segments/get/' + $scope.segment_id,
+				data: { segment_id: $scope.segment_id }
+			}).success(function (result) {
+				//alert(result.total_clicks);
+				//alert('here');
+				//alert(result);
+				$scope.data = result;
+			});
+		} else {
+			$scope.is_add = true;
+			$('.submission_button').attr('value','Add');
+
+			/*
+			$scope.data.name = "";
+			$scope.data.total_clicks = "";
+			$scope.data.total_leads = "";
+			$scope.data.total_cost = "";
+			*/
+		}
+
+		$scope.save = function() {
+			//alert($scope.data.name);
+			
+			//alert(angular.toJson($scope.data));
+			$http({
+			    method: 'POST',
+			    url: '/segments/save/' + $scope.segment_id,
+				data: { data: $scope.data }
+			}).success(function (result) {
+				$window.location = "/segments";
+				//alert(result.total_clicks);
+				//alert('here');
+				//alert(result);
+				//$scope.data = result;
+			});
+		};
+
+		$scope.delete = function() {
+			var result = $window.confirm('Are you Sure you Want to delete?');
+			//alert(result);
+			if (result) {
+				$http({
+				    method: 'get',
+				    url: '/segments/delete/' + $scope.segment_id,
+				}).success(function (result) {
+					$window.location = "/segments";
+				});
+			}
+		};
+
+		}]);
+
+	</script>
+
+<div ng-controller="UpdateController" style="width:800px; padding-left:10px;float:left;">
+	<form name="update_form">
+	<table  style="border-collapse: collapse;">
+	<tr>
+	<td>
+		<div class="form-group">
+			<label class="form-label">Name</label>
+			<input ng-model="data.name" type="text" class="form-control" placeholder="Name" required>
+		</div>
+	</td>
+	<td>
+		<div class="form-group">
+			<label class="form-label">Total Leads</label>
+			<input ng-model="data.total_leads"  type="text" class="form-control" placeholder="Total Leads" required>
+		</div>
+	</td>
+	</tr>
+	<tr>
+	<td>
+		<div class="form-group">
+			<label class="form-label">Total Clicks</label>
+			<input ng-model="data.total_clicks" type="text" class="form-control" placeholder="Total Clicks" required>
+		</div>
+	</td>
+	<td>
+		<div class="form-group">
+			<label class="form-label">Total Cost</label>
+			<input ng-model="data.total_cost" type="text" class="form-control" placeholder="Total Cost" required>
+		</div>
+	</td>
+	</tr>
+	<tr>
+	<td>
+		<div class="form-group">
+			<label class="form-label">Impressions</label>
+			<input ng-model="data.impressions" type="text" class="form-control" placeholder="Impressions" required>
+		</div>
+	</td>
+	<td>
+		<div class="form-group">
+			<label class="form-label">Clicks</label>
+			<input type="text" ng-model="data.clicks" class="form-control" placeholder="Clicks" required>
+		</div>
+	</td>
+	<td>
+	</td>
+	</tr>
+	</table>
+	<div style="float:left; padding-left:10px;">
+		<input  type="button" ng-disabled="update_form.$invalid" ng-click="save()" value="Update" class="btn btn-primary submission_button">
+	</div>
+	<div style="float:left; padding-left:10px;">
+		<a href="/segments"><input type="button" value="Cancel" class="btn btn-default"></a>
+	</div>
+	<div style="float:left; padding-left:150px;">
+		<input ng-hide="is_add"  ng-click="delete()" type="button" value="Delete" class="btn btn-danger"></a>
+	</div>
+	</form>
+</div>
+
+

@@ -1,0 +1,38 @@
+<html>
+<body>
+	<table border=0 style="border:1px solid black; padding:10px;" align="center" width="50%">
+	<tr>
+	<td style="font-family:arial; font-weight:900; color:#000000;">
+		<div style='padding-bottom:10px'>
+			<div style='padding-bottom:10px'><img src='http://thebitcoinbeast.serverdatahost.com/FrontEnd/images/logo.png' border='0'></div>
+		</div>
+		<hr>
+
+		<p>Dear <?=$t->fullname?>,</p>
+		<p style="color:#000000;">Congratulations... ! You have succesfully registered with BITCOIN-BEAST</p>
+
+		<p style="font-size:15px; color:#000000;">Your Login Details Are :</p>
+		<p style="color:#000000;">
+			User/Email ID:&nbsp;<?=$t->login?><br>
+			Password:&nbsp;<?=$t->password?><br>
+			Country:&nbsp;<?=$t->country?><br>
+			OTP:&nbsp;<?=$t->otp?><br>
+			Sponsor ID:&nbsp;<?=$t->sponsor_email?><br>
+		</p>
+		<p style="color:#000000;">
+			Login to your account at <a href="<?=$t->site_url?>/login.php"><?=$t->site_url?>/login.php</a>
+		</p>
+		<p style="color:#000000;">
+		With Regards,<br>
+		TEAM BITCOIN-BEAST
+		</p>
+		<p style=""><span style="color:#FFFFFF; background-color:#FF0000; padding:3px; ">Warning:&nbsp;</span></p>
+		<p style="background-color:yellow; color:#FF0000;">
+			Use Your Spare Money and ANYONE WHO BELIEVES THAT THE BITCOIN BEAST IS A BUSINESS OR INVESTMENT COMPANY AND THINKS ONLY HOW TO EARN MONEY HERE, PLEASE DO NOT PARTICIPATE IN OUR COMMUNITY
+		</p>
+	</td>
+	</tr>
+	</table>
+
+</body>
+</html>

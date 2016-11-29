@@ -1,0 +1,250 @@
+<script>
+
+	  app.controller('PageController', ['$scope', '$http', '$window', function($scope, $http, $window) {
+
+		var vm = this;
+		vm.arr_data = [];
+
+		$scope.search = "";
+		$scope.number_per_page = 100;
+
+
+		vm.t = {};
+
+	
+		vm.t.search_for_user_id = 0;
+		vm.t.is_send_to_all_active_members = 'Y';
+		vm.t.is_send_to_all_active_managers = 'Y';
+		
+
+		$http({
+		    method: 'POST',
+		    url: '/platform/send_email/get_email_template_html/',
+			data: { search: $scope.search }
+		}).success(function (result) {
+			if (result.is_success) {
+				vm.t.email_contents_html = result.html_template;
+			}
+		});
+
+		$scope.add = function() {
+			$window.location = "/segments/edit/0";
+			
+		};
+
+		$scope.edit_click = function(index) {
+			$window.location = "/segments/edit/" + index;
+			
+		};
+
+
+		vm.t.subject = '';
+
+
+		
+		vm.send_test_email = function() {
+			var obj_result = {};
+			//alert('in here');
+			console.info(vm.user_selected);
+			console.log(vm.user_selected);
+			$http({
+			    method: 'POST',
+			    url: '/platform/send_email/send_test_email/',
+				data: { subject: vm.t.subject, email_contents_html: vm.t.email_contents_html  }
+			}).success(function (result) {
+				//alert(result.arr_data);
+			});
+		};
+
+		vm.send_email = function() {
+			var obj_result = {};
+			//alert('in here');
+			console.info(vm.user_selected);
+			console.log(vm.user_selected);
+			var arr_to = [];
+			if(typeof vm.user_selected !== "undefined") {
+				if(typeof vm.user_selected.selected !== "undefined") {
+					arr_to = vm.user_selected.selected;
+				}
+			}
+			$http({
+			    method: 'POST',
+			    url: '/platform/send_email/send_emails/',
+				data: { arr_to: arr_to, subject: vm.t.subject, email_contents_html: vm.t.email_contents_html  }
+			}).success(function (result) {
+				if (result.is_success) {
+					alert("Number Emails Sent: " + result.number_emails_sent);
+				}
+				//alert(result.arr_data);
+			});
+		};
+
+		vm.user_change = function() {
+			console.info(vm.user_selected.selected);
+			/*
+			if (typeof vm.user_selected.selected === 'undefined') {
+				vm.t.search_for_user_id = 0;
+			} else {
+				vm.t.search_for_user_id = vm.user_selected.selected['id'];
+			}
+
+			$http({
+			    method: 'POST',
+			    url: '/platform/matchedrequests/get_data/' + vm.t.search_for_user_id,
+				data: { search: $scope.search }
+			}).success(function (result) {
+				if (result.is_success) {
+					vm.arr_data = result.arr_data;
+				}
+			});
+			*/
+		};
+
+
+		vm.arr_users_data = [];
+
+		vm.refresh_users = function(search) {
+			//console.log('refresh users');
+			$http({
+			    method: 'POST',
+			    url: '/platform/users/get_arr_search_results',
+				data: { search: search, is_show_only_active_managers: vm.t.is_show_only_active_managers }
+			}).success(function (result) {
+				//alert(result.total_clicks);
+				//alert('here');
+				//alert(result);
+				vm.arr_users_data = result.arr_data;
+				//alert($scope.arr_segment_data);
+			});
+
+		};
+
+
+		$scope.tinymceOptions = {
+			onChange: function(e) {
+			// put logic here for keypress and cut/paste changes
+		},
+			inline: false,
+			plugins: [
+			    "fullpage fullscreen code media advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker",
+			    "searchreplace wordcount visualblocks visualchars insertdatetime nonbreaking",
+			    "table contextmenu directionality emoticons template textcolor paste textcolor colorpicker textpattern"
+			  ],
+			toolbar1: "fullscreen code bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect",
+			toolbar2: "cut copy paste | searchreplace | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media code | insertdatetime preview | forecolor backcolor",
+			toolbar3: "table | hr removeformat | subscript superscript | charmap emoticons | print fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking template pagebreak restoredraft",
+			skin: 'lightgray',
+			theme : 'modern',
+			relative_urls: false,
+			remove_script_host: false,
+			height: 600,
+		};
+
+		$scope.dateOptions = {
+			    changeYear: true,
+			    changeMonth: true,
+			    yearRange: '1900:-0',    
+			    };
+
+
+	}]);
+
+
+</script>
+
+<style>
+
+	td {
+		padding-left:10px;
+		padding-right:10px;
+	}
+
+</style>
+
+<div class="page-title-header">
+	Send Email
+</div>
+
+<div ng-controller="PageController as page_ctrl">
+
+	<div style="clear:both;"></div>
+
+
+<div class="flex_container">
+	<div>
+
+		<div style="max-width:900px;">
+			<div class="col-xs-12 col-ms-12 col-sm-12" ng-show="page_ctrl.t.is_send_to_all_active_members == 'Y'">
+				<div class="form-group">
+					<label class="form-label">Send To All Active Members</label>
+					<select class="form-control" name="is_send_to_all_active_members" ng-model="page_ctrl.t.is_send_to_all_active_members">
+						<option value="Y">Yes</option>
+						<option value="N">No</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-12 col-ms-6 col-sm-6" ng-show="page_ctrl.t.is_send_to_all_active_members == 'N'">
+				<div class="form-group">
+					<label class="form-label">Send To Emails On Sign Up Date On Or After</label>
+					
+					<input  ui-date="dateOptions" type="text" class="form-control" ng-model="page_ctrl.t.signup_date_after" name="subject" placeholder="DATE">
+				</div>
+			</div>
+			<div class="col-xs-12 col-ms-6 col-sm-6" ng-show="page_ctrl.t.is_send_to_all_active_members == 'N'">
+				<div class="form-group">
+					<label class="form-label">Send To Emails On Sign Up Date On or Before</label>
+					
+					<input  ui-date="dateOptions" type="text" class="form-control" ng-model="page_ctrl.t.signup_date_before" name="subject" placeholder="DATE">
+				</div>
+			</div>
+			<div class="col-xs-12 col-ms-6 col-sm-6" ng-show="page_ctrl.t.is_send_to_all_active_members == 'N'">
+				<div class="form-group">
+					<label class="form-label">Show Only Active Managers</label>
+					<select class="form-control" name="is_show_only_active_managers" ng-model="page_ctrl.t.is_show_only_active_managers">
+						<option value="Y">Yes</option>
+						<option value="N">No</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-12 col-ms-6 col-sm-6" ng-show="page_ctrl.t.is_send_to_all_active_members == 'N'">
+				<div class="form-group">
+					<label class="form-label">Show Only Blocked Users</label>
+					<select class="form-control" name="is_show_only_blocked_users" ng-model="page_ctrl.t.is_show_only_blocked_users">
+						<option value="Y">Yes</option>
+						<option value="N">No</option>
+					</select>
+				</div>
+			</div>
+			<div ng-show="page_ctrl.t.is_send_to_all_active_members == 'N'" class="col-xs-12 col-ms-12 col-sm-12">
+				<ui-select multiple ng-change="page_ctrl.user_change()" allow-clear="true" ng-model="page_ctrl.user_selected.selected" theme="bootstrap" >
+				<ui-select-match placeholder="To">{{$item.fullname}} &lt;{{$item.login}}&gt;</ui-select-match>
+				<ui-select-choices repeat="item in page_ctrl.arr_users_data | filter: $select.search"
+				refresh="page_ctrl.refresh_users($select.search)"
+				refresh-delay="1" >
+				<div ng-bind-html="item.login | highlight: $select.search"></div>
+				</ui-select-choices>
+				</ui-select>
+			</div>
+			<div class="col-xs-12 col-ms-12 col-sm-12" style="padding-top:10px;">
+				<input type="text" class="form-control" ng-model="page_ctrl.t.subject" name="subject" placeholder="Subject">
+			</div>
+
+			<div class="col-xs-12 col-ms-12 col-sm-12" style="padding-top:10px;">
+				<textarea class="form-control" ui-tinymce="tinymceOptions" style="width:100%;" ng-model="page_ctrl.t.email_contents_html" rows=20 placeholder="Email Contents"></textarea>
+			</div>
+			<div style="max-width:350px;">
+				<div class="col-xs-12 col-ms-6 col-sm-6" style="padding-top:10px;">
+					<button ng-click="page_ctrl.send_test_email()" class="btn btn-primary">SEND TEST EMAIL</button>
+				</div>
+				<div class="col-xs-12 col-ms-6 col-sm-6" style="padding-top:10px;">
+					<button ng-click="page_ctrl.send_email()" class="btn btn-primary">SEND EMAIL</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+</div>
+

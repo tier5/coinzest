@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<head profile="http://gmpg.org/xfn/11">
+<link rel="shortcut icon" href="/images/ico/bookmark.ico" type="image/vnd.microsoft.icon"/>
+<link rel="icon" href="/images/ico/bookmark.ico" type="image/x-ico"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>BIT MUTUAL HELP</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="shortcut icon" href="/FrontEnd/images/fevicon.png">
+
+<!--
+<link rel="stylesheet" href="/BackEnd/Template/css/style.css" type="text/css" media="screen" />-->
+
+<!--<script src="/js/libs/angular.min.js"></script>-->
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-sanitize.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-messages.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-animate.js"></script>
+
+
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+
+	<script src="/components/moment/moment.js"></script>
+	<script src="https://cdn.jsdelivr.net/angular.moment/1.0.0-beta.6/angular-moment.min.js"></script>
+	<script src="/components/angular-timer/dist/assets/js/angular-timer-all.min.js"></script>
+
+	<script src="/components/ng-file-upload/ng-file-upload-shim.min.js"></script> <!-- for no html5 browsers support -->
+	<script src="/components/ng-file-upload/ng-file-upload.min.js"></script>
+
+	<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="/components/ngDialog/css/ngDialog.css">
+	<link rel="stylesheet" href="/components/ngDialog/css/ngDialog-theme-default.css">
+	<link rel="stylesheet" href="/components/ngDialog/css/ngDialog-theme-plain.css">
+	<link rel="stylesheet" href="/components/ngDialog/css/ngDialog-custom-width.css">
+	<script src="/components/ngDialog/js/ngDialog.js"></script>
+
+	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.3.2/css/simple-line-icons.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+
+
+
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="/components/bootstrap/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/components/bootstrap/css/bootstrap-theme.min.css">
+
+<script src="/components/bootstrap/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="/components/bootstrap-ms/bootstrap_ms.css">
+
+<link rel="stylesheet" href="/platform/css/table.css">
+
+<link rel="stylesheet" href="/components/css-animate/animate.css">
+
+
+<script src="/platform/js/MatchedRequests.js"></script>
+<script src="/platform/js/WalletLogs.js"></script>
+
+<link rel="stylesheet" href="/components/jquery-ui/jquery-ui.css">
+<script src="/components/jquery-ui/jquery-ui.js"></script>
+<script src="/components/ui-select/select.js"></script>
+<link rel="stylesheet" href="/components/ui-select/select.css">
+
+<script src="/components/jquery-ui-date/date.js"></script>
+
+<script src="/components/ui-tinymce/dist/tinymce.min.js"></script>
+
+
+
+<?
+
+/*
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+*/
+
+?>
+
+<link href="/platform/js/libs/angular-tooltips/dist/angular-tooltips.min.css" rel="stylesheet" type="text/css" />
+<script src="/platform/js/libs/angular-tooltips/dist/angular-tooltips.min.js"></script>
+
+
+<link rel="stylesheet" href="/platform/css/style.css">
+
+<style type="text/css" media="all">
+	@media only screen and (min-width: 600px) {
+	}
+
+
+body {
+	background-color:#FFFFFF;
+}
+
+	.flex_container {
+		  display:                 flex;
+		  display:                 -webkit-flex; /* Safari 8 */
+		  flex-wrap:               wrap;
+		  -webkit-flex-wrap:       wrap;         /* Safari 8 */
+		  justify-content:         center;
+		  -webkit-justify-content: center;       /* Safari 8 */
+	}
+
+
+	/* header */
+	.introduction_button {
+		background-attachment:
+		scroll
+		;
+		background-clip:
+		border-box
+		;
+		background-color:
+		rgba(0, 0, 0, 0)
+		;
+		background-image:
+		linear-gradient(rgb(26, 188, 156) 0%, rgb(14, 112, 92) 50%, rgb(26, 188, 156) 100%)
+		;
+		background-origin:
+		padding-box
+		;
+		background-size:
+		auto
+		;
+		border-bottom-color:
+		rgb(255, 255, 255)
+		;
+		border-bottom-left-radius:
+		5px
+		;
+		border-bottom-right-radius:
+		5px
+		;
+		border-bottom-style:
+		solid
+		;
+		border-bottom-width:
+		2px
+		;
+		border-image-outset:
+		0px
+		;
+		border-image-repeat:
+		stretch
+		;
+		border-image-slice:
+		100%
+		;
+		border-image-source:
+		none
+		;
+		border-image-width:
+		1
+		;
+		border-left-color:
+		rgb(255, 255, 255)
+		;
+		border-left-style:
+		solid
+		;
+		border-left-width:
+		2px
+		;
+		border-right-color:
+		rgb(255, 255, 255)
+		;
+		border-right-style:
+		solid
+		;
+		border-right-width:
+		2px
+		;
+		border-top-color:
+		rgb(255, 255, 255)
+		;
+		border-top-left-radius:
+		5px
+		;
+		border-top-right-radius:
+		5px
+		;
+		border-top-style:
+		solid
+		;
+		border-top-width:
+		2px
+		;
+		box-sizing:
+		border-box
+		;
+		color:
+		rgb(255, 255, 255)
+		;
+		cursor:
+		auto
+		;
+		display:
+		block
+		;
+		filter:
+		none
+		;
+		float:
+		left
+		;
+		font-family:
+		"Open Sans", sans-serif
+		;
+		font-size:
+		13px
+		;
+		font-weight:
+		bold
+		;
+		height:
+		39px
+		;
+		line-height:
+		35px
+		;
+		margin-left: 40px ;
+		margin-top: 20px ;
+		padding-bottom:
+		0px
+		;
+		padding-left:
+		20px
+		;
+		padding-right:
+		20px
+		;
+		padding-top:
+		0px
+		;
+		text-decoration:
+		none
+		;
+		text-transform:
+		uppercase
+		;
+		width:
+		145.812px
+	}
+	
+
+	.login_info_header {
+		display:none;
+	}
+
+	.introduction_header {
+		display:none;
+	}
+
+	.user_level_header {
+		display:none;
+	}
+
+	@media screen and (min-width:1000px) {
+		.introduction_header {
+			display:inline-block;
+			float:left;
+			color:#FFFFFF;
+			line-height:24px;
+			width:220px;
+			font-weight:900;
+			font-size:14px;
+			font-family: 'Open Sans', sans-serif;
+		}
+		.user_level_header {
+			display:inline-block;
+			float:left;
+			padding-top:15px;
+			color:#FFFFFF;
+			line-height:24px;
+			/*width:190px;*/
+			font-weight:900;
+			padding-left:10px;
+			font-size:14px;
+			font-family: 'Open Sans', sans-serif;
+		}
+	}
+	@media screen and (min-width:1200px) {
+		.login_info_header {
+			display:inline-block;
+			float:left;
+			padding-top:15px;
+			color:#FFFFFF; line-height:24px;
+			width:360px;
+			font-weight:900;
+			padding-left:50px; font-size:14px; 
+			font-family: 'Open Sans', sans-serif;
+		}
+	}
+
+	/* end of header */
+
+	/* nav section */
+	.top-nav {
+		background-color: #00acb3 !important;
+		background-image:none !important;
+		color:#FFFFFF;
+	}
+
+	/* hide nav */
+	ul.nav {
+		display:none;
+	}
+
+	.nav-icon {
+		float:right;
+		display:block;
+		padding-top:5px;
+		color:#FFFFFF;
+		font-weight:900;
+		padding-top:2px;
+		padding-right:10px;
+	}
+
+	.nav-icon:hover {
+		cursor:pointer;
+	}
+	.nav-icon a {
+		color:#FFFFFF;
+		font-weight:900;
+		font-size:24px;
+		text-decoration:none;
+	}
+	
+	/* makes li float left */
+	.nav > li {
+		display:block;
+		color:#FFFFFF !important;
+	}
+
+	.nav > li > a {
+		background-color: #00acb3 !important;
+	}
+	.nav > li > a:hover {
+		background-color: #008b91 !important;
+	}
+
+	ul.nav li:hover {
+		background-color: #008b91 !important;
+		background-image:none !important;
+	}
+
+	.nav > li:hover {
+		background-color: #008b91 !important;
+		background-image:none !important;
+	}
+
+	.nav > li > a {
+		color:#FFFFFF !important;
+	}
+
+	nav {
+		z-index:100;
+		position:relative;
+		height:40px;
+		color:#FFFFFF !important;
+		background-color: #00acb3 !important;
+
+		background-image:none !important;
+	}
+
+	/* when to display or hide nav */
+	/*@media screen and (min-width:897px) {*/
+	@media screen and (min-width:1006px) {
+		.nav-icon {
+			display:none;
+		}
+
+		ul.nav {
+			display:block;
+		}
+		ul.nav > li {
+			color:#FFFFFF !important;
+			float:left !important;
+		}
+	}
+	
+	@media screen and (max-width:897px) {
+	}
+
+	/* end nav section */
+
+	
+
+</style>
+
+ </head>
+
+<body id="home" ng-app="myApp" style="display:none;">
+
+	<script>
+		var app = angular.module('myApp', ['ngSanitize', 'ngMessages', '720kb.tooltips', 'timer', 'ngFileUpload', 'ngDialog', 'ngAnimate', 'ui.select','ui.date', 'ui.tinymce']);
+
+	app.controller('headerController', ['$scope', '$location','$window', function($scope, $location, $window) {
+		//$('body').css('display','');
+	}]);
+
+
+	</script>
+
+	<div ng-controller="headerController as hdr_ctrl">
+	</div>
+
+
+	<div style="">
+		<?=$t->contents_html?>
+	</div>
+</body>  
+</html> 

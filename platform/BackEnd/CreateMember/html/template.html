@@ -1,0 +1,348 @@
+
+
+<style>
+	td {
+		padding-left: 20px;
+	}
+</style>
+
+<script src="/platform/js/form_validator_helper.js"></script>
+<style>
+	form.submitted input.ng-invalid
+	{
+	    border:1px solid #f00;
+	}
+
+	form.submitted select.ng-invalid
+	{
+	    border:1px solid #f00;
+	}
+
+	form.submitted .ng-invalid
+	{
+	    border:1px solid #f00;
+	}
+
+
+	.field_error {
+	    border:1px solid #f00;
+	}
+
+	.asterisk-alert {
+		color:#ff0000;
+		
+	}
+</style>
+
+
+
+<script>
+
+
+
+	  app.controller('CreateMemberController', ['$scope', '$http', function($scope, $http) {
+
+
+		var vm = this;
+		vm.data = {};
+		vm.data.create_member_login = "";
+		vm.data.create_member_country = "";
+		vm.data.create_member_fullname = "";
+		vm.data.is_agreed_to_bmh_rules = "";
+
+		vm.data.sponsor_fullname = "";
+		vm.data.sponsor_id = 0;
+
+		vm.is_invalid_sponsor = false;
+		vm.is_display_sponsor = false;
+		vm.is_searching_for_sponsor = false;
+
+		vm.view_data = {};
+		
+		vm.view_data.submit_error_message = "";
+		vm.view_data.is_submit_success_message = false;
+		vm.view_data.is_submit_error_message = false;
+
+		//alert(vm.config.state.MIN_BUDGET);
+		vm.submit = function($form) {
+			var ngForm = $form;
+			if(isFormValid($scope, ngForm)) { // trigger manual validation
+			} else {
+				$form.$submitted = true;
+				$form.submitted = true;
+			}
+
+			if ($form.$invalid) {
+				$form.$submitted = true;
+				$form.submitted = true;
+			} else {
+				var obj_data = {};
+				obj_data.login = vm.data.create_member_login;
+				//alert(vm.data.create_member_login);
+				obj_data.country = vm.data.create_member_country;
+				obj_data.fullname = vm.data.create_member_fullname;
+				obj_data.sponsor_login = vm.data.sponsor_login;
+				obj_data.sponsor_id = vm.data.sponsor_id;
+				$http({
+					method: 'POST',
+					url: '/platform/createmember/create_member/',
+					data: {data:obj_data}
+				}).success(function (result) {
+					if (result.is_success) {
+						vm.view_data.is_submit_success_message = true;
+						vm.view_data.is_submit_error_message = false;
+						vm.data.create_member_login = "";
+						vm.data.create_member_country = "";
+						vm.data.create_member_fullname = "";
+						vm.data.is_agreed_to_bmh_rules = "";
+						$form.$setPristine();
+					} else {
+						vm.view_data.submit_error_message = "Invalid already in the system";
+						vm.view_data.is_submit_success_message = false;
+						vm.view_data.is_submit_error_message = true;
+					}
+					//$scope.form_data.get_otp_retrieve_login = '';
+					//$scope.otp_pop_up_url = 'FrontEnd/get_otp_pop_up_result.html';
+				});
+			}
+		};
+
+		vm.get_sponsor_details = function($form) {
+			var obj_data = {};
+			obj_data.sponsor_login = vm.data.sponsor_login;
+			vm.is_invalid_sponsor = false;
+			vm.is_display_sponsor = false;
+			vm.is_searching_for_sponsor = true;
+			if (vm.data.sponsor_login != "" && vm.data.create_member_login == vm.data.sponsor_login) {
+				$form.member_login.$setValidity("cannot_match_sponsor", false);
+			} else {
+				$form.member_login.$setValidity("cannot_match_sponsor", true);
+				$http({
+					method: 'POST',
+					url: '/platform/createmember/get_sponsor_details/',
+					data: {data:obj_data}
+				}).success(function (result) {
+					if (result.is_success) {
+						vm.data.sponsor_fullname = result.sponsor_fullname;
+						vm.data.sponsor_id = result.sponsor_id;
+						vm.is_searching_for_sponsor = false;
+						vm.is_display_sponsor = true;
+						vm.is_invalid_sponsor = false;
+						//alert(result.sponsor_id);
+					} else {
+						vm.data.sponsor_fullname = "";
+						vm.data.sponsor_id = 0;
+						vm.is_searching_for_sponsor = false;
+						vm.is_display_sponsor = false;
+						vm.is_invalid_sponsor = true;
+
+					}
+					//$scope.form_data.get_otp_retrieve_login = '';
+					//$scope.otp_pop_up_url = 'FrontEnd/get_otp_pop_up_result.html';
+				});
+			}
+
+		};
+
+		vm.view_data.is_login_already_exists = false;
+		vm.view_data.is_display_login_error = false;
+		vm.view_data.is_searching_for_login = false;
+
+		vm.check_if_login_already_exists = function($form) {
+			var obj_data = {};
+
+			if (vm.data.create_member_login != "" && vm.data.create_member_login == vm.data.sponsor_login) {
+				$form.member_login.$setValidity("cannot_match_sponsor", false);
+				$form.member_login.$setValidity("login_already_exists", true);
+			} else {
+				$form.member_login.$setValidity("cannot_match_sponsor", true);
+				obj_data.sponsor_login = vm.data.create_member_login;
+				$http({
+					method: 'POST',
+					url: '/platform/createmember/check_if_login_already_exists/',
+					data: {data:obj_data}
+				}).success(function (result) {
+					if (result.is_success) {
+						// invalid
+						$form.member_login.$setValidity("login_already_exists", false);
+						/*
+						vm.view_data.is_display_login_error = true;
+						vm.view_data.is_login_already_exists = true;
+						vm.view_data.is_searching_for_login = false;
+						*/
+
+					} else {
+						$form.member_login.$setValidity("login_already_exists", true);
+						/*
+						vm.view_data.is_display_login_error = false;
+						vm.view_data.is_login_already_exists = true;
+						vm.view_data.is_searching_for_login = false;
+						*/
+					}
+				});
+			}
+
+		};
+	    }]);
+
+	</script>
+
+	<div class="page-title-header">
+		New Member Registration
+	</div>
+
+
+	<div ng-controller="CreateMemberController as create_ctrl" style="width:100%;">
+		<form ng-class="{submitted:create_member_form.$submitted}" name="create_member_form" class="form-horizontal" novalidate>
+			<div class="flex_container">
+				<div class="col-xs-12 col-sm-12 col-sm-12 col-md-11 col-lg-9">
+					<div class="form-group" style="margin-bottom:0px;">
+						<div class="col-xs-12 col-ms-2 col-sm-3 col-md-3"></div>
+						<div class="cols-xs-12 col-ms-8 col-sm-7 col-md-7 control-label" style="text-align:left;">
+							<div ng-show="create_ctrl.view_data.is_submit_error_message" style="margin-bottom: 0px !important;" class="alert alert-danger" role="alert">
+								<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+								<span class="sr-only">Error:</span>
+								{{create_ctrl.view_data.submit_error_message}}
+							</div>
+							<div ng-show="create_ctrl.view_data.is_submit_success_message" style="" class="alert alert-success" role="alert">
+								SUCCESSFUL REGISTRATION IS COMPLETE, EMAIL WITH THE LOG IN ACCESS DETAILS WAS MAILED TO THE EMAIL REGISTERED WITH
+							</div>
+						</div>
+						<div class="col-xs-12 col-ms-2 col-sm-2 col-md-2"></div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-12 col-ms-2 col-sm-3 col-md-3"></div>
+						<div class="cols-xs-12 col-ms-10 col-sm-9 col-md-9 control-label" style="text-align:left;">
+						<h3 style="margin-top:0px !important; margin-bottom:0px; color: #45c1e9; font-size:18px;">SPONSOR DETAILS</h3>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-12 col-ms-2 col-sm-3 col-md-3"></div>
+						<label for="sponsor_login" class="col-xs-12 col-ms-4 col-sm-3 col-md-3 control-label" style="text-align:left;">Sponsor User/Email ID<span class="asterisk-alert">*</span></label>
+						<div class="col-xs-12 col-ms-4 col-sm-4 col-md-4">
+							<input ng-model="create_ctrl.data.sponsor_login" ng-change="create_ctrl.get_sponsor_details(create_member_form)" name="fullname" type="text" class="form-control" placeholder="Please Enter User/Email ID Of Sponsor">
+						</div>
+						<div class="col-xs-12 col-ms-2 col-sm-2 col-md-2"></div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-12 col-ms-2 col-sm-3 col-md-3"></div>
+						<label class="col-xs-12 col-ms-4 col-sm-3 col-md-3 control-label" style="text-align:left;">Sponsor Name<span class="asterisk-alert">*</span></label>
+						<div class="col-xs-12 col-ms-4 col-sm-4 col-md-4 control-label" style="text-align:left; color:green; font-weight:900;">
+							<div ng-show="create_ctrl.is_display_sponsor">{{create_ctrl.data.sponsor_fullname}}</div>
+							<div ng-show="create_ctrl.is_searching_for_sponsor" style="color:red;">Searching for Sponsor...</div>
+							<div ng-show="create_ctrl.is_invalid_sponsor" style="color:red;">Could not find Sponsor...</div>
+						</div>
+						<div class="col-xs-12 col-ms-2 col-sm-2 col-md-2"></div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-12 col-ms-2 col-sm-3 col-md-3"></div>
+						<div class="cols-xs-12 col-ms-10 col-sm-9 col-md-9 control-label" style="text-align:left;">
+						<h3 style="margin-bottom:0px; color: #45c1e9; font-size:18px;">PERSONAL DETAILS</h3>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-12 col-ms-2 col-sm-3 col-md-3"></div>
+						<label for="fullname" class="col-xs-12 col-ms-4 col-sm-3 col-md-3 control-label" style="text-align:left;">Full Name<span class="asterisk-alert">*</span></label>
+						<div class="col-xs-12 col-ms-4 col-sm-4 col-md-4">
+							<input ng-model="create_ctrl.data.create_member_fullname" name="fullname" type="text" class="form-control" placeholder="Please Enter Your Real Name" required>
+							<div style="color:red; font-weight:bold" ng-messages="create_member_form.fullname.$error" ng-if="create_member_form.fullname.$dirty">
+								<div ng-message="required">Required</div>
+							</div>
+						</div>
+						<div class="col-xs-12 col-ms-2 col-sm-2 col-md-2"></div>
+					</div>
+					<div>
+						<div class="col-xs-12 col-ms-2 col-sm-3 col-md-3"></div>
+						<label for="member_login" class="col-xs-12 col-ms-4 col-sm-3 col-md-3  control-label" style="text-align:left;"></label>
+						<div class="col-xs-12 col-ms-4 col-sm-4 col-md-4">
+							<div style="color:red;">Access details will be sent to the email entered below</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-12 col-ms-2 col-sm-3 col-md-3"></div>
+						<label for="member_login" class="col-xs-12 col-ms-4 col-sm-3 col-md-3  control-label" style="text-align:left;">E-mail ID<span class="asterisk-alert">*</span></label>
+						<div class="col-xs-12 col-ms-4 col-sm-4 col-md-4">
+							<input name="member_login"  ng-change="create_ctrl.check_if_login_already_exists(create_member_form)" ng-model="create_ctrl.data.create_member_login" type="email" class="form-control" placeholder="Please Enter User/Email ID" required>
+							
+							<!--
+							<div style="color:red; font-weight:bold" ng-show="create_member_form.member_login.$valid && create_ctrl.view_data.is_display_login_error && create_ctrl.view_data.is_login_already_exists">
+								LOGIN ALREADY EXISTS
+							</div>
+							-->
+							<div style="color:red; font-weight:bold" ng-messages="create_member_form.member_login.$error" ng-if="create_member_form.member_login.$dirty">
+								<div ng-message="required">Required</div>
+								<div ng-message="email">Your Login is invalid. Must be in Email form</div>
+								<div ng-message="login_already_exists">ID ALREADY EXIST</div>
+								<div ng-message="cannot_match_sponsor">Login Cannot Match Sponsor</div>
+							</div>
+
+						</div>
+						<div class="col-xs-12 col-ms-2 col-sm-2 col-md-2"></div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-xs-12 col-ms-2 col-sm-3 col-md-3"></div>
+						<div class="cols-xs-12 col-ms-10 col-sm-9 col-md-9 control-label" style="text-align:left;">
+						<h3 style="margin-bottom:0px;color: #45c1e9; font-size:18px;">LOCATION DETAILS</h3>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-12 col-ms-2 col-sm-3 col-md-3"></div>
+						<label for="country" class="col-xs-12 col-ms-4 col-sm-3 col-md-3  control-label" style="text-align:left">Country<span class="asterisk-alert">*</span></label>
+						<div class="col-xs-12 col-ms-4 col-sm-4 col-md-4">
+							<select name="country" class="form-control" ng-model="create_ctrl.data.create_member_country" required name="country" required>
+								<?=$t->countries_drop_down_html?>
+							</select>
+							<div style="color:red; font-weight:bold" ng-messages="create_member_form.country.$error" ng-if="create_member_form.country.$dirty">
+								<div ng-message="required">Required</div>
+							</div>
+						</div>
+						<div class="col-xs-12 col-ms-2 col-sm-2 col-md-2"></div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-12 col-ms-2 col-sm-3 col-md-3"></div>
+						<div class="col-xs-12 col-ms-4 col-sm-3 col-md-3">
+							<div style="color:red;">
+							* required
+							</div>
+						</div>
+						<div class="col-xs-12 col-ms-4 col-sm-4 col-md-4"></div>
+						<div class="col-xs-12 col-ms-2 col-sm-2 col-md-2"></div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-12 col-ms-2 col-sm-3 col-md-3"></div>
+						<div class="col-xs-12 col-ms-4 col-sm-3 col-md-3">
+						</div>
+						<div class="col-xs-12 col-ms-4 col-sm-4 col-md-4">
+							<div class="checkbox" style="padding-below:5px;">
+								<label>
+								<input type="checkbox" name="agreed_to_bmh_rules_checkbox" required="required" ng-model="create_ctrl.data.is_agreed_to_bmh_rules" required>I have read and agreed to all BMH rules</label>
+								<div style="color:red; font-weight:bold" ng-messages="create_member_form.agreed_to_bmh_rules_checkbox.$error" ng-if="create_member_form.agreed_to_bmh_rules_checkbox.$dirty">
+									<div ng-message="required">Required</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12 col-ms-2 col-sm-2 col-md-2"></div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-12 col-ms-2 col-sm-3 col-md-3"></div>
+						<div class="col-xs-12 col-ms-4 col-sm-3 col-md-3">
+						</div>
+						<div class="col-xs-12 col-ms-4 col-sm-4 col-md-4">
+							<button type="button" ng-click="create_ctrl.submit(create_member_form)" class="btn btn-primary">SUBMIT</button>
+						</div>
+						<div class="col-xs-12 col-ms-2 col-sm-2 col-md-2"></div>
+					</div>
+				</div> <!-- max width 80 % -->
+			</div>
+		</div>
+		<div class="form-group">
+
+		</div>
+	<div>
+		<div style="float:left;">
+		</div>
+	</div>
+</div>
+
+

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<head profile="http://gmpg.org/xfn/11">
+<link rel="shortcut icon" href="/images/ico/bookmark.ico" type="image/vnd.microsoft.icon"/>
+<link rel="icon" href="/images/ico/bookmark.ico" type="image/x-ico"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>BIT MUTUAL HELP</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="shortcut icon" href="/FrontEnd/images/fevicon.png">
+
+<!--
+<link rel="stylesheet" href="/BackEnd/Template/css/style.css" type="text/css" media="screen" />-->
+
+<!--<script src="/js/libs/angular.min.js"></script>-->
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-sanitize.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-messages.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-animate.js"></script>
+
+
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+
+	<script src="/components/moment/moment.js"></script>
+	<script src="https://cdn.jsdelivr.net/angular.moment/1.0.0-beta.6/angular-moment.min.js"></script>
+	<script src="/components/angular-timer/dist/assets/js/angular-timer-all.min.js"></script>
+
+	<script src="/components/ng-file-upload/ng-file-upload-shim.min.js"></script> <!-- for no html5 browsers support -->
+	<script src="/components/ng-file-upload/ng-file-upload.min.js"></script>
+
+	<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="/components/ngDialog/css/ngDialog.css">
+	<link rel="stylesheet" href="/components/ngDialog/css/ngDialog-theme-default.css">
+	<link rel="stylesheet" href="/components/ngDialog/css/ngDialog-theme-plain.css">
+	<link rel="stylesheet" href="/components/ngDialog/css/ngDialog-custom-width.css">
+	<script src="/components/ngDialog/js/ngDialog.js"></script>
+
+	<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.3.2/css/simple-line-icons.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+
+
+
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="/components/bootstrap/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/components/bootstrap/css/bootstrap-theme.min.css">
+
+<script src="/components/bootstrap/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="/components/bootstrap-ms/bootstrap_ms.css">
+
+<link rel="stylesheet" href="/platform/css/table.css">
+
+<link rel="stylesheet" href="/components/css-animate/animate.css">
+
+
+<script src="/platform/js/MatchedRequests.js"></script>
+<script src="/platform/js/PHRequests.js"></script>
+<script src="/platform/js/GHRequests.js"></script>
+<script src="/platform/js/WalletLogs.js"></script>
+<script src="/platform/js/Users.js"></script>
+
+<link rel="stylesheet" href="/components/jquery-ui/jquery-ui.css">
+<script src="/components/jquery-ui/jquery-ui.js"></script>
+<script src="/components/ui-select/select.js"></script>
+<link rel="stylesheet" href="/components/ui-select/select.css">
+
+<script src="/components/jquery-ui-date/date.js"></script>
+
+<script src="/components/ui-tinymce/dist/tinymce.min.js"></script>
+
+
+
+<?
+
+/*
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+*/
+
+?>
+
+<link href="/platform/js/libs/angular-tooltips/dist/angular-tooltips.min.css" rel="stylesheet" type="text/css" />
+<script src="/platform/js/libs/angular-tooltips/dist/angular-tooltips.min.js"></script>
+
+
+<link rel="stylesheet" href="/platform/css/style.css">
+
+<style type="text/css" media="all">
+	@media only screen and (min-width: 600px) {
+	}
+
+
+body {
+	background-color:#FFFFFF;
+}
+
+	.flex_container {
+		  display:                 flex;
+		  display:                 -webkit-flex; /* Safari 8 */
+		  flex-wrap:               wrap;
+		  -webkit-flex-wrap:       wrap;         /* Safari 8 */
+		  justify-content:         center;
+		  -webkit-justify-content: center;       /* Safari 8 */
+	}
+
+
+	/* header */
+	.introduction_button {
+		background-attachment:
+		scroll
+		;
+		background-clip:
+		border-box
+		;
+		background-color:
+		rgba(0, 0, 0, 0)
+		;
+		background-image:
+		linear-gradient(rgb(26, 188, 156) 0%, rgb(14, 112, 92) 50%, rgb(26, 188, 156) 100%)
+		;
+		background-origin:
+		padding-box
+		;
+		background-size:
+		auto
+		;
+		border-bottom-color:
+		rgb(255, 255, 255)
+		;
+		border-bottom-left-radius:
+		5px
+		;
+		border-bottom-right-radius:
+		5px
+		;
+		border-bottom-style:
+		solid
+		;
+		border-bottom-width:
+		2px
+		;
+		border-image-outset:
+		0px
+		;
+		border-image-repeat:
+		stretch
+		;
+		border-image-slice:
+		100%
+		;
+		border-image-source:
+		none
+		;
+		border-image-width:
+		1
+		;
+		border-left-color:
+		rgb(255, 255, 255)
+		;
+		border-left-style:
+		solid
+		;
+		border-left-width:
+		2px
+		;
+		border-right-color:
+		rgb(255, 255, 255)
+		;
+		border-right-style:
+		solid
+		;
+		border-right-width:
+		2px
+		;
+		border-top-color:
+		rgb(255, 255, 255)
+		;
+		border-top-left-radius:
+		5px
+		;
+		border-top-right-radius:
+		5px
+		;
+		border-top-style:
+		solid
+		;
+		border-top-width:
+		2px
+		;
+		box-sizing:
+		border-box
+		;
+		color:
+		rgb(255, 255, 255)
+		;
+		cursor:
+		auto
+		;
+		display:
+		block
+		;
+		filter:
+		none
+		;
+		float:
+		left
+		;
+		font-family:
+		"Open Sans", sans-serif
+		;
+		font-size:
+		13px
+		;
+		font-weight:
+		bold
+		;
+		height:
+		39px
+		;
+		line-height:
+		35px
+		;
+		margin-left: 40px ;
+		margin-top: 20px ;
+		padding-bottom:
+		0px
+		;
+		padding-left:
+		20px
+		;
+		padding-right:
+		20px
+		;
+		padding-top:
+		0px
+		;
+		text-decoration:
+		none
+		;
+		text-transform:
+		uppercase
+		;
+		width:
+		145.812px
+	}
+	
+
+	.login_info_header {
+		display:none;
+	}
+
+	.introduction_header {
+		display:none;
+	}
+
+	.user_level_header {
+		display:none;
+	}
+
+	@media screen and (min-width:1000px) {
+		.introduction_header {
+			display:inline-block;
+			float:left;
+			color:#FFFFFF;
+			line-height:24px;
+			width:220px;
+			font-weight:900;
+			font-size:14px;
+			font-family: 'Open Sans', sans-serif;
+		}
+		.user_level_header {
+			display:inline-block;
+			float:left;
+			padding-top:15px;
+			color:#FFFFFF;
+			line-height:24px;
+			/*width:190px;*/
+			font-weight:900;
+			padding-left:10px;
+			font-size:14px;
+			font-family: 'Open Sans', sans-serif;
+		}
+	}
+	@media screen and (min-width:1200px) {
+		.login_info_header {
+			display:inline-block;
+			float:left;
+			padding-top:15px;
+			color:#FFFFFF; line-height:24px;
+			width:360px;
+			font-weight:900;
+			padding-left:50px; font-size:14px; 
+			font-family: 'Open Sans', sans-serif;
+		}
+	}
+
+	/* end of header */
+
+	/* nav section */
+	.top-nav {
+		background-color: #00acb3 !important;
+		background-image:none !important;
+		color:#FFFFFF;
+	}
+
+	/* hide nav */
+	ul.nav {
+		display:none;
+	}
+
+	.nav-icon {
+		float:right;
+		display:block;
+		padding-top:5px;
+		color:#FFFFFF;
+		font-weight:900;
+		padding-top:2px;
+		padding-right:10px;
+	}
+
+	.nav-icon:hover {
+		cursor:pointer;
+	}
+	.nav-icon a {
+		color:#FFFFFF;
+		font-weight:900;
+		font-size:24px;
+		text-decoration:none;
+	}
+	
+	/* makes li float left */
+	.nav > li {
+		display:block;
+		color:#FFFFFF !important;
+	}
+
+	.nav > li > a {
+		background-color: #00acb3 !important;
+	}
+	.nav > li > a:hover {
+		background-color: #008b91 !important;
+	}
+
+	ul.nav li:hover {
+		background-color: #008b91 !important;
+		background-image:none !important;
+	}
+
+	.nav > li:hover {
+		background-color: #008b91 !important;
+		background-image:none !important;
+	}
+
+	.nav > li > a {
+		color:#FFFFFF !important;
+	}
+
+	nav {
+		z-index:100;
+		position:relative;
+		height:40px;
+		color:#FFFFFF !important;
+		background-color: #00acb3 !important;
+
+		background-image:none !important;
+	}
+
+	/* when to display or hide nav */
+	/*@media screen and (min-width:897px) {*/
+	@media screen and (min-width:1006px) {
+		.nav-icon {
+			display:none;
+		}
+
+		ul.nav {
+			display:block;
+		}
+		ul.nav > li {
+			color:#FFFFFF !important;
+			float:left !important;
+		}
+	}
+	
+	@media screen and (max-width:897px) {
+	}
+
+	/* end nav section */
+
+</style>
+
+ </head>
+
+<body id="home" ng-app="myApp" style="display:none;">
+
+	<script>
+	 var app = angular.module('myApp', ['ngSanitize', 'ngMessages', '720kb.tooltips', 'timer', 'ngFileUpload', 'ngDialog', 'ngAnimate', 'ui.select','ui.date', 'ui.tinymce']);
+
+	 app.controller('headerController', ['$scope', '$location','$window', function($scope, $location, $window) {
+
+		vm = this;
+		//alert($location.url());
+		//alert($window.location);
+		var current_location = String($window.location);
+		//alert(current_location);
+
+		//vm.is_view_old_data_form = 'N';
+
+		$scope.is_user_have_admin_access = <?=$t->is_user_have_admin_access?>;
+		vm.is_view_old_data_form = <?=$t->is_view_old_data_form?>;
+		var arr_split = [];
+		var arr_split = current_location.split("/");
+
+		var current_path = "";
+		if (arr_split.length >= 4) {
+			current_path = arr_split[3];
+		}
+		//alert(arr_split[3]);
+		//alert(current_path);
+		$scope.active_state = "";
+		//alert(current_location);
+		//alert(path);
+		if (current_path == "constants") {
+			$scope.active_state = "constants";
+		} else if (current_path == "segments") {
+			$scope.active_state = "segments";
+		} else if (current_path == "servicegroups") {
+			$scope.active_state = "service_groups";
+		} else if (current_path == "zipcodepopulations") {
+			$scope.active_state = "zipcode_populations";
+		} else if (current_path == "users") {
+			$scope.active_state = "users";
+			//alert($window.location);
+		} else {
+			$scope.active_state = "master";
+			//alert($window.location);
+		}
+		
+		$('.navbar').css('display','');
+
+		$scope.is_have_watch = false;
+
+
+		vm.nav_menu_click = function() {
+			toggle_nav();
+			/*
+			if (!$scope.is_have_watch) {
+				$scope.is_have_watch = true;
+				$scope.$watch (
+					function () {
+					    return $(window).width();
+					},
+					function (newValue, oldValue) {
+						console.log('in here value is' + newValue);
+						if (newValue >= 897) {
+							$('ul.nav').display('block');
+						}
+					}
+				);
+			}
+			*/
+			$('.top-nav').mouseleave(function() {
+				$('ul.nav').css('display','');
+				
+			});
+		}
+
+		
+		$('body').css('display','');
+	}]);
+
+// TODO the restore part doesen't seem to work.
+	  app.run(function($rootScope) {
+	  });
+
+
+		function toggle_nav() {
+			$('ul.nav').toggle();
+		}
+	</script>
+	<style>
+		.hide-element {
+			display:none !important;
+		}
+
+	</style>
+
+	<div ng-controller="headerController as hdr_ctrl">
+
+		<div style="background-color: #3a3d3b; min-height:106px; width:100%;">
+			<div style="float:left; padding-top:5px; padding-left:20px; width:340px; ">
+				<a href="/platform/">
+					<div class="col-xs-12 col-ms-6 col-sm-6" style="padding-top:10px;">
+						<img height=60 ng-src="/FrontEnd/images/logo-old2.png" border=0>
+					</div>
+					<div class="col-xs-12 col-ms-6 col-sm-6" style="padding-top:10px;">
+						<img height=60 ng-src="/FrontEnd/images/logo.png" border=0>
+					</div>
+				</a>
+			</div>
+			<div class="login_info_header">
+		
+				<div>Running Time: <?=$t->page_running_gm_date_time?> UTC</div>
+				<div>IP Address: <?=$t->remote_ip_address?></div>
+				<div>Login Time: <?=$t->session_start_gm_date_time?> UTC</div>
+			</div>
+			<div class="introduction_header">
+				<div style="display:table; vertical-align:top;">
+					<a href="/platform/introduction/">
+						<div class="introduction_button">
+							INTRODUCTION
+						</div>
+					</a>
+				</div>
+			</div>
+			<div class="user_level_header">
+				<?if ($t->is_user_have_manager_access) { ?>
+					<img ng-src="/platform/BackEnd/Template/images/manager-button.png" width="120" height"52">
+				<? } else { ?>
+					<img ng-src="/platform/BackEnd/Template/images/member-button.png" width="120" height"52">
+				<? } ?>
+			</div>
+			<div style="float:right; padding-top:0px; padding-right:10px;  color:#FFFFFF; line-height:24px; font-weight:900; font-size:14px; font-family: 'Open Sans', sans-serif;">
+				<!-- Large button group -->
+				<div class="btn-group">
+					<button class="dropdown-toggle" style="background-color:#3a3d3b; border-color:none !important; -webkit-box-shadow: none !important; box-shadow: none !important; border-style:none !important;" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span aria-haspopup="true" aria-expanded="false"><?=$t->login?><span class="caret"></span> </span>
+					</button>
+					<ul class="dropdown-menu" style="left:-100px !important;">
+						<li><a href="/platform/myprofile/"><i class="fa fa-user" style="padding-right:5px;"></i>My Profile</a></li>
+						<li ng-show="hdr_ctrl.is_view_old_data_form"><a href="/platform/import_old_data/"><i class="fa fa-user" style="padding-right:5px;"></i>Import Old Data</a></li>
+						<li><a href="/platform/changepassword/"><i class="fa fa-calendar" style="padding-right:5px;"></i>Security </a></li>
+						<li><a href="/platform/logout/"><i class="fa fa-key" style="padding-right:5px;"></i>Log Out</a></li>
+					</ul>
+				</div>
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+		<div class="top-nav">
+			<nav id="sidebar">
+				<div class="sidebar-collapse menu-scroll" style="z-index:0; position:relative;">
+					<div style="position:relative; z-index:10000000">
+						<div class="nav-icon">
+							<div style="position:absolute; top:0px; right:10px;z-index;10000000000;">
+								<a href="javascript:void(0);" ng-click="hdr_ctrl.nav_menu_click()">☰</a>
+							</div>
+						</div>
+						<div style="clear:both;"></div>
+					</div>
+					<ul id="side-menu" class="nav">
+						<li class="active"><a href="/platform/">
+							<i class="fa fa-tachometer fa-fw"><div class="icon-bg bg-orange"></div></i><span class="menu-title">Dashboard</span></a>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+								<i class="fa fa-sitemap fa-fw">
+									<div class="icon-bg bg-dark"></div>
+								</i>
+								<span class="menu-title">PH/GH<span class="caret"></span> </span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="/platform/ph/">PH</a></li>
+								<li><a href="/platform/gh/">GH</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+								<i class="fa fa-sitemap fa-fw">
+									<div class="icon-bg bg-dark"></div>
+								</i>
+								<span class="menu-title">Network <span class="caret"></span> </span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="/platform/downline/">BMH NETWORK VIEW</a></li>
+								<!--
+								<li><a href="/platform/downline/">Level View </a></li>
+								<li><a href="/platform/downline/">Direct Associate</a></li>
+								<li><a href="/platform/downline/">Level View </a></li>
+								-->
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+								<i class="fa fa-file-o fa-fw">
+									<div class="icon-bg bg-yellow"></div>
+								</i>
+								<span class="menu-title">Wallet<span class="caret"></span> </span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="/platform/wallets/view/level_income/">Level Income</a></li>
+								<li><a href="/platform/wallets/view/daily_growth/">Daily Growth</a></li>
+								<li><a href="/platform/wallets/view/daily_bonus_earnings/">Daily Bonus Earnings</a></li>
+								<li><a href="/platform/wallets/view/task_earnings/">Task Earnings</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+								<i class="fa fa-file-o fa-fw">
+									<div class="icon-bg bg-yellow"></div>
+								</i>
+								<span class="menu-title">Status<span class="caret"></span> </span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="/platform/status/view/level_income/">Level Income</a></li>
+								<li><a href="/platform/status/view/daily_growth/">Daily Growth</a></li>
+								<li><a href="/platform/status/view/daily_bonus_earnings/">Daily Bonus Earnings</a></li>
+								<li><a href="/platform/status/view/task_earnings/">Task Earnings</a></li>
+								<!--
+								<li><a href="/platform/status/level_history/">Level Income GH</a></li>
+								<li><a href="/platform/status/withdrawal_history/">Daily Growth GH</a></li>
+								-->
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+								<i class="fa fa-file-o fa-fw">
+									<div class="icon-bg bg-yellow"></div>
+								</i>
+								<span class="menu-title">Support<span class="caret"></span> </span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="/platform/support/">Support</a></li>
+								<!--
+								<li><a href="/platform/support/inbox/">Inbox</a></li>
+								<li><a href="/platform/support/emailhistory/">Sent</a></li>
+								-->
+							</ul>
+						</li>
+						<li class="active"><a href="/platform/dailytasks/">
+							<i class="fa fa-tachometer fa-fw"><div class="icon-bg bg-orange"></div></i><span class="menu-title">Daily Tasks</span></a>
+						</li>
+							
+						<li><a href="/platform/createmember">
+						<!--<li ng-show="is_user_have_admin_access"><a href="/platform/createmember">-->
+							<i class="fa fa-sitemap fa-fw">
+								<div class="icon-bg bg-dark"></div>
+							</i>
+							<span class="menu-title">Joining</span></a>
+						</li>
+						<li class="dropdown" ng-show="is_user_have_admin_access">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+								<i class="fa fa-file-o fa-fw">
+									<div class="icon-bg bg-yellow"></div>
+								</i>
+								<span class="menu-title">Admin<span class="caret"></span> </span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="/platform/membersadmin/">Members</a></li>
+								<li><a href="/platform/phrequests/list_all_ph_requests/">PH Requests</a></li>
+								<li><a href="/platform/ghrequests/list_all_gh_requests/">GH Requests</a></li>
+								<li><a href="/platform/matchedrequests/">Matched Requests</a></li>
+								<li><a href="/platform/dailytasks/needs_approval_list">User Submitted Daily Tasks</a></li>
+								<li><a href="/platform/dailytasks/manage">Daily Tasks</a></li>
+								<li><a href="/platform/leaderboards/highest_sponsored_members_weekly">Leaderboards: Number Sponsored Members Weekly</a></li>
+								<li><a href="/platform/leaderboards/highest_completed_ph_weekly">Leaderboards: Completed PH By Sponsored Members Weekly</a></li>
+								<li><a href="/platform/sitecontents/">Modify Site Contents</a></li>
+								<li><a href="/platform/emailcontents/">Modify Email Contents</a></li>
+								<li><a href="/platform/send_email/">Send Emails</a></li>
+								<!--<li><a href="/platform/admin/matched_requests/">Matched Requests</a></li>-->
+							</ul>
+						</li>
+					</ul>
+				</div>
+				<div style="clear:both;"></div>
+			</nav>
+		</div>
+	</div> <!-- end of headerController -->
+	<div style="">
+
+		<?=$t->contents_html?>
+	</div>
+</body>  
+</html> 

@@ -1,0 +1,227 @@
+
+
+<style>
+	form.submitted input.ng-invalid
+	{
+	    border:1px solid #f00;
+	}
+
+	form.submitted select.ng-invalid
+	{
+	    border:1px solid #f00;
+	}
+
+	form.submitted .ng-invalid
+	{
+	    border:1px solid #f00;
+	}
+
+
+	.field_error
+	{
+	    border:1px solid #f00;
+	}
+</style>
+
+
+<script>
+
+
+	isFormValid = function ($scope, ngForm) {
+		      var i = null;
+		      //$scope.$emit('$validate');
+		      $scope.$broadcast('$validate');
+		      
+		      if(! ngForm.$invalid) {
+			return true;
+		      } else {
+			// make the form fields '$dirty' so that the validation messages would be shown
+			ngForm.$dirty = true;
+			
+			for(i in ngForm) {
+			  if(ngForm[i] && ngForm[i].hasOwnProperty && ngForm[i].hasOwnProperty('$dirty')) { // TODO: is 'field.$invalid' test required?
+			    ngForm[i].$dirty = true;
+			  }
+			}
+		      }
+		    };
+
+	app.config(['ngDialogProvider', function (ngDialogProvider) {
+            ngDialogProvider.setDefaults({
+                className: 'ngdialog-theme-default',
+                plain: false,
+                showClose: true,
+                closeByDocument: true,
+                closeByEscape: true,
+                appendTo: false,
+                preCloseCallback: function () {
+                    //console.log('default pre-close callback');
+                }
+            });
+        }]);
+
+
+	  app.controller('PageController', ['$scope', '$http', 'Upload', '$timeout', 'ngDialog', '$window', function($scope, $http, Upload, $timeout, ngDialog, $window) {
+
+		var vm = this;
+		vm.data = {};
+
+		$scope.regex_date_of_birth = "^(\\d{1,2})\/(\\d{1,2})\/(\\d{4})$";
+		//$scope.regex_date_of_birth = "\\d{1,2}";
+
+		//$scope.new_password = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&#])[A-Za-z\\d$@$!%*#?&]{8,}$";
+		//$scope.new_password = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_])[A-Za-z\\d\\W]{8,}$";
+		// this version allows underscores
+		$scope.new_password = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_])[A-Za-z\\d\\W_]{8,}$";
+
+		vm.data.change_password = "";
+		vm.data.change_password2 = "";
+
+		
+		vm.is_complete = true;
+		vm.is_complete = false;
+
+		vm.proceed_to_site_click = function() {
+			$window.location = "/platform/";
+		}
+
+
+		vm.view_data = {};
+
+		vm.view_data.is_submit_error_message = false;
+		vm.view_data.is_submit_success_message = false;
+
+		vm.submit = function($form) {
+			var ngForm = $form;
+			if(isFormValid($scope, ngForm)) { // trigger manual validation
+			} else {
+				$form.$submitted = true;
+				$form.submitted = true;
+			}
+
+			if ($form.$invalid) {
+				$form.$submitted = true;
+				$form.submitted = true;
+			} else {
+				var obj_data = {};
+
+				obj_data.data = vm.data;
+
+				/*
+				alert('in here');
+				obj_data.login = $scope.data.create_member_login;
+				obj_data.country = $scope.data.create_member_country;
+				obj_data.fullname = $scope.data.create_member_fullname;
+				*/
+				$http({
+					method: 'POST',
+					url: '/platform/changepassword/update_password/',
+					data: {data:vm.data}
+				}).success(function (result) {
+					if (result.is_success) {
+						vm.view_data.is_submit_error_message = false;
+						vm.view_data.is_submit_success_message = true;
+						vm.data.old_password = "";
+						vm.data.change_password = "";
+						vm.data.change_password2 = "";
+						$form.$submitted = false;
+						$form.submitted = false;
+						$form.$setPristine();
+					} else {
+						vm.view_data.is_submit_error_message = true;
+						vm.view_data.is_submit_success_message = false;
+					}
+				});
+			}
+
+		};
+
+
+	    }]);
+		var compareTo = function() {
+		    return {
+			require: "ngModel",
+			scope: {
+			    otherModelValue: "=compareTo"
+			},
+			link: function(scope, element, attributes, ngModel) {
+			     
+			    ngModel.$validators.compareTo = function(modelValue) {
+				//alert('trying to compare' + modelValue + ' with ' + scope.otherModelValue);
+				return modelValue == scope.otherModelValue;
+			    };
+		 
+			    scope.$watch("otherModelValue", function() {
+				ngModel.$validate();
+			    });
+			}
+		    };
+		};
+		 
+		app.directive("compareTo", compareTo);
+
+
+
+
+	</script>
+
+	
+	<div class="flex_container">
+		<div ng-controller="PageController as page_ctrl" style="max-width:600px;">
+			<div >
+				<form ng-class="{submitted:password_form.$submitted}" name="password_form" novalidate>
+				<div style="padding-bottom:20px;">Please provide us with the below information to change your password</div>
+				<div>
+					<div ng-show="page_ctrl.view_data.is_submit_success_message" style="" class="alert alert-success" role="alert">
+						You have successfully Changed Your Password.
+					</div>
+					<div ng-show="page_ctrl.view_data.is_submit_error_message" style="" class="alert alert-danger" role="alert">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span class="sr-only">Error:</span>
+						Unable To Change Your Password. Try Again.
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="form-label">Old Password</label>
+					<input ng-class="{field_error:(!password_form.old_password.$valid && password_form.old_password.$dirty)}" ng-model="page_ctrl.data.old_password" name="old_password" type="password" class="form-control" placeholder="" required>
+					<div style="color:red; font-weight:bold" ng-messages="password_form.old_password.$error" ng-if="password_form.old_password.$dirty">
+					    <div ng-message="required">Required</div>
+					    <div ng-message="compareTo">Passwords must match</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="form-label">Enter New Password</label>
+					<input ng-class="{field_error:(!password_form.change_password.$valid && password_form.change_password.$dirty)}" ng-model="page_ctrl.data.change_password" ng-pattern="new_password" name="change_password" type="password" class="form-control" placeholder="" required>
+					<div style="color:red; font-weight:bold" ng-messages="password_form.change_password.$error" ng-if="password_form.change_password.$dirty">
+					    <div ng-message="required">Required</div>
+					    <div ng-message="pattern">Password must have minimum 8 characters at least<br>1 uppercase alphabet, 1 lowercase alphabet,<br>1 number and 1 special character</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="form-label">Re-Enter Password</label>
+					<input ng-class="{field_error:(!password_form.change_password2.$valid && password_form.change_password2.$dirty)}" ng-model="page_ctrl.data.change_password2" compare-to="page_ctrl.data.change_password" name="change_password2" type="password" class="form-control" placeholder="" required>
+					<div style="color:red; font-weight:bold" ng-messages="password_form.change_password2.$error" ng-if="password_form.change_password2.$dirty">
+					    <div ng-message="required">Required</div>
+					    <div ng-message="compareTo">Passwords must match</div>
+					</div>
+				</div>
+				<div style="float:left;">
+					<button ng-click="page_ctrl.submit(password_form)" class="btn btn-primary">SUBMIT</button>
+				</div>
+				</form>
+			</div> <!-- registration complete -->
+		</div>
+	</div>
+</div>
+
+
+<script type="text/ng-template" id="uploader_dialog">
+        <div class="ngdialog-message">
+		<div class="flex_container">
+			<div style="font-size:24px; font-weight:900; padding-top:10px;">
+			{{percentage_complete}}
+			</div>
+		</div>
+        </div>
+</script>
+

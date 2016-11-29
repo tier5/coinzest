@@ -1,0 +1,8 @@
+0000.001 (0) Opened log file at time: Wed, 02 Nov 2016 22:34:42 +0000 on http://coinzest.com
+0000.002 (0) UpdraftPlus WordPress backup plugin (https://updraftplus.com): 2.12.16 WP: 4.5.4 PHP: 5.6.21 (Linux server.bitmutualhelp.com 2.6.32-642.6.1.el6.x86_64 #1 SMP Wed Oct 5 00:36:12 UTC 2016 x86_64) MySQL: 5.6.33 WPLANG: en_US Server: Apache safe_mode: 0 max_execution_time: 900 memory_limit: 256M (used: 18.9M | 19.8M) multisite: N openssl: OpenSSL 1.0.1e-fips 11 Feb 2013 mcrypt: Y LANG:  ZipArchive::addFile: Y
+0000.206 (0) Free space on disk containing Updraft's temporary directory: 13469.3 MB
+0000.209 (0) Tasks: Backup files:  (schedule: daily) Backup DB: 1 (schedule: daily)
+0000.210 (0) Processed schedules. Combining jobs from identical schedules. Tasks now: Backup files:  Backup DB: 
+0000.211 (0) An email has been scheduled for this job, because we are in debug mode
+0000.211 (0) No email will be sent - this backup set was empty.
+0000.212 (0) The backup apparently succeeded and is now complete

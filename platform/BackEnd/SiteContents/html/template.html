@@ -1,0 +1,171 @@
+<script>
+
+	  app.controller('PageController', ['$scope', '$http', '$window', function($scope, $http, $window) {
+
+		var vm = this;
+		vm.arr_data = [];
+
+		vm.search = "";
+	
+		
+		var data = [];
+
+		data['human_name'] = "Daily Tasks";
+		data['name'] = "daily_tasks";
+		vm.arr_data[vm.arr_data.length] = data;
+
+		data = [];
+		data['human_name'] = "Support";
+		data['name'] = "support";
+		vm.arr_data[vm.arr_data.length] = data;
+
+		data = [];
+		data['human_name'] = "Letters of Happiness";
+		data['name'] = "loh";
+		vm.arr_data[vm.arr_data.length] = data;
+
+		data = [];
+		data['human_name'] = "Front Page Media";
+		data['name'] = "front_page_media";
+		vm.arr_data[vm.arr_data.length] = data;
+
+		data = [];
+		data['human_name'] = "Front Page FAQ";
+		data['name'] = "front_page_faq";
+		vm.arr_data[vm.arr_data.length] = data;
+
+		data = [];
+		data['human_name'] = "Front Page Facebook Footer";
+		data['name'] = "facebook_bottom_left_footer";
+		vm.arr_data[vm.arr_data.length] = data;
+
+		data = [];
+		data['human_name'] = "Introduction";
+		data['name'] = "introduction";
+		vm.arr_data[vm.arr_data.length] = data;
+
+		data = [];
+		data['human_name'] = "Notifications Pop Up";
+		data['name'] = "notifications_pop_up";
+		vm.arr_data[vm.arr_data.length] = data;
+
+
+		/*
+		$http({
+		    method: 'POST',
+		    url: '/platform/membersadmin/get_data/',
+			data: { search: vm.search }
+		}).success(function (result) {
+			if (result.is_success) {
+				//vm.arr_data = result.arr_data;
+				
+			}
+		});
+		*/
+
+
+		$scope.edit_click = function(name) {
+			$window.location = "/platform/sitecontents/edit/" + name;
+			
+		};
+
+		$scope.delete_click = function(index) {
+			var result = $window.confirm('Are you sure you want to delete?');
+                        if (result) {
+                                $http({
+                                    method: 'get',
+                                    url: '/segments/delete/' + index,
+                                }).success(function (result) {
+                                        $window.location = "/segments";
+                                });
+                        }
+		};
+
+	}]);
+
+</script>
+
+<style>
+
+	.table_header {
+		font-weight:900;
+	}
+	td {
+		padding-left:10px;
+		padding-right:10px;
+	}
+
+	.data_table_odd_cell {
+
+		background-color: #f8f8f8;
+		border-bottom:1px solid  #d8d8d8;
+		padding-top:13px;
+		padding-bottom:13px;
+	}
+
+
+	.data_table_even_cell {
+		background-color: #ffffff;
+		border-bottom:1px solid  #d8d8d8;
+		padding-top:13px;
+		padding-bottom:13px;
+	}
+
+	.data_table > tr:hover > td {
+		background-color: #ffff99;
+	}
+
+	tr.have_hover:hover > td {
+		background-color: #add8e6;
+	}
+
+	td.clickable:hover {
+		cursor:pointer;
+	}
+
+	th {
+		padding-left:10px !important;
+		padding-right:10px !important;
+	}
+</style>
+<div class="page-title-header">
+	Modify Site Contents
+</div>
+
+<div ng-controller="PageController as page_ctrl">
+
+	<div style="clear:both;"></div>
+
+
+<div class="flex_container">
+	<div>
+
+		<table  style="border-collapse: collapse; margin:10px;"  class="data_table">
+		<tr>
+		<th class="table_header">Sr. No</th>
+		<th class="table_header">Name</th>
+		<th colspan="1"></th>
+		</tr>
+		<tr ng-if="page_ctrl.arr_data.length == 0">
+			<td colspan="3">
+			      <strong>No results found...</strong>
+			</td>
+		</tr>
+
+		<tr class="have_hover" ng-repeat="data in page_ctrl.arr_data track by $index">
+		<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{$index+1}}</td>
+		<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{data.human_name}}</td>
+		<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
+			<button ng-click="edit_click(data.name)" type = "button" class = "btn btn-success">Edit</button>
+		</td>
+		<td ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
+		</td>
+			
+		</td>
+		</tr>
+		</table>
+	</div>
+</div>
+
+
+</div>

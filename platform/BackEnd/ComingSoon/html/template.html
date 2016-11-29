@@ -1,0 +1,85 @@
+<script>
+
+	  app.controller('PageController', ['$scope', '$http', '$window', function($scope, $http, $window) {
+
+		var vm = this;
+		vm.arr_downline_data = [];
+
+		$scope.search = "";
+		$scope.number_per_page = 100;
+
+
+	
+		
+
+		$http({
+		    method: 'POST',
+		    url: '/platform/downline/get_user_downline_data/',
+			data: { search: $scope.search }
+		}).success(function (result) {
+			if (result.is_success) {
+				vm.arr_downline_data = result.arr_data;
+				(vm.arr_downline_data);
+			}
+		});
+
+		$scope.add = function() {
+			$window.location = "/segments/edit/0";
+			
+		};
+
+		$scope.edit_click = function(index) {
+			$window.location = "/segments/edit/" + index;
+			
+		};
+
+		$scope.delete_click = function(index) {
+			var result = $window.confirm('Are you sure you want to delete?');
+                        if (result) {
+                                $http({
+                                    method: 'get',
+                                    url: '/segments/delete/' + index,
+                                }).success(function (result) {
+                                        $window.location = "/segments";
+                                });
+                        }
+		};
+
+		$scope.search_submission = function() {
+			//alert('in here');
+			$http({
+			    method: 'POST',
+			    url: '/segments/get_arr_search_results/',
+				data: { search: $scope.search }
+			}).success(function (result) {
+				$scope.arr_segments_data = result.arr_data;
+				//alert(result.arr_data);
+			});
+			
+		};
+
+
+	}]);
+
+
+</script>
+
+<style>
+
+	td {
+		padding-left:10px;
+		padding-right:10px;
+	}
+
+</style>
+
+<div class="page-title-header">
+	Coming Soon
+</div>
+
+
+<div class="flex_container" style="padding-top:20px; font-size:24px; font-weight;900">
+	<div>
+	Coming Soon...
+	</div>
+</div>

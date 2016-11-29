@@ -1,0 +1,118 @@
+<div class="page-title-header">
+	Create PH
+</div>
+
+<style>
+	td {
+		padding-left: 20px;
+	}
+</style>
+
+
+<script>
+
+
+
+	  app.controller('PHController', ['$scope', '$http', '$window', function($scope, $http, $window) {
+
+
+		var vm = this;
+		vm.t = {};
+		vm.data = {};
+		vm.data.amount = "";
+		vm.data.temp_amount = 0;
+
+		vm.data.is_submit_error_message = false;
+		vm.data.submit_error_message = "";
+		vm.data.is_submit_success_message = false;
+
+
+		vm.t.is_show_form = true;
+
+
+		vm.t.is_submit_disabled = false;
+		
+
+		//alert(vm.config.state.MIN_BUDGET);
+		vm.submit = function() {
+			vm.t.is_submit_disabled = true;
+			var obj_data = {};
+			obj_data.amount = vm.data.amount;
+			$http({
+				method: 'POST',
+				url: '/platform/phrequests/create_phrequest/',
+				data: {data:obj_data}
+			}).success(function (result) {
+				if (!result.is_success) {
+					vm.data.is_submit_error_message = true;
+					vm.data.is_submit_success_message = false;
+					if (!result.is_twenty_or_multiple_of_50) {
+						vm.data.submit_error_message = "PH Amount Not Equal To 20 or Multiple's of 50 e.g. $20, $50, $100, $150";
+					} else if (result.is_amount_exceed_ph_level) {
+						vm.data.submit_error_message = "PH Amount exceeds your current max of $" + result.max_ph_amount;
+					} else if (result.is_already_have_active_matched_ph) {
+						vm.data.submit_error_message = "NEW PH REQUEST CAN NOT BE CREATED AT THIS TIME. YOU FIRST HAVE TO COMPLETE THE CURRENT PH ORDER IN PROCESSING";
+					} else if (result.is_already_have_active_ph) {
+						vm.data.submit_error_message = "NO MORE THAN ONE PH REQUESTED ALLOWED WHILE PH IS IN THE QUEUE OR NOT COMPLETED 100%";
+					} else if (result.is_over_max) {
+						vm.data.submit_error_message = "PH Amount is Over Maximum of $" + result.max_ph_amount;
+					} else if (result.does_not_match_last_ph_amount) {
+						//vm.data.submit_error_message = "PH Amount does not match your last PH Amount of $" + result.last_ph_amount;
+						vm.data.submit_error_message = "PH Amount must be minimum of $" + result.min_ph_amount;
+					} else if (!result.is_able_to_allocate) {
+						vm.data.submit_error_message = "Unable to Allocate Funds. Please check with Manager.";
+					} else if (result.is_invalid_ph_amount) {
+						vm.data.submit_error_message = "Invalid PH Amount";
+					}
+					console.info('ph completed level ' + result.ph_completed_level);
+				} else {
+					vm.t.is_show_form = false;
+					vm.data.is_submit_error_message = false;
+					vm.data.is_submit_success_message = true;
+				
+					vm.data.temp_amount = vm.data.amount;
+					vm.data.amount = "";
+
+				}
+				vm.t.is_submit_disabled = false;
+
+				//$window.location = '/platform/';
+			});
+
+		};
+	    }]);
+
+	</script>
+
+	<div ng-controller="PHController as ph_ctrl">
+		<div class="flex_container">
+			<div class="col-xs-12 col-ms-9 col-sm-9" style="max-width:620px;">
+				<form class="form-horizontal">
+					<div ng-show="ph_ctrl.data.is_submit_error_message" style="" class="alert alert-danger" role="alert">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span class="sr-only">Error:</span>
+						{{ph_ctrl.data.submit_error_message}}
+					</div>
+					<div ng-show="ph_ctrl.data.is_submit_success_message" style="" class="alert alert-success" role="alert">
+						Successfully created PH for $ {{ph_ctrl.data.temp_amount}}
+					</div>
+
+					<div ng-show="ph_ctrl.t.is_show_form">
+						<div class="form-group">
+							<label class="col-xs-12 cols-ms-3 col-sm-3 control-label" style="text-align:left !important;">Enter PH Amount</label>
+							<div class="col-xs-12 cols-ms-9 col-sm-9">
+								<input ng-model="ph_ctrl.data.amount" type="text" class="form-control" placeholder="Amount">
+								<div style="color:red; padding-top:5px;">
+									Note: PH amount should be $20 or multiple of $50 and greater than or equal to previous PH 
+								</div>
+								<div style="padding-top:5px;">
+									<button ng-disabled="ph_ctrl.t.is_submit_disabled" ng-click="ph_ctrl.submit()" class="btn btn-primary">SUBMIT</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

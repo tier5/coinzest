@@ -1,0 +1,327 @@
+0000.001 (0) Opened log file at time: Sat, 06 Aug 2016 07:15:58 +0000 on http://thebitcoinbeast.serverdatahost.com
+0000.002 (0) UpdraftPlus WordPress backup plugin (https://updraftplus.com): 2.12.16 WP: 4.5.3 PHP: 5.3.3 (Linux prometheus 2.6.32-573.22.1.el6.x86_64 #1 SMP Wed Mar 23 03:35:39 UTC 2016 x86_64) MySQL: 5.1.73 WPLANG: en_US Server: Apache/2.2.22 (@RELEASE@) safe_mode: 0 max_execution_time: 900 memory_limit: 256M (used: 15.5M | 15.8M) multisite: N openssl: OpenSSL 1.0.1e-fips 11 Feb 2013 mcrypt: Y LANG: C ZipArchive::addFile: Y
+0000.003 (0) Free space on disk containing Updraft's temporary directory: 43547.1 MB
+0000.006 (0) Tasks: Backup files: 1 (schedule: daily) Backup DB:  (schedule: daily)
+0000.007 (0) Processed schedules. Combining jobs from identical schedules. Tasks now: Backup files: 1 Backup DB: 1
+0000.009 (0) Requesting semaphore lock (fd) (apparently via scheduler: last_scheduled_action_called_at=1470376253, seconds_ago=91505)
+0000.011 (0) Set semaphore last lock (fd) time to 2016-08-06 07:15:58
+0000.012 (0) Semaphore lock (fd) complete
+0000.016 (0) Backup run: resumption=0, nonce=8db1f98ff982, begun at=1470467758 (0s ago), job type=backup
+0000.017 (0) Scheduling a resumption (1) after 300 seconds (1470468058) in case this run gets aborted
+0000.034 (0) Checking if we have a zip executable available
+0000.037 (0) Creation of backups of directories: beginning
+0000.040 (0) Beginning creation of dump of plugins (split every: 400 MB)
+0001.090 (0) Total entities for the zip file: 204 directories, 1269 files (0 skipped as non-modified), 16.7 MB
+0001.133 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-plugins.zip.tmp: 100 files added (on-disk size: 0 KB)
+0001.177 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-plugins.zip.tmp: 200 files added (on-disk size: 0 KB)
+0001.231 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-plugins.zip.tmp: 300 files added (on-disk size: 0 KB)
+0001.276 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-plugins.zip.tmp: 400 files added (on-disk size: 0 KB)
+0001.324 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-plugins.zip.tmp: 500 files added (on-disk size: 0 KB)
+0001.326 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (10.7 MB, 1269 files batched, 501 (501) added so far); re-opening (prior size: 0 KB)
+0002.478 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-plugins.zip.tmp: 600 files added (on-disk size: 2301.4 KB)
+0002.541 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-plugins.zip.tmp: 700 files added (on-disk size: 2301.4 KB)
+0002.602 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-plugins.zip.tmp: 800 files added (on-disk size: 2301.4 KB)
+0002.666 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-plugins.zip.tmp: 900 files added (on-disk size: 2301.4 KB)
+0002.728 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-plugins.zip.tmp: 1000 files added (on-disk size: 2301.4 KB)
+0002.731 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (2.1 MB, 1269 files batched, 501 (1002) added so far); re-opening (prior size: 2301.4 KB)
+0003.010 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-plugins.zip.tmp: 1100 files added (on-disk size: 3004.7 KB)
+0003.072 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-plugins.zip.tmp: 1200 files added (on-disk size: 3004.7 KB)
+0003.812 (0) Created plugins zip (0) - 3927.8 KB in 3.8 s (1043.4 KB/s) (SHA1 checksum: 64e21216ad3b77df6b50486b7a025cfd432e5b18)
+0003.816 (0) Beginning creation of dump of themes (split every: 400 MB)
+0003.901 (0) Total entities for the zip file: 23 directories, 153 files (0 skipped as non-modified), 3.1 MB
+0003.936 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-themes.zip.tmp: 100 files added (on-disk size: 0 KB)
+0004.197 (0) Created themes zip (0) - 2412.8 KB in 0.4 s (6471.8 KB/s) (SHA1 checksum: c1d9f2b5abb0d034d3dd750c0bc2b9c86d7f29c1)
+0004.201 (0) Exclusion option setting (uploads): backup*,*backups,backwpup*,wp-clone
+0004.202 (0) Looking for candidates to back up in: /hosting/web/thebitcoinbeast.com-virtual/public_html/wp-content/uploads
+0004.203 (0) finding files: 2016: adding to list (1)
+0004.204 (0) Beginning creation of dump of uploads (split every: 400 MB)
+0004.215 (0) Total entities for the zip file: 3 directories, 0 files (0 skipped as non-modified), 0 MB
+0004.219 (0) Created uploads zip (0) - 0.3 KB in 0 s (43.1 KB/s) (SHA1 checksum: 6aff2306049f45de0e3ae3c033eeab2408806b2e)
+0004.223 (0) Exclusion option setting (wpcore): 
+0004.224 (0) Looking for candidates to back up in: /hosting/web/thebitcoinbeast.com-virtual/public_html
+0004.225 (0) finding files: wp-includes: adding to list (1)
+0004.226 (0) finding files: components: adding to list (2)
+0004.226 (0) finding files: wp-admin: adding to list (3)
+0004.227 (0) finding files: wp-cron.php: adding to list (4)
+0004.228 (0) finding files: FrontEnd: adding to list (5)
+0004.229 (0) finding files: login.php: adding to list (6)
+0004.229 (0) finding files: readme.html: adding to list (7)
+0004.230 (0) finding files: home.php: adding to list (8)
+0004.231 (0) finding files: wp-settings.php: adding to list (9)
+0004.232 (0) finding files: wp-activate.php: adding to list (10)
+0004.232 (0) finding files: platform: adding to list (11)
+0004.233 (0) finding files: wp-trackback.php: adding to list (12)
+0004.234 (0) finding files: wp-comments-post.php: adding to list (13)
+0004.234 (0) finding files: license.txt: adding to list (14)
+0004.235 (0) finding files: faq.php: adding to list (15)
+0004.236 (0) finding files: .htaccess: adding to list (16)
+0004.237 (0) finding files: wp-mail.php: adding to list (17)
+0004.237 (0) finding files: wp-config.php: adding to list (18)
+0004.238 (0) finding files: wp-config-sample.php: adding to list (19)
+0004.239 (0) finding files: wp-signup.php: adding to list (20)
+0004.240 (0) finding files: index.php: adding to list (21)
+0004.240 (0) finding files: business.php: adding to list (22)
+0004.241 (0) finding files: uploads: adding to list (23)
+0004.242 (0) finding files: wp-load.php: adding to list (24)
+0004.242 (0) finding files: wp-login.php: adding to list (25)
+0004.243 (0) finding files: about.php: adding to list (26)
+0004.244 (0) finding files: testimonials.php: adding to list (27)
+0004.245 (0) finding files: wp-links-opml.php: adding to list (28)
+0004.245 (0) finding files: bitcoin-history.php: adding to list (29)
+0004.246 (0) finding files: xmlrpc.php: adding to list (30)
+0004.247 (0) finding files: media.php: adding to list (31)
+0004.248 (0) finding files: wp-blog-header.php: adding to list (32)
+0004.248 (0) finding files: wp-content: skipping: this is the wp-content directory
+0004.249 (0) Beginning creation of dump of wpcore (split every: 400 MB)
+0005.518 (0) Total entities for the zip file: 403 directories, 2680 files (0 skipped as non-modified), 49.9 MB
+0005.551 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 100 files added (on-disk size: 0 KB)
+0005.580 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 200 files added (on-disk size: 0 KB)
+0005.612 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 300 files added (on-disk size: 0 KB)
+0005.645 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 400 files added (on-disk size: 0 KB)
+0005.683 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 500 files added (on-disk size: 0 KB)
+0005.684 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (8.5 MB, 2680 files batched, 501 (501) added so far); re-opening (prior size: 0 KB)
+0006.609 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 600 files added (on-disk size: 3109.3 KB)
+0006.641 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 700 files added (on-disk size: 3109.3 KB)
+0006.677 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 800 files added (on-disk size: 3109.3 KB)
+0006.720 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 900 files added (on-disk size: 3109.3 KB)
+0006.766 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 1000 files added (on-disk size: 3109.3 KB)
+0006.768 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (8.9 MB, 2680 files batched, 501 (1002) added so far); re-opening (prior size: 3109.3 KB)
+0008.264 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 1100 files added (on-disk size: 5644.4 KB)
+0008.317 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 1200 files added (on-disk size: 5644.4 KB)
+0008.362 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 1300 files added (on-disk size: 5644.4 KB)
+0008.398 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 1400 files added (on-disk size: 5644.4 KB)
+0008.432 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 1500 files added (on-disk size: 5644.4 KB)
+0008.434 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (10.6 MB, 2680 files batched, 501 (1503) added so far); re-opening (prior size: 5644.4 KB)
+0009.632 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 1600 files added (on-disk size: 10560.4 KB)
+0009.667 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 1700 files added (on-disk size: 10560.4 KB)
+0009.705 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 1800 files added (on-disk size: 10560.4 KB)
+0009.741 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 1900 files added (on-disk size: 10560.4 KB)
+0009.784 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 2000 files added (on-disk size: 10560.4 KB)
+0009.787 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (7.7 MB, 2680 files batched, 501 (2004) added so far); re-opening (prior size: 10560.4 KB)
+0010.477 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 2100 files added (on-disk size: 14104.1 KB)
+0010.518 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 2200 files added (on-disk size: 14104.1 KB)
+0010.559 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 2300 files added (on-disk size: 14104.1 KB)
+0010.604 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 2400 files added (on-disk size: 14104.1 KB)
+0010.650 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 2500 files added (on-disk size: 14104.1 KB)
+0010.653 (0) Adding batch to zip file (UpdraftPlus_ZipArchive): over 500 files added on this batch (12.2 MB, 2680 files batched, 501 (2505) added so far); re-opening (prior size: 14104.1 KB)
+0011.560 (0) Zip: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip.tmp: 2600 files added (on-disk size: 17663.3 KB)
+0012.077 (0) Created wpcore zip (0) - 18193.8 KB in 7.8 s (2326.6 KB/s) (SHA1 checksum: 3e5b5f888e114fdcc2a89fe597245d9bdbdb283c)
+0012.081 (0) Beginning backup of other directories found in the content directory (index: 0)
+0012.082 (0) Exclusion option setting (others): upgrade,cache,updraft,backup*,*backups,mysql.sql,debug.log
+0012.083 (0) Looking for candidates to back up in: /hosting/web/thebitcoinbeast.com-virtual/public_html/wp-content
+0012.084 (0) finding files: themes: skipping: this is the themes directory
+0012.084 (0) finding files: upgrade: skipping: excluded by options
+0012.085 (0) finding files: index.php: adding to list (1)
+0012.086 (0) finding files: uploads: skipping: this is the uploads directory
+0012.087 (0) finding files: plugins: skipping: this is the plugins directory
+0012.087 (0) finding files: updraft: skipping: this is the updraft directory
+0012.097 (0) Total entities for the zip file: 0 directories, 1 files (0 skipped as non-modified), 0 MB
+0012.102 (0) Created others zip (0) - 0.1 KB in 0 s (19.7 KB/s) (SHA1 checksum: 349f6c1a74c020769a885bafd8581ad7e886103e)
+0012.106 (0) No backup of more: excluded by user's options
+0012.110 (0) Saving backup status to database (elements: 10)
+0012.113 (0) Beginning creation of database dump (WordPress DB)
+0012.114 (0) All tables found will be backed up (indicated by backupdb_nonwp option)
+0012.122 (0) Table wp_options: Total expected rows (approximate): 208
+0012.138 (0) Table wp_options: Total rows added: 208 in 0.02 seconds
+0012.141 (0) Table wp_options: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_options.table.gz - 22.3 KB)
+0012.145 (0) Table wp_users: Total expected rows (approximate): 83
+0012.183 (0) Table wp_users: Total rows added: 83 in 0.04 seconds
+0012.185 (0) Table wp_users: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_users.table.gz - 8.6 KB)
+0012.189 (0) Table wp_usermeta: Total expected rows (approximate): 16
+0012.192 (0) Table wp_usermeta: Total rows added: 16 in 0.00 seconds
+0012.193 (0) Table wp_usermeta: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_usermeta.table.gz - 0.6 KB)
+0012.197 (0) Table wp_commentmeta: Total expected rows (approximate): 0
+0012.199 (0) Table wp_commentmeta: Total rows added: 0 in 0.00 seconds
+0012.200 (0) Table wp_commentmeta: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_commentmeta.table.gz - 0.3 KB)
+0012.204 (0) Table wp_comments: Total expected rows (approximate): 1
+0012.207 (0) Table wp_comments: Total rows added: 1 in 0.00 seconds
+0012.208 (0) Table wp_comments: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_comments.table.gz - 0.6 KB)
+0012.212 (0) Table wp_links: Total expected rows (approximate): 0
+0012.214 (0) Table wp_links: Total rows added: 0 in 0.00 seconds
+0012.215 (0) Table wp_links: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_links.table.gz - 0.4 KB)
+0012.219 (0) Table wp_postmeta: Total expected rows (approximate): 3
+0012.221 (0) Table wp_postmeta: Total rows added: 3 in 0.00 seconds
+0012.222 (0) Table wp_postmeta: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_postmeta.table.gz - 0.4 KB)
+0012.225 (0) Table wp_posts: Total expected rows (approximate): 3
+0012.229 (0) Table wp_posts: Total rows added: 3 in 0.00 seconds
+0012.230 (0) Table wp_posts: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_posts.table.gz - 1.3 KB)
+0012.233 (0) Table wp_term_relationships: Total expected rows (approximate): 1
+0012.235 (0) Table wp_term_relationships: Total rows added: 1 in 0.00 seconds
+0012.236 (0) Table wp_term_relationships: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_term_relationships.table.gz - 0.3 KB)
+0012.240 (0) Table wp_term_taxonomy: Total expected rows (approximate): 1
+0012.242 (0) Table wp_term_taxonomy: Total rows added: 1 in 0.00 seconds
+0012.243 (0) Table wp_term_taxonomy: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_term_taxonomy.table.gz - 0.4 KB)
+0012.247 (0) Table wp_termmeta: Total expected rows (approximate): 0
+0012.249 (0) Table wp_termmeta: Total rows added: 0 in 0.00 seconds
+0012.250 (0) Table wp_termmeta: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_termmeta.table.gz - 0.3 KB)
+0012.254 (0) Table wp_terms: Total expected rows (approximate): 1
+0012.256 (0) Table wp_terms: Total rows added: 1 in 0.00 seconds
+0012.257 (0) Table wp_terms: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_terms.table.gz - 0.4 KB)
+0012.261 (0) Table ghrequests: Total expected rows (approximate): 1
+0012.263 (0) Table ghrequests: Total rows added: 1 in 0.00 seconds
+0012.264 (0) Table ghrequests: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-ghrequests.table.gz - 0.5 KB)
+0012.268 (0) Table matched_requests: Total expected rows (approximate): 1
+0012.271 (0) Table matched_requests: Total rows added: 1 in 0.00 seconds
+0012.272 (0) Table matched_requests: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-matched_requests.table.gz - 0.6 KB)
+0012.276 (0) Table phrequests: Total expected rows (approximate): 2
+0012.279 (0) Table phrequests: Total rows added: 2 in 0.00 seconds
+0012.280 (0) Table phrequests: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-phrequests.table.gz - 0.6 KB)
+0012.284 (0) Table user_temp: Total expected rows (approximate): 1
+0012.287 (0) Table user_temp: Total rows added: 1 in 0.00 seconds
+0012.288 (0) Table user_temp: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-user_temp.table.gz - 1.2 KB)
+0012.292 (0) Table wallet_logs: Total expected rows (approximate): 14
+0012.296 (0) Table wallet_logs: Total rows added: 14 in 0.00 seconds
+0012.297 (0) Table wallet_logs: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wallet_logs.table.gz - 0.7 KB)
+0012.301 (0) Table wp_users_backup: Total expected rows (approximate): 76
+0012.334 (0) Table wp_users_backup: Total rows added: 76 in 0.03 seconds
+0012.336 (0) Table wp_users_backup: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_users_backup.table.gz - 8.1 KB)
+0012.340 (0) Table wp_users_old: Total expected rows (approximate): 1
+0012.343 (0) Table wp_users_old: Total rows added: 1 in 0.00 seconds
+0012.344 (0) Table wp_users_old: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_users_old.table.gz - 0.5 KB)
+0012.348 (0) Table wp_users_working: Total expected rows (approximate): 1
+0012.350 (0) Table wp_users_working: Total rows added: 1 in 0.00 seconds
+0012.351 (0) Table wp_users_working: finishing file (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_users_working.table.gz - 0.5 KB)
+0012.355 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_options.table.gz (1/20): adding to final database dump
+0012.366 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_users.table.gz (2/20): adding to final database dump
+0012.372 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_usermeta.table.gz (3/20): adding to final database dump
+0012.373 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_commentmeta.table.gz (4/20): adding to final database dump
+0012.374 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_comments.table.gz (5/20): adding to final database dump
+0012.376 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_links.table.gz (6/20): adding to final database dump
+0012.377 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_postmeta.table.gz (7/20): adding to final database dump
+0012.378 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_posts.table.gz (8/20): adding to final database dump
+0012.380 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_term_relationships.table.gz (9/20): adding to final database dump
+0012.381 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_term_taxonomy.table.gz (10/20): adding to final database dump
+0012.382 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_termmeta.table.gz (11/20): adding to final database dump
+0012.383 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_terms.table.gz (12/20): adding to final database dump
+0012.385 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-ghrequests.table.gz (13/20): adding to final database dump
+0012.386 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-matched_requests.table.gz (14/20): adding to final database dump
+0012.387 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-phrequests.table.gz (15/20): adding to final database dump
+0012.389 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-user_temp.table.gz (16/20): adding to final database dump
+0012.390 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wallet_logs.table.gz (17/20): adding to final database dump
+0012.392 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_users_backup.table.gz (18/20): adding to final database dump
+0012.396 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_users_old.table.gz (19/20): adding to final database dump
+0012.398 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db-table-wp_users_working.table.gz (20/20): adding to final database dump
+0012.399 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db.gz: finished writing out complete database file (16 KB)
+0012.404 (0) Total database tables backed up: 20 (backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db.gz, size: 45060, checksum (SHA1): d13d1d875779f6360ceffc9a296522ef50dd7924)
+0012.411 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-plugins.zip: plugins: This file has not yet been successfully uploaded: will queue
+0012.412 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-themes.zip: themes: This file has not yet been successfully uploaded: will queue
+0012.413 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-uploads.zip: uploads: This file has not yet been successfully uploaded: will queue
+0012.413 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip: wpcore: This file has not yet been successfully uploaded: will queue
+0012.414 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-others.zip: others: This file has not yet been successfully uploaded: will queue
+0012.415 (0) backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db.gz: db: This file has not yet been successfully uploaded: will queue
+0012.416 (0) Saving backup history. Total backup size: 24 MB
+0012.419 (0) Requesting upload of the files that have not yet been successfully uploaded (6)
+0012.422 (0) Cloud backup selection (1/1): none (last)
+0012.423 (0) No remote despatch: user chose no remote backup service
+0012.424 (0) Recording as successfully uploaded: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-plugins.zip (874d238939a02b8fbbe5b91589d9bfbc)
+0012.429 (0) Recording as successfully uploaded: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-themes.zip (ee804093cbb5fbed35edd51302b32289)
+0012.433 (0) Recording as successfully uploaded: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-uploads.zip (e0c18a6fda2d976569614891f05fc200)
+0012.437 (0) Recording as successfully uploaded: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-wpcore.zip (1c61ad989ec6253df4dfc41f6e713e62)
+0012.441 (0) Recording as successfully uploaded: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-others.zip (9d62073b484500bc2710477ef5f351f7)
+0012.446 (0) Recording as successfully uploaded: backup_2016-08-06-0715_Bitcoin_Beast_8db1f98ff982-db.gz (c1597b8ccd0133b7ad41b55246ed6036)
+0012.450 (0) Retain: beginning examination of existing backup sets; user setting: retain_files=5, retain_db=5
+0012.451 (0) Number of backup sets in history: 6; groups (db): 1
+0012.452 (0) Examining (for databases) backup set with group_id=0, nonce=8db1f98ff982, datestamp=1470467758 (Aug 06 2016 07:15:58)
+0012.453 (0) This backup set is the backup set just made, so will not be deleted.
+0012.454 (0) Examining (for databases) backup set with group_id=0, nonce=60f5a011e4ff, datestamp=1470376253 (Aug 05 2016 05:50:53)
+0012.454 (0) [Debug] dbprune examine: 1470376253, type=db, entity=db, entry_prune_it=, last_relevant_backup_kept_at=, last_backup_seen_at=, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.454 (0) Keeping this backup, as it is the first relevant (i.e. old enough) backup we've come across for the current rule
+0012.455 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0012.456 (0) Examining (for databases) backup set with group_id=0, nonce=830da65538d1, datestamp=1470290292 (Aug 04 2016 05:58:12)
+0012.457 (0) [Debug] dbprune examine: 1470290292, type=db, entity=db, entry_prune_it=, last_relevant_backup_kept_at=1470376253, last_backup_seen_at=1470376253, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.457 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=85961, every_time=1
+0012.457 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0012.458 (0) Examining (for databases) backup set with group_id=0, nonce=5d87fef3891c, datestamp=1470194496 (Aug 03 2016 03:21:36)
+0012.459 (0) [Debug] dbprune examine: 1470194496, type=db, entity=db, entry_prune_it=, last_relevant_backup_kept_at=1470290292, last_backup_seen_at=1470290292, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.459 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=95796, every_time=1
+0012.459 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0012.459 (0) Examining (for databases) backup set with group_id=0, nonce=970adb4258fa, datestamp=1470096300 (Aug 02 2016 00:05:00)
+0012.460 (0) [Debug] dbprune examine: 1470096300, type=db, entity=db, entry_prune_it=, last_relevant_backup_kept_at=1470194496, last_backup_seen_at=1470194496, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.460 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=98196, every_time=1
+0012.460 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0012.461 (0) Examining (for databases) backup set with group_id=0, nonce=???, datestamp=1469749887 (Jul 28 2016 23:51:27)
+0012.462 (0) [Debug] dbprune examine: 1469749887, type=db, entity=db, entry_prune_it=, last_relevant_backup_kept_at=1470096300, last_backup_seen_at=1470096300, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.462 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=346413, every_time=1
+0012.462 (0) 1469749887: db: this set includes a database (backup_2016-07-28-2351_Bitcoin_Beast_1e9861378ab0-db.gz); db count is now 5
+0012.463 (0) 1469749887: db: over retain limit (5); will delete this database
+0012.463 (0) Delete file: backup_2016-07-28-2351_Bitcoin_Beast_1e9861378ab0-db.gz, service=none
+0012.466 (0) This backup set remains non-empty (f=1/d=0); will retain in history
+0012.466 (0) Number of backup sets in history: 6; groups (files): 1
+0012.467 (0) Examining (for files) backup set with nonce=8db1f98ff982, datestamp=1470467758 (Aug 06 2016 07:15:58)
+0012.468 (0) This backup set is the backup set just made, so will not be deleted.
+0012.469 (0) This backup set is the backup set just made, so will not be deleted.
+0012.469 (0) This backup set is the backup set just made, so will not be deleted.
+0012.469 (0) This backup set is the backup set just made, so will not be deleted.
+0012.470 (0) This backup set is the backup set just made, so will not be deleted.
+0012.470 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0012.471 (0) Examining (for files) backup set with nonce=60f5a011e4ff, datestamp=1470376253 (Aug 05 2016 05:50:53)
+0012.471 (0) [Debug] dbprune examine: 1470376253, type=files, entity=plugins, entry_prune_it=, last_relevant_backup_kept_at=, last_backup_seen_at=, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.472 (0) Keeping this backup, as it is the first relevant (i.e. old enough) backup we've come across for the current rule
+0012.472 (0) [Debug] dbprune examine: 1470376253, type=files, entity=themes, entry_prune_it=, last_relevant_backup_kept_at=, last_backup_seen_at=, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.472 (0) Keeping this backup, as it is the first relevant (i.e. old enough) backup we've come across for the current rule
+0012.473 (0) [Debug] dbprune examine: 1470376253, type=files, entity=uploads, entry_prune_it=, last_relevant_backup_kept_at=, last_backup_seen_at=, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.473 (0) Keeping this backup, as it is the first relevant (i.e. old enough) backup we've come across for the current rule
+0012.473 (0) [Debug] dbprune examine: 1470376253, type=files, entity=wpcore, entry_prune_it=, last_relevant_backup_kept_at=, last_backup_seen_at=, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.473 (0) Keeping this backup, as it is the first relevant (i.e. old enough) backup we've come across for the current rule
+0012.474 (0) [Debug] dbprune examine: 1470376253, type=files, entity=others, entry_prune_it=, last_relevant_backup_kept_at=, last_backup_seen_at=, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.474 (0) Keeping this backup, as it is the first relevant (i.e. old enough) backup we've come across for the current rule
+0012.474 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0012.475 (0) Examining (for files) backup set with nonce=830da65538d1, datestamp=1470290292 (Aug 04 2016 05:58:12)
+0012.476 (0) [Debug] dbprune examine: 1470290292, type=files, entity=plugins, entry_prune_it=, last_relevant_backup_kept_at=1470376253, last_backup_seen_at=1470376253, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.476 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=85961, every_time=1
+0012.476 (0) [Debug] dbprune examine: 1470290292, type=files, entity=themes, entry_prune_it=, last_relevant_backup_kept_at=1470376253, last_backup_seen_at=1470376253, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.476 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=85961, every_time=1
+0012.476 (0) [Debug] dbprune examine: 1470290292, type=files, entity=uploads, entry_prune_it=, last_relevant_backup_kept_at=1470376253, last_backup_seen_at=1470376253, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.476 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=85961, every_time=1
+0012.476 (0) [Debug] dbprune examine: 1470290292, type=files, entity=wpcore, entry_prune_it=, last_relevant_backup_kept_at=1470376253, last_backup_seen_at=1470376253, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.476 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=85961, every_time=1
+0012.476 (0) [Debug] dbprune examine: 1470290292, type=files, entity=others, entry_prune_it=, last_relevant_backup_kept_at=1470376253, last_backup_seen_at=1470376253, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.476 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=85961, every_time=1
+0012.476 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0012.477 (0) Examining (for files) backup set with nonce=5d87fef3891c, datestamp=1470194496 (Aug 03 2016 03:21:36)
+0012.478 (0) [Debug] dbprune examine: 1470194496, type=files, entity=plugins, entry_prune_it=, last_relevant_backup_kept_at=1470290292, last_backup_seen_at=1470290292, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.478 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=95796, every_time=1
+0012.478 (0) [Debug] dbprune examine: 1470194496, type=files, entity=themes, entry_prune_it=, last_relevant_backup_kept_at=1470290292, last_backup_seen_at=1470290292, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.478 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=95796, every_time=1
+0012.478 (0) [Debug] dbprune examine: 1470194496, type=files, entity=uploads, entry_prune_it=, last_relevant_backup_kept_at=1470290292, last_backup_seen_at=1470290292, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.478 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=95796, every_time=1
+0012.478 (0) [Debug] dbprune examine: 1470194496, type=files, entity=wpcore, entry_prune_it=, last_relevant_backup_kept_at=1470290292, last_backup_seen_at=1470290292, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.478 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=95796, every_time=1
+0012.478 (0) [Debug] dbprune examine: 1470194496, type=files, entity=others, entry_prune_it=, last_relevant_backup_kept_at=1470290292, last_backup_seen_at=1470290292, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.478 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=95796, every_time=1
+0012.478 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0012.479 (0) Examining (for files) backup set with nonce=970adb4258fa, datestamp=1470096300 (Aug 02 2016 00:05:00)
+0012.480 (0) [Debug] dbprune examine: 1470096300, type=files, entity=plugins, entry_prune_it=, last_relevant_backup_kept_at=1470194496, last_backup_seen_at=1470194496, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.480 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=98196, every_time=1
+0012.480 (0) [Debug] dbprune examine: 1470096300, type=files, entity=themes, entry_prune_it=, last_relevant_backup_kept_at=1470194496, last_backup_seen_at=1470194496, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.480 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=98196, every_time=1
+0012.480 (0) [Debug] dbprune examine: 1470096300, type=files, entity=uploads, entry_prune_it=, last_relevant_backup_kept_at=1470194496, last_backup_seen_at=1470194496, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.480 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=98196, every_time=1
+0012.480 (0) [Debug] dbprune examine: 1470096300, type=files, entity=wpcore, entry_prune_it=, last_relevant_backup_kept_at=1470194496, last_backup_seen_at=1470194496, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.480 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=98196, every_time=1
+0012.481 (0) [Debug] dbprune examine: 1470096300, type=files, entity=others, entry_prune_it=, last_relevant_backup_kept_at=1470194496, last_backup_seen_at=1470194496, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.481 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=98196, every_time=1
+0012.481 (0) This backup set remains non-empty (f=1/d=1); will retain in history
+0012.481 (0) Examining (for files) backup set with nonce=???, datestamp=1469749887 (Jul 28 2016 23:51:27)
+0012.482 (0) [Debug] dbprune examine: 1469749887, type=files, entity=plugins, entry_prune_it=, last_relevant_backup_kept_at=1470096300, last_backup_seen_at=1470096300, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.482 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=346413, every_time=1
+0012.482 (0) plugins: over retain limit (5); will delete this file entity
+0012.483 (0) [Debug] dbprune examine: 1469749887, type=files, entity=themes, entry_prune_it=, last_relevant_backup_kept_at=1470096300, last_backup_seen_at=1470096300, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.483 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=346413, every_time=1
+0012.483 (0) themes: over retain limit (5); will delete this file entity
+0012.484 (0) [Debug] dbprune examine: 1469749887, type=files, entity=uploads, entry_prune_it=, last_relevant_backup_kept_at=1470096300, last_backup_seen_at=1470096300, rule={"after-howmany":0,"after-period":0,"every-period":1,"every-howmany":1}
+0012.484 (0) [Debug] Will keep - enough time different to the last backup. time_from_backup_to_last_kept=346413, every_time=1
+0012.484 (0) uploads: over retain limit (5); will delete this file entity
+0012.485 (0) Delete file: backup_2016-07-28-2351_Bitcoin_Beast_1e9861378ab0-plugins.zip, service=none
+0012.486 (0) Delete file: backup_2016-07-28-2351_Bitcoin_Beast_1e9861378ab0-themes.zip, service=none
+0012.486 (0) Delete file: backup_2016-07-28-2351_Bitcoin_Beast_1e9861378ab0-uploads.zip, service=none
+0012.488 (0) This backup set is now empty; will remove from history
+0012.489 (0) No nonce record found in the backup set, so cannot delete any remaining log file
+0012.490 (0) Retain: saving new backup history (sets now: 5) and finishing retain operation
+0012.493 (0) Resume backup (8db1f98ff982, 0): finish run
+0012.495 (0) Decremented the semaphore (fd) by 1
+0012.496 (0) Semaphore (fd) unlocked
+0012.497 (0) There were no errors in the uploads, so the 'resume' event (1) is being unscheduled
+0012.500 (0) An email has been scheduled for this job, because we are in debug mode
+0012.501 (0) No email will/can be sent - the user has not configured an email address.
+0012.501 (0) The backup apparently succeeded and is now complete

@@ -1,0 +1,82 @@
+<script>
+
+	  app.controller('PageController', ['$scope', '$http', '$window', function($scope, $http, $window) {
+
+		var vm = this;
+		vm.arr_data = [];
+
+		$scope.search = "";
+		$scope.number_per_page = 100;
+
+
+		vm.t = {};
+
+	
+		vm.t.search_for_user_id = 0;
+		
+
+		$http({
+		    method: 'POST',
+		    url: '/platform/leaderboards/get_refs_ph_amount_sponsored_stats_weekly_leaderboard/amount',
+			data: { search: $scope.search }
+		}).success(function (result) {
+			if (result.is_success) {
+				vm.arr_data = result.arr_data;
+			}
+		});
+
+
+	}]);
+
+
+</script>
+
+<style>
+
+	td {
+		padding-left:10px;
+		padding-right:10px;
+	}
+
+</style>
+
+<div class="page-title-header">
+	Highest PH Completed Weekly
+</div>
+
+<div ng-controller="PageController as page_ctrl">
+
+	<div style="clear:both;"></div>
+
+
+	<div class="flex_container">
+		<div>
+
+			<table  style="border-collapse: collapse; margin:10px;"  class="general_data_table">
+			<tr>
+			<th class="general_table_header">No</th>
+			<th class="general_table_header">User</th>
+			<th class="general_table_header">Country</th>
+			<th class="general_table_header">PH Completed Amount</th>
+			<th class="general_table_header">Number Members</th>
+			</tr>
+
+			<tr ng-if="arr_data.length == 0">
+				<td colspan="9">
+				      <strong>No results found...</strong>
+				</td>
+			</tr>
+			<tr class="have_hover full-standard-fade" ng-repeat="data in page_ctrl.arr_data track by $index">
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{$index+1}}</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="word-break: break-all">{{data.fullname}} ({{data.login}})</td>
+				<!--<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="word-break: break-all"><a target="_blank" href="/platform/membersadmin/edit/{{data.user_id}}/">{{data.login}}</a></td>-->
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{data.country}}</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">${{data.amount | number:2}}</td>
+				<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{data.number_refs}}</td>
+			</tr>
+			</table>
+		</div>
+	</div>
+
+
+</div>

@@ -1,0 +1,135 @@
+<script>
+
+	  app.controller('PageController', ['$scope', '$http', '$window', function($scope, $http, $window) {
+
+		var vm = this;
+		vm.arr_downline_data = [];
+
+		$scope.search = "";
+		$scope.number_per_page = 100;
+
+
+		vm.t = {};
+	
+		vm.t.is_loading_data = true;
+		
+
+		$http({
+		    method: 'POST',
+		    url: '/platform/downline/get_user_downline_data/',
+			data: { search: $scope.search }
+		}).success(function (result) {
+			if (result.is_success) {
+				vm.arr_downline_data = result.arr_data;
+				vm.t.is_loading_data = false;
+			}
+		});
+
+		$scope.add = function() {
+			$window.location = "/segments/edit/0";
+			
+		};
+
+		$scope.edit_click = function(index) {
+			$window.location = "/segments/edit/" + index;
+			
+		};
+
+		$scope.delete_click = function(index) {
+			var result = $window.confirm('Are you sure you want to delete?');
+                        if (result) {
+                                $http({
+                                    method: 'get',
+                                    url: '/segments/delete/' + index,
+                                }).success(function (result) {
+                                        $window.location = "/segments";
+                                });
+                        }
+		};
+
+		$scope.search_submission = function() {
+			//alert('in here');
+			$http({
+			    method: 'POST',
+			    url: '/segments/get_arr_search_results/',
+				data: { search: $scope.search }
+			}).success(function (result) {
+				$scope.arr_segments_data = result.arr_data;
+				//alert(result.arr_data);
+			});
+			
+		};
+
+		vm.build_total_gh = function(data) {
+			var total = 0;
+			total = (+data.daily_bonus_earning_balance) + (+data.daily_growth_balance) + (+data.level_income_balance) + (+data.task_earning_balance);
+			return total;
+		}
+
+	}]);
+
+
+</script>
+
+<style>
+
+	td {
+		padding-left:10px;
+		padding-right:10px;
+	}
+
+</style>
+
+<div class="page-title-header">
+	Level View
+</div>
+
+<div ng-controller="PageController as page_ctrl">
+
+	<div style="clear:both;"></div>
+
+
+<div class="flex_container">
+	<div>
+		<table  style="border-collapse: collapse; margin:10px;"  class="general_data_table">
+		<tr>
+		<th class="general_table_header">Sr. No</th>
+		<th class="general_table_header">Level</th>
+		<th class="general_table_header">User ID</th>
+		<th class="general_table_header">Name</th>
+		<th class="general_table_header">Mobile</th>
+		<th class="general_table_header">Country</th>
+		<th class="general_table_header">PH Confirmed</th>
+		<th class="general_table_header">PH Matched</th>
+		<th class="general_table_header">PH Total</th>
+		<th class="general_table_header" width="150">Join Date</th>
+		</tr>
+
+		<tr ng-if="page_ctrl.arr_downline_data.length == 0 && !page_ctrl.t.is_loading_data">
+			<td colspan="10">
+			      <strong>No results found...</strong>
+			</td>
+		</tr>
+		<tr ng-if="page_ctrl.t.is_loading_data">
+			<td colspan="10">
+			      <strong>Loading Data...</strong>
+			</td>
+		</tr>
+		<tr class="have_hover" ng-repeat="data in page_ctrl.arr_downline_data track by $index">
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{$index+1}}</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{data.downline_level}}</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{data.login}}</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell clickable'" >{{data.fullname}}</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{data.phone}}</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{data.country}}</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">$ {{data.confirmed_ph}}</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">$ {{data.unconfirmed_ph}}</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">$ {{data.total_ph}}</td>
+			<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" style="width:200px !important;">{{data.gm_created}} UTC</td>
+		</tr>
+		</table>
+	</div>
+</div>
+
+
+</div>

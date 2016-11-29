@@ -1,0 +1,312 @@
+
+
+<style>
+	form.submitted input.ng-invalid
+	{
+	    border:1px solid #f00;
+	}
+
+	form.submitted select.ng-invalid
+	{
+	    border:1px solid #f00;
+	}
+
+	form.submitted .ng-invalid
+	{
+	    border:1px solid #f00;
+	}
+
+
+	.field_error
+	{
+	    border:1px solid #f00;
+	}
+</style>
+
+
+<script>
+
+
+	isFormValid = function ($scope, ngForm) {
+		      var i = null;
+		      //$scope.$emit('$validate');
+		      $scope.$broadcast('$validate');
+		      
+		      if(! ngForm.$invalid) {
+			return true;
+		      } else {
+			// make the form fields '$dirty' so that the validation messages would be shown
+			ngForm.$dirty = true;
+			
+			for(i in ngForm) {
+			  if(ngForm[i] && ngForm[i].hasOwnProperty && ngForm[i].hasOwnProperty('$dirty')) { // TODO: is 'field.$invalid' test required?
+			    ngForm[i].$dirty = true;
+			  }
+			}
+		      }
+		    };
+
+	app.config(['ngDialogProvider', function (ngDialogProvider) {
+            ngDialogProvider.setDefaults({
+                className: 'ngdialog-theme-default',
+                plain: false,
+                showClose: true,
+                closeByDocument: true,
+                closeByEscape: true,
+                appendTo: false,
+                preCloseCallback: function () {
+                    //console.log('default pre-close callback');
+                }
+            });
+        }]);
+
+
+	  app.controller('PageController', ['$scope', '$http', 'Upload', '$timeout', 'ngDialog', '$window', function($scope, $http, Upload, $timeout, ngDialog, $window) {
+
+		var vm = this;
+		vm.data = {};
+
+		$scope.regex_date_of_birth = "^(\\d{1,2})\/(\\d{1,2})\/(\\d{4})$";
+		//$scope.regex_date_of_birth = "\\d{1,2}";
+
+		//$scope.new_password = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&#])[A-Za-z\\d$@$!%*#?&]{8,}$";
+		$scope.new_password = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_])[A-Za-z\\d\\W]{8,}$";
+
+		vm.data.change_password = "";
+		vm.data.change_password2 = "";
+
+		
+		vm.is_registration_complete = true;
+		vm.is_registration_complete = false;
+
+		vm.proceed_to_site_click = function() {
+			$window.location = "/platform/";
+		}
+
+		vm.submit = function($form) {
+			var ngForm = $form;
+			if(isFormValid($scope, ngForm)) { // trigger manual validation
+			} else {
+				$form.$submitted = true;
+				$form.submitted = true;
+			}
+
+			if ($form.$invalid) {
+				$form.$submitted = true;
+				$form.submitted = true;
+			} else {
+				var obj_data = {};
+
+				obj_data.data = vm.data;
+
+				/*
+				alert('in here');
+				obj_data.login = $scope.data.create_member_login;
+				obj_data.country = $scope.data.create_member_country;
+				obj_data.fullname = $scope.data.create_member_fullname;
+				*/
+				$http({
+					method: 'POST',
+					url: '/platform/registrations/update_registration/',
+					data: {data:obj_data}
+				}).success(function (result) {
+					if (result.is_success) {
+						vm.is_registration_complete = true;
+					}
+					//alert(result);
+					//$scope.form_data.get_otp_retrieve_login = '';
+				});
+			}
+
+		};
+
+		vm.file_upload = function(data, upload_file) {
+
+			//mr_data.is_have_image_receipt = 'Y';
+			//alert(upload_files);
+			/*var new_dialog = ngDialog.open({ id: 'fromAService', template: 'firstDialogId', controller: 'InsideCtrl', data: { foo: 'from a service' } });
+			*/
+			if (upload_file != null) {
+				var new_dialog = ngDialog.open({ id: 'fromAService', closeByDocument: false, template: 'uploader_dialog', controller: 'UploaderController', data: { file: upload_file, form_data: data} });
+				// example on checking whether created `new_dialog` is open
+				$timeout(function() {
+					console.log(ngDialog.isOpen(new_dialog.id));
+				}, 2000)
+			}
+		};
+
+	    }]);
+		var compareTo = function() {
+		    return {
+			require: "ngModel",
+			scope: {
+			    otherModelValue: "=compareTo"
+			},
+			link: function(scope, element, attributes, ngModel) {
+			     
+			    ngModel.$validators.compareTo = function(modelValue) {
+				//alert('trying to compare' + modelValue + ' with ' + scope.otherModelValue);
+				return modelValue == scope.otherModelValue;
+			    };
+		 
+			    scope.$watch("otherModelValue", function() {
+				ngModel.$validate();
+			    });
+			}
+		    };
+		};
+		 
+		app.directive("compareTo", compareTo);
+
+
+		app.controller('UploaderController', ['$scope', 'Upload', '$timeout', 'ngDialog', function ($scope, Upload, $timeout, ngDialog) {
+
+
+			//console.log($scope.ngDialogData);
+			//console.log($scope.ngDialogData.files);
+			var vm = this;
+			//alert($scope.ngDialogData.files);
+			vm.log = '';
+			var temp = '';
+			vm.is_uploading = false;
+			vm.percentage_complete = "";
+			vm.is_processing_upload = false;
+
+			vm.upload = function (upload_file) {
+				var files = [upload_file]; 
+				console.log('starting upload');
+				if (files && files.length) {
+					for (var i = 0; i < files.length; i++) {
+						var file = files[i];
+
+						if (!file.$error) {
+							//alert(matchedrequest_id);
+							Upload.upload({
+								url: '/platform/registrations/upload_photo_id/',
+								data: {
+									file: file
+								}
+							}).then(function (resp) {
+								$timeout(function() {
+									$scope.closeThisDialog();
+									if (resp.data.is_success) {
+										//$scope.ngDialogData.mr_data.is_have_image_receipt = 'Y';
+										$scope.ngDialogData.form_data.photo_upload = 'Y';
+									} else {
+									}
+								});
+								$scope.is_uploading = false;
+								$scope.is_processing_upload = false;
+							}, null, function (evt) {
+								var progressPercentage = parseInt(100.0 *
+								evt.loaded / evt.total);
+								$scope.is_uploading = true;
+								if (progressPercentage == 100) {
+									$scope.is_uploading = false;
+									$scope.is_processing_upload = true;
+								} else {
+									$scope.percentage_complete = "file uploading: " + progressPercentage + "%";
+								}
+								$scope.log = 'progress: ' + progressPercentage + 
+								'% ' + evt.config.data.file.name + '\n' + 
+								$scope.log;
+							});
+						}
+					} // end for
+				} // end if
+			}; // vm.upload
+			//alert($scope.ngDialogData.file);
+			//alert('in here');
+			if ($scope.ngDialogData.file != null) {
+				vm.upload($scope.ngDialogData.file);
+			} else {
+				$scope.closeThisDialog();
+			}
+		}]);
+
+
+	</script>
+
+	
+	<div class="flex_container">
+		<div ng-controller="PageController as page_ctrl" style="max-width:600px;">
+			<div ng-show="page_ctrl.is_registration_complete">
+	
+				<div style="" class="alert alert-success" role="alert">
+					You have successfully registered. Congratulations.
+				</div>
+				<button type="button" class="btn btn-primary" ng-click="page_ctrl.proceed_to_site_click()">PROCEED TO SITE</button>
+
+			</div>
+			<div ng-show="!page_ctrl.is_registration_complete">
+				<form ng-class="{submitted:registration_form.$submitted}" name="registration_form" novalidate>
+				<div style="padding-bottom:20px;">Please provide us with this final set of information to access your account</div>
+				<div class="form-group">
+					<label class="form-label">Enter New Password</label>
+					<input ng-class="{field_error:(!registration_form.change_password.$valid && registration_form.change_password.$dirty)}" ng-model="page_ctrl.data.change_password" ng-pattern="new_password" name="change_password" type="password" class="form-control" placeholder="" required>
+					<div style="color:red; font-weight:bold" ng-messages="registration_form.change_password.$error" ng-if="registration_form.change_password.$dirty">
+					    <div ng-message="required">Required</div>
+					    <div ng-message="pattern">Password must have minimum 8 characters at least 1 uppercase alphabet, 1 lowercase alphabet, 1 number and 1 special character</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="form-label">Re-Enter Password</label>
+					<input ng-class="{field_error:(!registration_form.change_password2.$valid && registration_form.change_password2.$dirty)}" ng-model="page_ctrl.data.change_password2" compare-to="page_ctrl.data.change_password" name="change_password2" type="password" class="form-control" placeholder="" required>
+					<div style="color:red; font-weight:bold" ng-messages="registration_form.change_password2.$error" ng-if="registration_form.change_password2.$dirty">
+					    <div ng-message="required">Required</div>
+					    <div ng-message="compareTo">Passwords must match</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="form-label">Date of Birth</label>
+					<input ng-class="{field_error:(!registration_form.date_of_birth.$valid && registration_form.date_of_birth.$dirty)}" ng-pattern="regex_date_of_birth" ng-model="page_ctrl.data.date_of_birth" name="date_of_birth" type="text" class="form-control" placeholder="MM/DD/YYYY" required>
+					<div style="color:red; font-weight:bold" ng-messages="registration_form.date_of_birth.$error" ng-if="registration_form.date_of_birth.$dirty">
+					    <div ng-message="required">Required</div>
+					    <div ng-message="pattern">MM/DD/YYYY invalid birth date</div>
+					</div>
+
+				</div>
+				<div class="form-group">
+					<label class="form-label">Complete Street Address</label>
+					<input name="complete_street_address" ng-model="page_ctrl.data.complete_street_address" type="text" class="form-control" placeholder="Complete Street Address" required>
+					<div style="color:red; font-weight:bold" ng-messages="registration_form.complete_street_address.$error" ng-if="registration_form.complete_street_address.$dirty">
+					    <div ng-message="required">Required</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="form-label">PHOTO ID (Must include a close up of your face holding your ID)</label>
+					<div>
+						<button type="button" ngf-select ng-model="page_ctrl.data.photo_uploader" ngf-change="page_ctrl.file_upload(page_ctrl.data, page_ctrl.data.photo_uploader)" ngf-multiple="false" class="btn btn-primary">UPLOAD PHOTO ID</button>
+						<input type="hidden" ng-model="page_ctrl.data.photo_upload" value="" name="photo_upload" required>
+					</div>
+					<div style="color:red; font-weight:bold" ng-messages="registration_form.photo_upload.$error" ng-if="registration_form.photo_upload.$dirty">
+					    <div ng-message="required">Required</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="form-label">ID Number (must match your proof of ID)</label>
+					<input ng-model="page_ctrl.data.id_number" type="text" class="form-control" name="id_number" placeholder="ID Number" required>
+					<div style="color:red; font-weight:bold" ng-messages="registration_form.id_number.$error" ng-if="registration_form.id_number.$dirty">
+					    <div ng-message="required">Required</div>
+					</div>
+				</div>
+				<div style="float:left;">
+					<button ng-click="page_ctrl.submit(registration_form)" class="btn btn-primary">UPDATE</button>
+				</div>
+				</form>
+			</div> <!-- registration complete -->
+		</div>
+	</div>
+</div>
+
+
+<script type="text/ng-template" id="uploader_dialog">
+        <div class="ngdialog-message">
+		<div class="flex_container">
+			<div style="font-size:24px; font-weight:900; padding-top:10px;">
+			{{percentage_complete}}
+			</div>
+		</div>
+        </div>
+</script>
+

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<head profile="http://gmpg.org/xfn/11">
+	<link rel="shortcut icon" href="/images/ico/bookmark.ico" type="image/vnd.microsoft.icon"/>
+	<link rel="icon" href="/images/ico/bookmark.ico" type="image/x-ico"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>BIT MUTUAL HELP</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="shortcut icon" href="/FrontEnd/images/fevicon.png">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-sanitize.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-messages.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-animate.js"></script>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+
+	<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="/components/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/components/bootstrap/css/bootstrap-theme.min.css">
+	<script src="/components/bootstrap/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="/components/bootstrap-ms/bootstrap_ms.css">
+
+	<link rel="stylesheet" href="/components/jquery-ui/jquery-ui.css">
+	<script src="/components/jquery-ui/jquery-ui.js"></script>
+
+
+	<link rel="stylesheet" href="/platform/css/style.css">
+
+	<style type="text/css" media="all">
+		@media only screen and (min-width: 600px) {
+		}
+
+
+		body {
+			background-color:#FFFFFF;
+		}
+
+		.flex_container {
+			  display:                 flex;
+			  display:                 -webkit-flex; /* Safari 8 */
+			  flex-wrap:               wrap;
+			  -webkit-flex-wrap:       wrap;         /* Safari 8 */
+			  justify-content:         center;
+			  -webkit-justify-content: center;       /* Safari 8 */
+		}
+
+
+	</style>
+
+ </head>
+
+<body id="home" ng-app="myApp" style="display:none;">
+
+	<script>
+		var app = angular.module('myApp', ['ngSanitize', 'ngMessages']);
+
+		app.controller('headerController', ['$scope', '$location','$window', function($scope, $location, $window) {
+			$('body').css('display','');
+		}]);
+
+	</script>
+
+
+	<div ng-controller="headerController as hdr_ctrl"></div>
+
+	<div style="">
+		<?=$t->contents_html?>
+	</div>
+</body>  
+</html> 

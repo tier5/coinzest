@@ -1,0 +1,132 @@
+
+
+<style>
+	td {
+		padding-left: 20px;
+	}
+</style>
+
+
+<script>
+
+app.controller('UpdateController', ['$scope', '$http', '$window','$timeout', 'ngDialog', function($scope, $http, $window, $timeout, ngDialog) {
+
+	var current_location = String($window.location);
+
+	var arr_split = [];
+	var arr_split = current_location.split("/");
+
+	var param_value = "";
+
+	var vm = this;
+
+	vm.t = [];
+
+	vm.t.arr_status_options = [];
+	
+	param_value = arr_split[arr_split.length-1];
+	if (param_value == "") {
+		param_value = arr_split[arr_split.length-2];
+	}
+
+	var site_content_name = param_value
+	
+	vm.t.human_content_name = '';
+
+	if (site_content_name == "daily_tasks") {
+		vm.t.human_content_name = 'Daily Tasks';
+	} else if (site_content_name == "loh") {
+		vm.t.human_content_name = 'Letters of Hpapines';
+	} else if (site_content_name == "support") {
+		vm.t.human_content_name = 'Support';
+	}
+
+
+	$scope.is_add = false;
+	$http({
+	    method: 'GET',
+	    url: '/platform/sitecontents/get/' + site_content_name,
+		data: { }
+	}).success(function (result) {
+		if (result.is_success) {
+			vm.t.data = result.data;
+			//vm.t.old_data = result.data.slice();
+			vm.t.old_data = jQuery.extend({}, result.data);
+			//alert(result.data);
+		}
+	});
+
+	vm.submit = function() {
+		vm.t.is_submit_error_message = false;
+		vm.t.is_submit_success_message = false;
+		$http({
+		    method: 'POST',
+		    url: '/platform/membersadmin/save/' + user_id,
+			data: { data: vm.t.data, old_data:vm.t.old_data }
+		}).success(function (result) {
+			if (result.is_success) {
+				vm.t.is_submit_success_message = true;
+				//alert('in here');
+			} else {
+				vm.t.is_submit_error_message = true;
+			}
+		});
+	};
+
+}]);
+
+</script>
+
+
+
+<div ng-controller="UpdateController as update_ctrl" >
+	<div class="page-title-header">
+		Edit Contents: {{update_ctrl.t.human_content_name}}
+	</div>
+	<div class="flex_container">
+		<div class="col-xs-12 col-ms-9 col-sm-9" style="max-width:600px;">
+			<form novalidate>
+				<div ng-show="update_ctrl.t.is_submit_error_message" style="" class="alert alert-danger" role="alert">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span class="sr-only">Error:</span>
+					Unable to Update Content
+				</div>
+				<div ng-show="update_ctrl.t.is_submit_success_message" style="" class="alert alert-success" role="alert">
+					Updated Content
+				</div>
+				<div class="col-xs-12">
+					<div style="padding-bottom:20px;">Update Information Below</div>
+				</div>
+				<div style="clear:both;"></div>
+				<div class="col-xs-12">
+					<div class="form-group">
+						<label class="form-label">Contents</label>
+						<textarea style="width:100%;" ng-model="update_ctrl.t.contents" name="fullname" type="text" class="form-control" placeholder="Contents" required rows=10></textarea>
+						<div style="color:red; font-weight:bold" ng-messages="profile_form.date_of_birth.$error" ng-if="profile_form.date_of_birth.$dirty">
+						    <div ng-message="required">Required</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12">
+				</div>
+				<div style="clear:both;"></div>
+				<div style="padding-bottom:10px;">
+					<div class="col-xs-12">
+						<div class="form-group" style="">
+							<div style="float:left;">
+								<button ng-click="update_ctrl.submit()" class="btn btn-primary">SUBMIT</button>
+							</div>
+							<div style="float:left; padding-left:5px;">
+								<a href="/platform/sitecontents/"><input type="button" value="CANCEL" class="btn btn-default"></a>
+							</div>
+							<div style="clear:both;"></div>
+						</div>
+					</div>
+				</div>
+
+
+			</form>
+		</div>
+	</div>
+</div>
+
