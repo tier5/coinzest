@@ -121,7 +121,19 @@ class BackEnd_DailyTasks_View {
 		$s = BackEnd_Template_View::build_html($data_object);
 		return $s;
 	}
+	function build_approve_clients_html() {
+		$t = new stdclass();
 
+		$template_file = dirname(__FILE__)."/html/show_pending_users_task.html";
+
+		//$arr_options = InvoiceGroups::get_arr_values();
+
+		$data_object = new stdclass();
+		$data_object->contents_html = Common::build_html($template_file, $t);
+		
+		$s = BackEnd_Template_View::build_html($data_object);
+		return $s;
+	}
 
 }
 ?>

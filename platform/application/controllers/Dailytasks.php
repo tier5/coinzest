@@ -31,7 +31,16 @@ class Dailytasks extends CI_Controller {
 		}
 		print BackEnd_DailyTasks_View::build_manage_html();
 	}
-
+	//tier5 llc daily task pending list generation
+	public function show_pending_users_task() {
+		Library_Auth_Common::check_allowed_request();
+		if (!LoginAuth::is_user_have_admin_access()) {
+			print BackEnd_Login_View::build_no_access_html();
+			exit(0);
+		} else {
+			print BackEnd_DailyTasks_View::build_approve_clients_html();
+		}
+	}
 	public function needs_approval_list() {
 		Library_Auth_Common::check_allowed_request();
 		if (!LoginAuth::is_user_have_admin_access()) {
