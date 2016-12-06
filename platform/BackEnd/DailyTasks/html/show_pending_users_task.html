@@ -1,0 +1,75 @@
+<style type="text/css">
+	#custom_form_outline {
+		margin-top: 10px;
+	    border: 1px solid grey;
+	    border-radius: 5px;
+	    padding: 8px;
+	    text-align: center;
+	    background: whitesmoke;
+	    box-shadow: 8px 8px 3px #888888;
+	    min-height: 200px;
+	}
+	#custom_form_outline input {
+	    width: 50%;
+	    margin-left: 25%;
+	    margin-top:2%;
+	}
+	form label{
+		margin-top: 5%;
+	}
+	form span {
+		color: red;
+	}
+	form p {
+		/*margin-top : 8%;*/
+		text-transform: capitalize;
+		font-style: italic;
+	}
+	.validation_message{
+		margin-top : 8%;
+		text-transform: capitalize;
+		font-style: italic;
+	}
+	form button {
+		background: whitesmoke !important;
+		border: 1px solid grey !important;
+		color: grey !important;
+		border-radius: 0px !important;
+		font-weight: normal;
+		text-transform: capitalize !important;
+		width: 20%;
+		font-size: 15px !important;
+	}
+	form button:hover {
+		background: grey !important;
+		color: whitesmoke !important;
+		border: 1px solid grey !important;
+	}
+	@media only screen and (max-width: 320px)  {
+		form button {
+			text-align: center !important;
+			font-size: 10px !important;
+			padding: 10px 2px !important;
+		}
+	}
+</style>
+<div class="row" ng-controller = "uploadController">
+	<div class="container">
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<form role="form" action="#" method="POST" id="custom_form_outline" name= "custom_form_outline" enctype="multipart/form-data">
+				<div class="form-group">
+					<label for="daily_task_sheet">Upload File <span>*</span></label>
+					<input type="file" name="daily_task_sheet" id="daily_task_sheet" required="true" class="form-control"></input>
+				</div>
+				<button type="submit" id="btn_upld_sheet" class="btn btn-info">upload</button>
+				<p class="validation_message"><i class="fa fa-info-circle" aria-hidden="true"></i> all <span>*</span> marked field is mandetory</p>
+				<p><i class="fa fa-info-circle" aria-hidden="true"></i> Google Spread sheet file upload is only recomended and file name should be the date.</p>
+			</form>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	app.controller('uploadController', ['$scope', '$http', '$window', function($scope, $http, $window) {
+		
+	}]);
+</script>
