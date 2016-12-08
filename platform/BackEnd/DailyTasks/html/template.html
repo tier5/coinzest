@@ -115,8 +115,34 @@
 <div class="flex_container">
 	<div>
 		<?=$t->contents_html?>
+		<?php 
+			$var = $_SESSION;
+			$id = $var['user_id'];
+		?>
 	</div>
 </div>
 
 
 </div>
+<script type="text/javascript">
+	$(function(){
+		var userid = <?php echo $id;?>;
+		//console.log(userid);
+		$.ajax({
+      	url: "/platform/GetSheetData",
+      	type: "POST",
+      	data:{userid:userid},
+      	success: function(response) {
+      		var response = $.parseJSON(response);
+      		//console.log(response);
+      		for(var i =0; i < response.length; i++){
+      			/*response[i].bmh_user_id*/
+      			$('#show_data').append('<tr><td>'+response[i].update_date+'</td><td>'+response[i].name+'</td><td>'+response[i].bmh_user_id+'</td><td>'+response[i].task_one+'</td><td>'+response[i].modarator_comment_task_one+'</td><td>'+response[i].task_two+'</td><td>'+response[i].modarator_comment_task_two+'</td></tr>');
+      		}
+
+      		/*$('#show_data').append('<tr><td>'+response.update_date+'<td></tr>');*/
+      	}
+      });
+			
+	});
+</script>

@@ -57,4 +57,24 @@
 		}
         unlink('../file_uploads/'.$update_date.'.xls');
     } 
+    public function getEmail($id) {
+        $sql = "SELECT login FROM wp_users WHERE ID = ".$id;
+        $get_email = $this->db->query($sql);
+        return $get_email->row();
+    }
+    public function getTableData($email) {
+        if (isset($email) && $email!= null && $email->login) {
+            $qry = "SELECT * FROM file_upload_log WHERE bmh_user_id = '".$email->login."'";
+            $get_data = $this->db->query($qry);
+            if ($get_data->num_rows() > 0) {
+                return $get_data->result();
+            } else {
+                //returns null value
+                return 0;
+            }
+        } else {
+            //no email
+            return -1;
+        }
+    }
  }
