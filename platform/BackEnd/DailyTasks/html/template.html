@@ -128,21 +128,53 @@
 	$(function(){
 		var userid = <?php echo $id;?>;
 		//console.log(userid);
+		var task_one_jq = "";
+		var task_two_jq = "";
+		var progress = 0;
 		$.ajax({
-      	url: "/platform/GetSheetData",
-      	type: "POST",
-      	data:{userid:userid},
-      	success: function(response) {
-      		var response = $.parseJSON(response);
-      		//console.log(response);
-      		for(var i =0; i < response.length; i++){
-      			/*response[i].bmh_user_id*/
-      			$('#show_data').append('<tr><td>'+response[i].update_date+'</td><td>'+response[i].name+'</td><td>'+response[i].bmh_user_id+'</td><td>'+response[i].task_one+'</td><td>'+response[i].modarator_comment_task_one+'</td><td>'+response[i].task_two+'</td><td>'+response[i].modarator_comment_task_two+'</td></tr>');
+      		url: "/platform/GetSheetData",
+      		type: "POST",
+      		data:{userid:userid},
+      		success: function(response) {
+	      		switch(response) {
+	      			case "No Id":
+	      				console.log("No user id found!");
+	      			break;
+	      			case "No Data Related To user id":
+	      				console.log("No Data Related To user id!");
+	      			break;
+	      			case "No Data in spread sheet":
+	      				console.log("No Data in spread sheet!");
+	      			break;
+	      			default:
+	      				var response = $.parseJSON(response);
+	      				if (response.length > 0) {
+		      				for(var i =0; i < response.length; i++){
+		      					task_one_jq = response[i].task_one;
+		      					task_one_jq = task_one_jq == 1 ? "DONE" : "Pending or rejected";
+		      					task_two_jq = response[i].task_two;
+		      					task_two_jq = task_two_jq == 1 ? "DONE" : "Pending or rejected";
+		      					progress += parseFloat(response[i].task_one == 1 ? 3.33 : 0);
+		      					progress += parseFloat(response[i].task_two == 1 ? 3.33 : 0);
+				      			$('#show_data').append('<tr><td>'+response[i].update_date+'</td><td>'+response[i].name+'</td><td>'+response[i].bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response[i].modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response[i].modarator_comment_task_two+'</td></tr>');
+				      		}
+				      		progress = progress.toFixed(2);
+				      		console.log(progress);
+				      		_generateProgress(progress);
+	      				} else {
+	      					console.log("Some internal error occured! debug defult case");
+	      				}
+	      			break;
+	      		}
       		}
-
-      		/*$('#show_data').append('<tr><td>'+response.update_date+'<td></tr>');*/
-      	}
-      });
-			
+      	});
 	});
+	function _generateProgress(value) {
+		//progress bar 
+		$('.progress .progress-bar').css("width",function() {
+			$(this).attr("aria-valuenow", value);
+			$('.val').text(value+"%");
+	        return $(this).attr("aria-valuenow") + "%";
+	    });
+	}
 </script>

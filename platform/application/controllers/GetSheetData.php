@@ -10,18 +10,23 @@ class GetSheetData extends CI_Controller {
 
 	public function index() { 
 		$id = $this->input->post('userid');
-		$this->load->model('daily_tasks_file_upload');
-		$query_res = $this->daily_tasks_file_upload->getEmail($id);
-		//print_r($query_res);
-		if ($query_res != null) {
-			$query_res_sec =  $this->daily_tasks_file_upload->getTableData($query_res);
-			echo json_encode($query_res_sec);
-			/*foreach ($query_res_sec as $key => $value) {
-				print_r($value);
-			}*/
+		if ($id != null) {
+			$this->load->model('daily_tasks_file_upload');
+			$query_res = $this->daily_tasks_file_upload->getEmail($id);
+			if ($query_res != null) {
+				$query_res_sec =  $this->daily_tasks_file_upload->getTableData($query_res);
+				if (count($query_res_sec) > 0) {
+					echo json_encode($query_res_sec);
+				} else {
+					//spread sheet there is no data
+					echo "No Data in spread sheet";
+				}
+			} else {
+				//no data related to user id
+				echo "No Data Related To user id";
+			}
 		} else {
-			//no data related to user id
-			echo -1;
+			echo "No Id";
 		}
 	}
 
