@@ -154,8 +154,8 @@
 		      					task_one_jq = task_one_jq == 1 ? "DONE" : "Pending or rejected";
 		      					task_two_jq = response[i].task_two;
 		      					task_two_jq = task_two_jq == 1 ? "DONE" : "Pending or rejected";
-		      					progress += parseFloat(response[i].task_one == 1 ? 3.33 : 0);
-		      					progress += parseFloat(response[i].task_two == 1 ? 3.33 : 0);
+		      					progress += parseFloat(response[i].modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0);
+		      					progress += parseFloat(response[i].modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0);
 				      			$('#show_data').append('<tr><td>'+response[i].update_date+'</td><td>'+response[i].name+'</td><td>'+response[i].bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response[i].modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response[i].modarator_comment_task_two+'</td></tr>');
 				      		}
 				      		progress = progress.toFixed(2);

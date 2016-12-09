@@ -53,15 +53,15 @@
 		}
 	}
 </style>
-<!-- <div class="alert alert-success">
-	<p>Hey this is success!</p>
+<div class="alert alert-success" style="display: none;" id="success">
+	
 </div>
-<div class="alert alert-danger">
-	<p>Hey this is danger!</p>
+<div class="alert alert-danger" style="display: none;" id="fail">
+	
 </div>
-<div class="alert alert-warning">
-	<p>Hey this is warning!</p>
-</div> -->
+<div class="alert alert-warning" style="display: none;" id="warning">
+	
+</div>
 <div class="row">
 	<div class="container">
 		<div class="col-md-12 col-sm-12 col-xs-12">
@@ -73,7 +73,46 @@
 				<button type="submit" id="btn_upld_sheet" class="btn btn-info">upload</button>
 				<p class="validation_message"><i class="fa fa-info-circle" aria-hidden="true"></i> all <span>*</span> marked field is mandetory</p>
 				<p><i class="fa fa-info-circle" aria-hidden="true"></i> Google Spread sheet file upload is only recomended and file name should be the date.</p>
+				<?php echo $testing;?>
 			</form>
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+	$(function(){
+		$.ajax({
+			url: '/platform/uploadspreadsheet/showError',
+			type:"POST",
+			success : function(data) {
+				//console.log(data);
+				//-1, 0, 1, 2, 500
+				switch(parseInt(data)){
+				case 1 :
+						$('#success').show();
+						$('#success').html('<p>Successfully saved records!</p>');
+					break;
+				case -1:
+						$('#warning').show();
+						$('#warning').html('<p>File already uploaded duplicate not allowed!</p>');
+					break;
+				case 0:
+						$('#warning').show();
+						$('#warning').html('<p>Failed to keep track record of file!</p>');
+					break;
+				case 2:
+						$('#fail').show();
+						$('#fail').html('<p>Bad File extension only xls allowed!</p>');
+					break;
+				case 500:
+						$('#fail').show();
+						$('#fail').html('<p>Internal server error!</p>');
+					break;
+				default:
+						console.log("No Such Case!");
+					break;
+				}
+				//console.log(data);
+			}
+		});
+	});
+</script>

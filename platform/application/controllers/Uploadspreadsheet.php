@@ -6,6 +6,7 @@ class Uploadspreadsheet extends CI_Controller {
 		parent::__construct();
 		$this->load->helper(array('url'));
 		$this->load->library(array('user_agent', 'read_excel/Spreadsheet_Excel_Reader', 'session'));
+		$testing = 1;
 	}
 
 	public function index() {
@@ -29,22 +30,25 @@ class Uploadspreadsheet extends CI_Controller {
 			switch ($query_res) {
 				case 1:
 					//success
-					$_SESSION["response"] = 1;
-					//$this->session->set_userdata('response',1);
+					//$_SESSION["response"] = 1;
+					$this->session->set_flashdata('response', 1);
 					break;
 				case -1:
 					//file already uploaded
-					$_SESSION["response"] = -1;
+					//$_SESSION["response"] = -1;
+					$this->session->set_flashdata('response', -1);
 					//$this->session->set_userdata('response',-1);
 					break;
 				case 0:
 					//fail to insert 2nd rec
-					$_SESSION["response"] = 0;
+					//$_SESSION["response"] = 0;
+					$this->session->set_flashdata('response', 0);
 					//$this->session->set_userdata('response',0);
 					break;
 				default:
 					// internal server error
-					$_SESSION["response"] = 500;
+					//$_SESSION["response"] = 500;
+					$this->session->set_flashdata('response', 500);
 					//$this->session->set_userdata('response',500);
 					break;
 			}
@@ -53,10 +57,16 @@ class Uploadspreadsheet extends CI_Controller {
 			/*print_r($this->session->userdata());
 			exit();*/
 		} else {
-			//bad input here xlsx allowed
-			$_SESSION["response"] = 2;
+			//bad input here xls allowed
+			//$_SESSION["response"] = 2;
+			$this->session->set_flashdata('response', 2);
 			//$this->session->set_userdata('response',2);
 			redirect($this->agent->referrer());
 		}
+	}
+	public function showError() {
+		//1->ok, 2->bad file extension, -1 file already uploaded, 0->failed to insert second rec ,500 internal server error
+		print_r($_SESSION['response']);
+		//unset($_SESSION['response']);
 	}
 }
