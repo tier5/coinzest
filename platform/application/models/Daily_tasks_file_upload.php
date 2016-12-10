@@ -46,8 +46,7 @@
 		}
 		$insert_date = "INSERT INTO file_on_date(upload_date,is_active) VALUES ('".$update_date."', 1)";
 		$run_query = $this->db->query($insert_date);
-		/*print_r($run_query);
-		exit();*/
+        unlink('../file_uploads/'.$update_date.'.xls');
 		if ($run_query == 1) {
 			return 1; //this is only valid
 		} else {
@@ -55,7 +54,6 @@
 			//debug the sql error here dev guide -Tier5 llc
 			//$error = $this->db->error(); print $error;
 		}
-        unlink('../file_uploads/'.$update_date.'.xls');
     } 
     public function getEmail($id) {
         $sql = "SELECT login FROM wp_users WHERE ID = ".$id;
