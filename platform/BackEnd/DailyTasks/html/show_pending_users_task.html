@@ -72,8 +72,8 @@
 				</div>
 				<button type="submit" id="btn_upld_sheet" class="btn btn-info">upload</button>
 				<p class="validation_message"><i class="fa fa-info-circle" aria-hidden="true"></i> all <span>*</span> marked field is mandetory</p>
-				<p><i class="fa fa-info-circle" aria-hidden="true"></i> Google Spread sheet file upload is only recomended and file name should be the date.</p>
-				<?php echo $testing;?>
+				<p><i class="fa fa-info-circle" aria-hidden="true"></i> File extension <span style="color: red;">.xls</span> recomended and file name should be the date.</p>
+				<input type="hidden" name="user_id_session"  value="<?php print_r($_SESSION['user_id']);?>"></input>
 			</form>
 		</div>
 	</div>

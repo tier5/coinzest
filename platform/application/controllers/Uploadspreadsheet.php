@@ -10,7 +10,7 @@ class Uploadspreadsheet extends CI_Controller {
 	}
 
 	public function index() {
-		/*print_r($_COOKIE);
+		/*print_r();
 		exit();*/
 		$this->load->model('daily_tasks_file_upload');
 		$file_name = array();
@@ -23,7 +23,8 @@ class Uploadspreadsheet extends CI_Controller {
         	move_uploaded_file($tmp_name, "../file_uploads/$name");
         	error_reporting(E_ALL ^ E_NOTICE);
 			$data = new Spreadsheet_Excel_Reader("../file_uploads/".$name);
-			$query_res = $this->daily_tasks_file_upload->index($data, $file_name[0]);
+			$user_id = $_POST['user_id_session'];
+			$query_res = $this->daily_tasks_file_upload->index($data, $file_name[0], $user_id);
 			/*print_r($query_res);
 			exit();*/
 			session_start();

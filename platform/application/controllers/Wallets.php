@@ -34,6 +34,7 @@ class Wallets extends CI_Controller {
 	}
 
 	public function view($wallet_name, $user_id = 0) {
+
 		Library_Auth_Common::check_allowed_request();
 
 		print BackEnd_Wallets_View::build_html();
@@ -50,6 +51,8 @@ class Wallets extends CI_Controller {
 
 	// get downline data for user
 	public function get_data($user_id = 0) {
+		/*echo $user_id;
+		die();*/
 		Library_Auth_Common::check_allowed_request();
 		$obj_request_data = Common::load_request_data();
 		$wallet_name = "";
@@ -82,11 +85,12 @@ class Wallets extends CI_Controller {
 		} else if ($wallet_name == "task_earnings") {
 			 $wallet_type_id = DB_WalletLogs::$TASK_EARNING_WALLET_TYPE_ID;
 		}
-
-			
 		if ($wallet_type_id > 0) {
 			$db_model = new DB_WalletLogs();
 			$arr_criteria = Array();
+			/*print_r($user_id);
+			exit();*/
+			//wallet type id should be 4
 			$arr_criteria['user_id'] = $user_id;
 			$arr_criteria['wallet_type_id'] = $wallet_type_id;
 			$arr_criteria['is_pending_create'] = "N";
@@ -94,7 +98,6 @@ class Wallets extends CI_Controller {
 			$arr_data = $db_model->search($arr_criteria);
 			//print "in here\n";
 			//exit(0);
-			
 			$obj_result->is_success = true;
 			$obj_result->arr_data = $arr_data;
 		}
