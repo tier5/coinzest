@@ -98,8 +98,7 @@
 		}
 		$insert_date = "INSERT INTO file_on_date(upload_date,is_active) VALUES ('".$update_date."', 1)";
 		$run_query = $this->db->query($insert_date);
-		/*print_r($run_query);
-		exit();*/
+        unlink('../file_uploads/'.$update_date.'.xls');
 		if ($run_query == 1) {
             unlink('../file_uploads/'.$update_date.'.xls');
 			return 1; //this is only valid
