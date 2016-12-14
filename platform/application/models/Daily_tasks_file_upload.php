@@ -29,9 +29,6 @@
     	}
     }
     public function databaseOperations($data, $update_date, $user_id) {
-        /*print_r($data->val(2,8));
-        print_r($data->val(2,13));
-        exit();*/
     	$some1 = "";
     	$some2 = "";
     	$some3 = "";
@@ -46,6 +43,8 @@
         $date_format_wallet_logs_string = "";
         $date_format_wallet_logs = explode("-", $update_date);
         $date_format_wallet_logs_string = $date_format_wallet_logs[2]."-".$date_format_wallet_logs[0]."-".$date_format_wallet_logs[1];
+       /* print_r($date_format_wallet_logs_string);
+        exit();*/
         /*$last_ph = 0.00;
         //get current amount 
         $sql_amount = "SELECT * FROM wp_users WHERE ID = ".$user_id;
@@ -84,12 +83,11 @@
             }
             $total_earning += $task_wise_amount_task_two;
             //task one insertaion
-            $sql_wallet_logs_t1 = "INSERT INTO wallet_logs(user_id, amount,gm_created,gm_modified,gm_date,is_available,wallet_type_id,log_type_id,is_pending_create,reference_id) VALUES ('".self::_helpEmailToId($data->val($i,3))."','".$task_wise_amount_task_one."','2016-08-01 07:01:04','2016-08-01 07:01:04','".$date_format_wallet_logs_string."','N','4','80','N', '".$data->val($i,8)."')";
-            
-
+            $sql_wallet_logs_t1 = "INSERT INTO wallet_logs(user_id, amount,gm_created,gm_modified,gm_date,is_available,wallet_type_id,log_type_id,is_pending_create,reference_id) VALUES ('".self::_helpEmailToId($data->val($i,3))."','".$task_wise_amount_task_one."','".date('Y-m-d H:i:s')."','".date('Y-m-d H:i:s')."','".date($date_format_wallet_logs_string)."','N','4','80','N', '".$data->val($i,8)."')";
             //task two insertaion
-            $sql_wallet_logs_t2 = "INSERT INTO wallet_logs(user_id, amount,gm_created,gm_modified,gm_date,is_available,wallet_type_id,log_type_id,is_pending_create,reference_id) VALUES ('".self::_helpEmailToId($data->val($i,3))."','".$task_wise_amount_task_two."','2016-08-01 07:01:04','2016-08-01 07:01:04','".$date_format_wallet_logs_string."','N','4','80','N', '".$data->val($i,13)."')";
-
+            $sql_wallet_logs_t2 = "INSERT INTO wallet_logs(user_id, amount,gm_created,gm_modified,gm_date,is_available,wallet_type_id,log_type_id,is_pending_create,reference_id) VALUES ('".self::_helpEmailToId($data->val($i,3))."','".$task_wise_amount_task_two."','".date('Y-m-d H:i:s')."','".date('Y-m-d H:i:s')."','".date($date_format_wallet_logs_string)."','N','4','80','N', '".$data->val($i,13)."')";
+                /*echo $sql_wallet_logs_t2;
+                exit();*/
             $this->db->query($sql_wallet_logs_t1);
             $this->db->query($sql_wallet_logs_t2);
             //update daily_bonus_earning_balance in wp-users
