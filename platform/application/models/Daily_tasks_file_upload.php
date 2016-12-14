@@ -39,10 +39,10 @@
         $task_wise_amount_task_one = 0.00;
         $task_wise_amount_task_two = 0.00;
         $current_ph = 0.00;
-        $date_format_wallet_logs = array();
+        /*$date_format_wallet_logs = array();
         $date_format_wallet_logs_string = "";
         $date_format_wallet_logs = explode("-", $update_date);
-        $date_format_wallet_logs_string = $date_format_wallet_logs[2]."-".$date_format_wallet_logs[0]."-".$date_format_wallet_logs[1];
+        $date_format_wallet_logs_string = $date_format_wallet_logs[2]."-".$date_format_wallet_logs[0]."-".$date_format_wallet_logs[1];*/
        /* print_r($date_format_wallet_logs_string);
         exit();*/
         /*$last_ph = 0.00;
@@ -83,9 +83,9 @@
             }
             $total_earning += $task_wise_amount_task_two;
             //task one insertaion
-            $sql_wallet_logs_t1 = "INSERT INTO wallet_logs(user_id, amount,gm_created,gm_modified,gm_date,is_available,wallet_type_id,log_type_id,is_pending_create,reference_id) VALUES ('".self::_helpEmailToId($data->val($i,3))."','".$task_wise_amount_task_one."','".date('Y-m-d H:i:s')."','".date('Y-m-d H:i:s')."','".date($date_format_wallet_logs_string)."','N','4','80','N', '".$data->val($i,8)."')";
+            $sql_wallet_logs_t1 = "INSERT INTO wallet_logs(user_id, amount,gm_created,gm_modified,gm_date,is_available,wallet_type_id,log_type_id,is_pending_create,reference_id) VALUES ('".self::_helpEmailToId($data->val($i,3))."','".$task_wise_amount_task_one."','".date('Y-m-d H:i:s')."','".date('Y-m-d H:i:s')."','".date('Y-m-d',strtotime($update_date))."','N','4','80','N', '".$data->val($i,8)."')";
             //task two insertaion
-            $sql_wallet_logs_t2 = "INSERT INTO wallet_logs(user_id, amount,gm_created,gm_modified,gm_date,is_available,wallet_type_id,log_type_id,is_pending_create,reference_id) VALUES ('".self::_helpEmailToId($data->val($i,3))."','".$task_wise_amount_task_two."','".date('Y-m-d H:i:s')."','".date('Y-m-d H:i:s')."','".date($date_format_wallet_logs_string)."','N','4','80','N', '".$data->val($i,13)."')";
+            $sql_wallet_logs_t2 = "INSERT INTO wallet_logs(user_id, amount,gm_created,gm_modified,gm_date,is_available,wallet_type_id,log_type_id,is_pending_create,reference_id) VALUES ('".self::_helpEmailToId($data->val($i,3))."','".$task_wise_amount_task_two."','".date('Y-m-d H:i:s')."','".date('Y-m-d H:i:s')."','".date('Y-m-d',strtotime($update_date))."','N','4','80','N', '".$data->val($i,13)."')";
                 /*echo $sql_wallet_logs_t2;
                 exit();*/
             $this->db->query($sql_wallet_logs_t1);
@@ -96,7 +96,7 @@
 		}
 		$insert_date = "INSERT INTO file_on_date(upload_date,is_active) VALUES ('".$update_date."', 1)";
 		$run_query = $this->db->query($insert_date);
-        unlink('../file_uploads/'.$update_date.'.xls');
+        //unlink('../file_uploads/'.$update_date.'.xls');
 		if ($run_query == 1) {
             unlink('../file_uploads/'.$update_date.'.xls');
 			return 1; //this is only valid
