@@ -126,11 +126,10 @@
 </div>
 <script type="text/javascript">
 	$(function(){
+		//get current month and highlight that table
+		var month  = _returnMonth();
+		//var progress = 0;
 		var userid = <?php echo $id;?>;
-		//console.log(userid);
-		var task_one_jq = "";
-		var task_two_jq = "";
-		var progress = 0;
 		$.ajax({
       		url: "/platform/GetSheetData",
       		type: "POST",
@@ -148,19 +147,17 @@
 	      			break;
 	      			default:
 	      				var response = $.parseJSON(response);
+	      				//console.log(response);
+	      				//return;
 	      				if (response.length > 0) {
+
 		      				for(var i =0; i < response.length; i++){
-		      					task_one_jq = response[i].task_one;
-		      					task_one_jq = task_one_jq == 1 ? "DONE" : "Pending or rejected";
-		      					task_two_jq = response[i].task_two;
-		      					task_two_jq = task_two_jq == 1 ? "DONE" : "Pending or rejected";
-		      					progress += parseFloat(response[i].modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0);
-		      					progress += parseFloat(response[i].modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0);
-				      			$('#show_data').append('<tr><td>'+response[i].update_date+'</td><td>'+response[i].name+'</td><td>'+response[i].bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response[i].modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response[i].modarator_comment_task_two+'</td></tr>');
+		      					//progress += parseFloat(response[i].modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0);
+								//progress += parseFloat(response[i].modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0);
+		      					_showTableData(response[i].update_date.split('-')[1], response[i]);
 				      		}
-				      		progress = progress.toFixed(2);
-				      		console.log(progress);
-				      		_generateProgress(progress);
+				      		//progress = progress.toFixed(2);
+							//_generateProgress(progress, month);
 	      				} else {
 	      					console.log("Some internal error occured! debug defult case");
 	      				}
@@ -169,12 +166,329 @@
       		}
       	});
 	});
-	function _generateProgress(value) {
+	function _generateProgress(response, month) {
 		//progress bar 
-		$('.progress .progress-bar').css("width",function() {
-			$(this).attr("aria-valuenow", value);
-			$('.val').text(value+"%");
-	        return $(this).attr("aria-valuenow") + "%";
-	    });
+		var month = parseInt(month);
+		var progress = 0.00;
+		switch(month) {
+			case 1:
+				
+				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
+				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
+				return progress; 
+			break;
+			case 2:
+				//var progress = 0.00;
+				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
+				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
+				return progress;
+			break;
+			case 3:
+				//var progress = 0.00;
+				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
+				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
+				return progress;
+			break;
+			case 4:
+				//var progress = 0.00;
+				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
+				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
+				return progress;
+			break;
+			case 5:
+				//var progress = 0.00;
+				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
+				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
+				return progress;
+			break;
+			case 6:
+				//var progress = 0.00;
+				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
+				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
+				return progress;
+			break;
+			case 7:
+				//var progress = 0.00;
+				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
+				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
+				return progress;
+			break;
+			case 8:
+				//var progress = 0.00;
+				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
+				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
+				return progress;
+			break;
+			case 9:
+				//var progress = 0.00;
+				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
+				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
+				return progress;
+			break;
+			case 10:
+				//var progress = 0.00;
+				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
+				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
+				return progress;
+			break;
+			case 11:
+				//var progress = 0.00;
+				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
+				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
+				return progress;
+			break;
+			case 12:
+				var progress = 0.00;
+				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
+				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
+				return progress;
+			break;
+			default:
+				console.log('Error in selecting the month debug in generate progress');
+			break;
+		}
+	}
+	function _returnMonth() {
+		var month = moment().month();
+		month = month+1;
+		//console.log(month);
+		switch(month) {
+			case 1:
+				$('#tab_jan').parent().attr('style','border:5px solid #00acb3;');
+				return 1;
+			break;
+			case 2:
+				$('#tab_feb').parent().attr('style','border:5px solid #00acb3;');
+				return 2;
+			break;
+			case 3:
+				$('#tab_mar').parent().attr('style','border:5px solid #00acb3;');
+				return 3;
+			break;
+			case 4:
+				$('#tab_apr').parent().attr('style','border:5px solid #00acb3;');
+				return 4;
+			break;
+			case 5:
+				$('#tab_may').parent().attr('style','border:5px solid #00acb3;');
+				return 5;
+			break;
+			case 6:
+				$('#tab_jun').parent().attr('style','border:5px solid #00acb3;');
+				return 6;
+			break;
+			case 7:
+				$('#tab_july').parent().attr('style','border:5px solid #00acb3;');
+				return 7;
+			break;
+			case 8:
+				$('#tab_aug').parent().attr('style','border:5px solid #00acb3;');
+				return 8;
+			break;
+			case 9:
+				$('#tab_sep').parent().attr('style','border:5px solid #00acb3;');
+				return 9;
+			break;
+			case 10:
+				$('#tab_oct').parent().attr('style','border:5px solid #00acb3;');
+				return 10;
+			break;
+			case 11:
+				$('#tab_nov').parent().attr('style','border:5px solid #00acb3;');
+				return 11;
+			break;
+			case 12:
+				$('#tab_dec').parent().attr('style','border:5px solid #00acb3;');
+				return 12;
+			break;
+			default:
+				console.log('Error in selecting the month debug in return month');
+			break;
+		}
+	}
+	function _showTableData(month, response) {
+		var month = parseInt(month);
+		var progressData = 0.00;
+		var previousValue = 0.00;
+		var newValue = 0.00;
+		var task_one_jq = "";
+		var task_two_jq = "";
+		task_one_jq = response.task_one;
+		task_one_jq = task_one_jq == 1 ? "DONE" : "Pending or rejected";
+		task_two_jq = response.task_two;
+		task_two_jq = task_two_jq == 1 ? "DONE" : "Pending or rejected";
+		switch(month) {
+			case 1:
+			progressData = _generateProgress(response, 1);
+				previousValue = $('.prog_dec .val').text();
+				console.log(previousValue);
+				progressData = parseFloat(progressData);
+				previousValue = parseFloat(previousValue);
+				newValue = previousValue+progressData;
+				$('.progress .prog_dec').css("width",function(){
+					$(this).attr("aria-valuenow", newValue);
+					$('.val').text(newValue+"%");
+			        return $(this).attr("aria-valuenow") + "%";
+			    });
+			$('#tab_jan #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+			break;
+			case 2:
+			progressData = _generateProgress(response, 2);
+				previousValue = $('.prog_dec .val').text();
+				console.log(previousValue);
+				progressData = parseFloat(progressData);
+				previousValue = parseFloat(previousValue);
+				newValue = previousValue+progressData;
+				$('.progress .prog_dec').css("width",function(){
+					$(this).attr("aria-valuenow", newValue);
+					$('.val').text(newValue+"%");
+			        return $(this).attr("aria-valuenow") + "%";
+			    });
+				$('#tab_feb #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+			break;
+			case 3:
+			progressData = _generateProgress(response, 3);
+				previousValue = $('.prog_dec .val').text();
+				console.log(previousValue);
+				progressData = parseFloat(progressData);
+				previousValue = parseFloat(previousValue);
+				newValue = previousValue+progressData;
+				$('.progress .prog_dec').css("width",function(){
+					$(this).attr("aria-valuenow", newValue);
+					$('.val').text(newValue+"%");
+			        return $(this).attr("aria-valuenow") + "%";
+			    });
+				$('#tab_mar #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+			break;
+			case 4:
+			progressData = _generateProgress(response, 4);
+				previousValue = $('.prog_dec .val').text();
+				console.log(previousValue);
+				progressData = parseFloat(progressData);
+				previousValue = parseFloat(previousValue);
+				newValue = previousValue+progressData;
+				$('.progress .prog_dec').css("width",function(){
+					$(this).attr("aria-valuenow", newValue);
+					$('.val').text(newValue+"%");
+			        return $(this).attr("aria-valuenow") + "%";
+			    });
+				$('#tab_apr #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+			break;
+			case 5:
+				progressData = _generateProgress(response, 5);
+				previousValue = $('.prog_dec .val').text();
+				console.log(previousValue);
+				progressData = parseFloat(progressData);
+				previousValue = parseFloat(previousValue);
+				newValue = previousValue+progressData;
+				$('.progress .prog_dec').css("width",function(){
+					$(this).attr("aria-valuenow", newValue);
+					$('.val').text(newValue+"%");
+			        return $(this).attr("aria-valuenow") + "%";
+			    });
+				$('#tab_may #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+			break;
+			case 6:
+				progressData = _generateProgress(response, 6);
+				previousValue = $('.prog_dec .val').text();
+				console.log(previousValue);
+				progressData = parseFloat(progressData);
+				previousValue = parseFloat(previousValue);
+				newValue = previousValue+progressData;
+				$('.progress .prog_dec').css("width",function(){
+					$(this).attr("aria-valuenow", newValue);
+					$('.val').text(newValue+"%");
+			        return $(this).attr("aria-valuenow") + "%";
+			    });
+				$('#tab_jun #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+			break;
+			case 7:
+				progressData = _generateProgress(response, 7);
+				previousValue = $('.prog_dec .val').text();
+				console.log(previousValue);
+				progressData = parseFloat(progressData);
+				previousValue = parseFloat(previousValue);
+				newValue = previousValue+progressData;
+				$('.progress .prog_dec').css("width",function(){
+					$(this).attr("aria-valuenow", newValue);
+					$('.val').text(newValue+"%");
+			        return $(this).attr("aria-valuenow") + "%";
+			    });
+				$('#tab_july #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+			break;
+			case 8:
+				progressData = _generateProgress(response, 8);
+				previousValue = $('.prog_dec .val').text();
+				console.log(previousValue);
+				progressData = parseFloat(progressData);
+				previousValue = parseFloat(previousValue);
+				newValue = previousValue+progressData;
+				$('.progress .prog_dec').css("width",function(){
+					$(this).attr("aria-valuenow", newValue);
+					$('.val').text(newValue+"%");
+			        return $(this).attr("aria-valuenow") + "%";
+			    });
+				$('#tab_aug #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+			break;
+			case 9:
+				progressData = _generateProgress(response, 9);
+				previousValue = $('.prog_dec .val').text();
+				console.log(previousValue);
+				progressData = parseFloat(progressData);
+				previousValue = parseFloat(previousValue);
+				newValue = previousValue+progressData;
+				$('.progress .prog_dec').css("width",function(){
+					$(this).attr("aria-valuenow", newValue);
+					$('.val').text(newValue+"%");
+			        return $(this).attr("aria-valuenow") + "%";
+			    });
+				$('#tab_sep #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+			break;
+			case 10:
+				progressData = _generateProgress(response, 10);
+				previousValue = $('.prog_dec .val').text();
+				console.log(previousValue);
+				progressData = parseFloat(progressData);
+				previousValue = parseFloat(previousValue);
+				newValue = previousValue+progressData;
+				$('.progress .prog_dec').css("width",function(){
+					$(this).attr("aria-valuenow", newValue);
+					$('.val').text(newValue+"%");
+			        return $(this).attr("aria-valuenow") + "%";
+			    });
+				$('#tab_oct #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+			break;
+			case 11:
+				progressData = _generateProgress(response, 11);
+				previousValue = $('.prog_dec .val').text();
+				console.log(previousValue);
+				progressData = parseFloat(progressData);
+				previousValue = parseFloat(previousValue);
+				newValue = previousValue+progressData;
+				$('.progress .prog_dec').css("width",function(){
+					$(this).attr("aria-valuenow", newValue);
+					$('.val').text(newValue+"%");
+			        return $(this).attr("aria-valuenow") + "%";
+			    });
+				$('#tab_nov #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+			break;
+			case 12:
+				progressData = _generateProgress(response, 12);
+				previousValue = $('.prog_dec .val').text();
+				console.log(previousValue);
+				progressData = parseFloat(progressData);
+				previousValue = parseFloat(previousValue);
+				newValue = previousValue+progressData;
+				$('.progress .prog_dec').css("width",function(){
+					$(this).attr("aria-valuenow", newValue);
+					$('.val').text(newValue+"%");
+			        return $(this).attr("aria-valuenow") + "%";
+			    });
+				$('#tab_dec #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+			break;
+			default:
+				console.log('Error in putting data');
+			break;
+		}
 	}
 </script>

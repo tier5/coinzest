@@ -29,26 +29,326 @@
   transition-duration: 2s;
   padding: 1px;
 }
+.custom-month-table {
+    border: 1px solid;
+    margin-left: 1px;
+    display: inline-block;
+    margin-top: 4px;
+    width: 100%;
+    border-radius: 9px;
+    border-color: #00acb3;
+    background: whitesmoke;
+}
+/*.custom-month-table-first {
+  margin-top: 1px !important;
+}
+.custom-month-table-last {
+  margin-bottom: 3px !important; 
+}*/
 </style>
 <?php session_start();?>
-<div class="progress skill-bar">
-    <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" >
-        <span class="skill"><i class="val"></i></span>
+<div class="row">
+  <div class="container" style="margin-bottom: 10px;">
+    <div class="col-md-12">
+
+      <div class="col-md-6 custom-month-table">
+        <p>January</p>
+        <div class="progress skill-bar">
+          <div class="progress-bar progress-bar-warning prog_jan" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" >
+              <span class="skill"><i class="val">0</i></span>
+          </div>
+        </div>
+        <table class="table table-bordered" id="tab_jan">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Task one</th>
+              <th>Status</th>
+              <th>Task two</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="show_data">
+            
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6 custom-month-table">
+        <p>February</p>
+        <div class="progress skill-bar">
+          <div class="progress-bar progress-bar-warning prog_feb" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" >
+              <span class="skill"><i class="val">0</i></span>
+          </div>
+        </div>
+        <table class="table table-bordered" id="tab_feb">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Task one</th>
+              <th>Status</th>
+              <th>Task two</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="show_data">
+            
+          </tbody>
+        </table>
+      </div>
     </div>
+    <div class="col-md-12">
+      <div class="col-md-6 custom-month-table">
+        <p>March</p>
+        <div class="progress skill-bar">
+          <div class="progress-bar progress-bar-warning prog_mar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" >
+              <span class="skill"><i class="val">0</i></span>
+          </div>
+        </div>
+        <table class="table table-bordered" id="tab_mar">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Task one</th>
+              <th>Status</th>
+              <th>Task two</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="show_data">
+            
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6 custom-month-table">
+        <p>April</p>
+        <div class="progress skill-bar">
+          <div class="progress-bar progress-bar-warning prog_apr" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" >
+              <span class="skill"><i class="val">0</i></span>
+          </div>
+        </div>
+        <table class="table table-bordered" id="tab_apr">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Task one</th>
+              <th>Status</th>
+              <th>Task two</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="show_data">
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="col-md-6 custom-month-table">
+        <p>May</p>
+        <div class="progress skill-bar">
+          <div class="progress-bar progress-bar-warning prog_may" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" >
+              <span class="skill"><i class="val">0</i></span>
+          </div>
+        </div>
+        <table class="table table-bordered" id="tab_may">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Task one</th>
+              <th>Status</th>
+              <th>Task two</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="show_data">
+            
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6 custom-month-table">
+        <p>June</p>
+        <div class="progress skill-bar">
+          <div class="progress-bar progress-bar-warning prog_jun" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" >
+              <span class="skill"><i class="val">0</i></span>
+          </div>
+        </div>
+        <table class="table table-bordered" id="tab_jun">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Task one</th>
+              <th>Status</th>
+              <th>Task two</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="show_data">
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="col-md-6 custom-month-table">
+        <p>July</p>
+        <div class="progress skill-bar">
+          <div class="progress-bar progress-bar-warning prog_july" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" >
+              <span class="skill"><i class="val">0</i></span>
+          </div>
+        </div>
+        <table class="table table-bordered" id="tab_july">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Task one</th>
+              <th>Status</th>
+              <th>Task two</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="show_data">
+            
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6 custom-month-table">
+        <p>August</p>
+        <div class="progress skill-bar">
+          <div class="progress-bar progress-bar-warning prog_aug" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" >
+              <span class="skill"><i class="val">0</i></span>
+          </div>
+        </div>
+        <table class="table table-bordered" id="tab_aug">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Task one</th>
+              <th>Status</th>
+              <th>Task two</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="show_data">
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="col-md-6 custom-month-table">
+        <p>September</p>
+        <div class="progress skill-bar">
+          <div class="progress-bar progress-bar-warning prog_sep" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" >
+              <span class="skill"><i class="val">0</i></span>
+          </div>
+        </div>
+        <table class="table table-bordered" id="tab_sep">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Task one</th>
+              <th>Status</th>
+              <th>Task two</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="show_data">
+            
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6 custom-month-table">
+        <p>October</p>
+        <div class="progress skill-bar">
+          <div class="progress-bar progress-bar-warning prog_oct" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" >
+              <span class="skill"><i class="val">0</i></span>
+          </div>
+        </div>
+        <table class="table table-bordered" id="tab_oct">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Task one</th>
+              <th>Status</th>
+              <th>Task two</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="show_data">
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="col-md-6 custom-month-table">
+        <p>November</p>
+        <div class="progress skill-bar">
+          <div class="progress-bar progress-bar-warning prog_nov" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" >
+              <span class="skill"><i class="val">0</i></span>
+          </div>
+        </div>
+        <table class="table table-bordered" id="tab_nov">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Task one</th>
+              <th>Status</th>
+              <th>Task two</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="show_data">
+            
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-6 custom-month-table">
+        <p>December</p>
+        <div class="progress skill-bar">
+          <div class="progress-bar progress-bar-warning prog_dec" role="progressbar" aria-valuenow="0" aria-valuemin="" aria-valuemax="100" >
+              <span class="skill"><i class="val">0</i></span>
+          </div>
+        </div>
+        <table class="table table-bordered" id="tab_dec">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Task one</th>
+              <th>Status</th>
+              <th>Task two</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="show_data">
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
-<table class="table table-bordered" >
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Task one</th>
-      <th>Status</th>
-      <th>Task two</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tbody id="show_data">
-    
-  </tbody>
-</table>
