@@ -127,9 +127,24 @@
 <script type="text/javascript">
 	$(function(){
 		//get current month and highlight that table
+		setter_1 = 0;
+		setter_2 = 0;
+		setter_3 = 0;
+		setter_4 = 0;
+		setter_5 = 0;
+		setter_6 = 0;
+		setter_7 = 0;
+		setter_8 = 0;
+		setter_9 = 0;
+		setter_10 = 0;
+		setter_11 = 0;
+		setter_12 = 0;
+		MULTIPLIER = 3.33;
+
 		var month  = _returnMonth();
 		//var progress = 0;
 		var userid = <?php echo $id;?>;
+		
 		$.ajax({
       		url: "/platform/GetSheetData",
       		type: "POST",
@@ -152,21 +167,19 @@
 	      				if (response.length > 0) {
 
 		      				for(var i =0; i < response.length; i++){
-		      					//progress += parseFloat(response[i].modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0);
-								//progress += parseFloat(response[i].modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0);
 		      					_showTableData(response[i].update_date.split('-')[1], response[i]);
 				      		}
-				      		//progress = progress.toFixed(2);
-							//_generateProgress(progress, month);
 	      				} else {
 	      					console.log("Some internal error occured! debug defult case");
 	      				}
+	      				_setProgressBar();
 	      			break;
 	      		}
       		}
       	});
+
 	});
-	function _generateProgress(response, month) {
+	/*function _generateProgress(response, month) {
 		//progress bar 
 		var month = parseInt(month);
 		var progress = 0.00;
@@ -247,7 +260,7 @@
 				console.log('Error in selecting the month debug in generate progress');
 			break;
 		}
-	}
+	}*/
 	function _returnMonth() {
 		var month = moment().month();
 		month = month+1;
@@ -306,11 +319,13 @@
 			break;
 		}
 	}
+	
 	function _showTableData(month, response) {
 		var month = parseInt(month);
-		var progressData = 0.00;
-		var previousValue = 0.00;
-		var newValue = 0.00;
+		//var progressData = 0.00;
+		//var previousValue = 0.00;
+		//var newValue = 0.00;
+		
 		var task_one_jq = "";
 		var task_two_jq = "";
 		task_one_jq = response.task_one;
@@ -319,176 +334,185 @@
 		task_two_jq = task_two_jq == 1 ? "DONE" : "Pending or rejected";
 		switch(month) {
 			case 1:
-			progressData = _generateProgress(response, 1);
-				previousValue = $('.prog_jan .val').text();
-				console.log(previousValue);
-				progressData = parseFloat(progressData);
-				previousValue = parseFloat(previousValue);
-				newValue = previousValue+progressData;
-				$('.progress .prog_jan').css("width",function(){
-					$(this).attr("aria-valuenow", newValue);
-					$('.val').text(newValue+"%");
-			        return $(this).attr("aria-valuenow") + "%";
-			    });
+			if (response.modarator_comment_task_one == '3.33 % Earned') {
+				
+				setter_1++;
+				
+			}
+			if (response.modarator_comment_task_two == '3.33 % Earned') {
+				setter_1++;
+				
+			}
 			$('#tab_jan #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 2:
-			progressData = _generateProgress(response, 2);
-				previousValue = $('.prog_feb .val').text();
-				console.log(previousValue);
-				progressData = parseFloat(progressData);
-				previousValue = parseFloat(previousValue);
-				newValue = previousValue+progressData;
-				$('.progress .prog_feb').css("width",function(){
-					$(this).attr("aria-valuenow", newValue);
-					$('.val').text(newValue+"%");
-			        return $(this).attr("aria-valuenow") + "%";
-			    });
+				if (response.modarator_comment_task_one == '3.33 % Earned') {
+					setter_2++;
+				}
+				if (response.modarator_comment_task_two == '3.33 % Earned') {
+					setter_2++;
+				}
 				$('#tab_feb #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 3:
-			progressData = _generateProgress(response, 3);
-				previousValue = $('.prog_mar .val').text();
-				console.log(previousValue);
-				progressData = parseFloat(progressData);
-				previousValue = parseFloat(previousValue);
-				newValue = previousValue+progressData;
-				$('.progress .prog_mar').css("width",function(){
-					$(this).attr("aria-valuenow", newValue);
-					$('.val').text(newValue+"%");
-			        return $(this).attr("aria-valuenow") + "%";
-			    });
+				if (response.modarator_comment_task_one == '3.33 % Earned') {
+					setter_3++;
+				}
+				if (response.modarator_comment_task_two == '3.33 % Earned') {
+					setter_3++;
+				}
 				$('#tab_mar #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 4:
-			progressData = _generateProgress(response, 4);
-				previousValue = $('.prog_apr .val').text();
-				console.log(previousValue);
-				progressData = parseFloat(progressData);
-				previousValue = parseFloat(previousValue);
-				newValue = previousValue+progressData;
-				$('.progress .prog_apr').css("width",function(){
-					$(this).attr("aria-valuenow", newValue);
-					$('.val').text(newValue+"%");
-			        return $(this).attr("aria-valuenow") + "%";
-			    });
+				if (response.modarator_comment_task_one == '3.33 % Earned') {
+					setter_4++;
+				}
+				if (response.modarator_comment_task_two == '3.33 % Earned') {
+					setter_4++;
+				}
 				$('#tab_apr #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 5:
-				progressData = _generateProgress(response, 5);
-				previousValue = $('.prog_may .val').text();
-				console.log(previousValue);
-				progressData = parseFloat(progressData);
-				previousValue = parseFloat(previousValue);
-				newValue = previousValue+progressData;
-				$('.progress .prog_may').css("width",function(){
-					$(this).attr("aria-valuenow", newValue);
-					$('.val').text(newValue+"%");
-			        return $(this).attr("aria-valuenow") + "%";
-			    });
+				if (response.modarator_comment_task_one == '3.33 % Earned') {
+					setter_5++;
+				}
+				if (response.modarator_comment_task_two == '3.33 % Earned') {
+					setter_5++;
+				}
 				$('#tab_may #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 6:
-				progressData = _generateProgress(response, 6);
-				previousValue = $('.prog_jun .val').text();
-				console.log(previousValue);
-				progressData = parseFloat(progressData);
-				previousValue = parseFloat(previousValue);
-				newValue = previousValue+progressData;
-				$('.progress .prog_jun').css("width",function(){
-					$(this).attr("aria-valuenow", newValue);
-					$('.val').text(newValue+"%");
-			        return $(this).attr("aria-valuenow") + "%";
-			    });
+				if (response.modarator_comment_task_one == '3.33 % Earned') {
+					setter_6++;
+				}
+				if (response.modarator_comment_task_two == '3.33 % Earned') {
+					setter_6++;
+				}
 				$('#tab_jun #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 7:
-				progressData = _generateProgress(response, 7);
-				previousValue = $('.prog_july .val').text();
-				console.log(previousValue);
-				progressData = parseFloat(progressData);
-				previousValue = parseFloat(previousValue);
-				newValue = previousValue+progressData;
-				$('.progress .prog_july').css("width",function(){
-					$(this).attr("aria-valuenow", newValue);
-					$('.val').text(newValue+"%");
-			        return $(this).attr("aria-valuenow") + "%";
-			    });
+				if (response.modarator_comment_task_one == '3.33 % Earned') {
+					setter_7++;
+				}
+				if (response.modarator_comment_task_two == '3.33 % Earned') {
+					setter_7++;
+				}
 				$('#tab_july #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 8:
-				progressData = _generateProgress(response, 8);
-				previousValue = $('.prog_aug .val').text();
-				console.log(previousValue);
-				progressData = parseFloat(progressData);
-				previousValue = parseFloat(previousValue);
-				newValue = previousValue+progressData;
-				$('.progress .prog_aug').css("width",function(){
-					$(this).attr("aria-valuenow", newValue);
-					$('.val').text(newValue+"%");
-			        return $(this).attr("aria-valuenow") + "%";
-			    });
+				if (response.modarator_comment_task_one == '3.33 % Earned') {
+					setter_8++;
+				}
+				if (response.modarator_comment_task_two == '3.33 % Earned') {
+					setter_8++;
+				}
 				$('#tab_aug #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 9:
-				progressData = _generateProgress(response, 9);
-				previousValue = $('.prog_sep .val').text();
-				console.log(previousValue);
-				progressData = parseFloat(progressData);
-				previousValue = parseFloat(previousValue);
-				newValue = previousValue+progressData;
-				$('.progress .prog_sep').css("width",function(){
-					$(this).attr("aria-valuenow", newValue);
-					$('.val').text(newValue+"%");
-			        return $(this).attr("aria-valuenow") + "%";
-			    });
+				if (response.modarator_comment_task_one == '3.33 % Earned') {
+					setter_9++;
+				}
+				if (response.modarator_comment_task_two == '3.33 % Earned') {
+					setter_9++;
+				}
 				$('#tab_sep #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 10:
-				progressData = _generateProgress(response, 10);
-				previousValue = $('.prog_oct .val').text();
-				console.log(previousValue);
-				progressData = parseFloat(progressData);
-				previousValue = parseFloat(previousValue);
-				newValue = previousValue+progressData;
-				$('.progress .prog_oct').css("width",function(){
-					$(this).attr("aria-valuenow", newValue);
-					$('.val').text(newValue+"%");
-			        return $(this).attr("aria-valuenow") + "%";
-			    });
+				if (response.modarator_comment_task_one == '3.33 % Earned') {
+					setter_10++;
+				}
+				if (response.modarator_comment_task_two == '3.33 % Earned') {
+					setter_10++;
+				}
 				$('#tab_oct #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 11:
-				progressData = _generateProgress(response, 11);
-				previousValue = $('.prog_nov .val').text();
-				console.log(previousValue);
-				progressData = parseFloat(progressData);
-				previousValue = parseFloat(previousValue);
-				newValue = previousValue+progressData;
-				$('.progress .prog_nov').css("width",function(){
-					$(this).attr("aria-valuenow", newValue);
-					$('.val').text(newValue+"%");
-			        return $(this).attr("aria-valuenow") + "%";
-			    });
+				if (response.modarator_comment_task_one == '3.33 % Earned') {
+					setter_11++;
+				}
+				if (response.modarator_comment_task_two == '3.33 % Earned') {
+					setter_11++;
+				}
 				$('#tab_nov #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 12:
-				progressData = _generateProgress(response, 12);
-				previousValue = $('.prog_dec .val').text();
-				console.log(previousValue);
-				progressData = parseFloat(progressData);
-				previousValue = parseFloat(previousValue);
-				newValue = previousValue+progressData;
-				$('.progress .prog_dec').css("width",function(){
-					$(this).attr("aria-valuenow", newValue);
-					$('.val').text(newValue+"%");
-			        return $(this).attr("aria-valuenow") + "%";
-			    });
+				if (response.modarator_comment_task_one == '3.33 % Earned') {
+					setter_12++;
+					
+				}
+				if (response.modarator_comment_task_two == '3.33 % Earned') {
+					setter_12++;
+					
+				}
 				$('#tab_dec #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			default:
 				console.log('Error in putting data');
 			break;
 		}
+
 	}
+	function _setProgressBar() {
+		//console.log(MULTIPLIER);
+	$('.progress .prog_jan').css("width",function(){
+		$(this).attr("aria-valuenow", MULTIPLIER*setter_1);
+		$('.val').text(MULTIPLIER*setter_1+"%");
+		return $(this).attr("aria-valuenow") + "%";
+	});
+	$('.progress .prog_feb').css("width",function(){
+		$(this).attr("aria-valuenow", MULTIPLIER*setter_2);
+		$('.val').text(MULTIPLIER*setter_2+"%");
+		return $(this).attr("aria-valuenow") + "%";
+	});
+	$('.progress .prog_mar').css("width",function(){
+		$(this).attr("aria-valuenow", MULTIPLIER*setter_3);
+		$('.val').text(MULTIPLIER*setter_3+"%");
+		return $(this).attr("aria-valuenow") + "%";
+	});
+	$('.progress .prog_apr').css("width",function(){
+		$(this).attr("aria-valuenow", MULTIPLIER*setter_4);
+		$('.val').text(MULTIPLIER*setter_4+"%");
+		return $(this).attr("aria-valuenow") + "%";
+	});
+	$('.progress .prog_may').css("width",function(){
+		$(this).attr("aria-valuenow", MULTIPLIER*setter_5);
+		$('.val').text(MULTIPLIER*setter_5+"%");
+		return $(this).attr("aria-valuenow") + "%";
+	});
+	$('.progress .prog_jun').css("width",function(){
+		$(this).attr("aria-valuenow", MULTIPLIER*setter_6);
+		$('.val').text(MULTIPLIER*setter_6+"%");
+		return $(this).attr("aria-valuenow") + "%";
+	});
+	$('.progress .prog_jul').css("width",function(){
+		$(this).attr("aria-valuenow", MULTIPLIER*setter_7);
+		$('.val').text(MULTIPLIER*setter_7+"%");
+		return $(this).attr("aria-valuenow") + "%";
+	});
+	$('.progress .prog_aug').css("width",function(){
+		$(this).attr("aria-valuenow", MULTIPLIER*setter_8);
+		$('.val').text(MULTIPLIER*setter_8+"%");
+		return $(this).attr("aria-valuenow") + "%";
+	});
+	$('.progress .prog_sep').css("width",function(){
+		$(this).attr("aria-valuenow", MULTIPLIER*setter_9);
+		$('.val').text(MULTIPLIER*setter_9+"%");
+		return $(this).attr("aria-valuenow") + "%";
+	});
+	$('.progress .prog_oct').css("width",function(){
+		$(this).attr("aria-valuenow", MULTIPLIER*setter_10);
+		$('.val').text(MULTIPLIER*setter_10+"%");
+		return $(this).attr("aria-valuenow") + "%";
+	});
+	$('.progress .prog_nov').css("width",function(){
+		$(this).attr("aria-valuenow", MULTIPLIER*setter_11);
+		$('.val').text(MULTIPLIER*setter_11+"%");
+		return $(this).attr("aria-valuenow") + "%";
+	});
+	$('.progress .prog_dec').css("width",function(){
+		$(this).attr("aria-valuenow", MULTIPLIER*setter_12);
+		$('.val').text(MULTIPLIER*setter_12+"%");
+		return $(this).attr("aria-valuenow") + "%";
+	});
+}
 </script>
