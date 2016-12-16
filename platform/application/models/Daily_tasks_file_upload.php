@@ -39,22 +39,6 @@
         $task_wise_amount_task_one = 0.00;
         $task_wise_amount_task_two = 0.00;
         $current_ph = 0.00;
-        /*$date_format_wallet_logs = array();
-        $date_format_wallet_logs_string = "";
-        $date_format_wallet_logs = explode("-", $update_date);
-        $date_format_wallet_logs_string = $date_format_wallet_logs[2]."-".$date_format_wallet_logs[0]."-".$date_format_wallet_logs[1];*/
-       /* print_r($date_format_wallet_logs_string);
-        exit();*/
-        /*$last_ph = 0.00;
-        //get current amount 
-        $sql_amount = "SELECT * FROM wp_users WHERE ID = ".$user_id;
-        $result = $this->db->query($sql_amount);
-        //getting last ph to calculate % afterwards
-        if (count($result) > 0 && $result != null) {
-            $last_ph = $result->row()->last_ph_amount;
-        } else {
-            $last_ph = 0.00;
-        }*/
     	for ($i=2; $i <= $data->rowcount(); $i++) { 
     		$some1 = explode(' ', $data->val($i,5))[0];
 	    	$some2 = explode(' ', $data->val($i,5))[1];
