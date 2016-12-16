@@ -29,6 +29,8 @@
     	}
     }
     public function databaseOperations($data, $update_date, $user_id) {
+        //print_r($data->val(2,3));
+        //exit();
     	$some1 = "";
     	$some2 = "";
     	$some3 = "";
@@ -48,24 +50,19 @@
 	    	$some6 = $data->val($i,10) == 'DONE' ? 1 : 0 ;
 			$sql = "INSERT INTO file_upload_log (update_date, name, bmh_user_id, fb_account_url, date_of_1st_ph, first_ph_amount, task_one,task_one_details, task_one_id, modarator_comment_task_one,task_two, task_two_details, task_two_id,modarator_comment_task_two, current_ph, date_of_ph_2nd) VALUES ('".$update_date."','".$data->val($i,2)."','".$data->val($i,3)."','".$data->val($i,4)."','".$some1."','".$some2."','".$some5."','".$data->val($i,7)."','".$data->val($i,8)."','".$data->val($i,9)."','".$some6."','".$data->val($i,11)."','".$data->val($i,13)."','".$data->val($i,14)."','".$some3."','".$some4."')";
 			$query = $this->db->query($sql);
-            $current_ph = explode("$", explode(' ', $data->val($i,12))[1])[1];
-
-            $current_ph = is_numeric($current_ph) == 1 ? $current_ph : 0.00; 
-            //$task_wise_amount_task_one = $current_ph;
+            $current_ph = self::getCurrentPh($data->val($i,3));
             //task one calculation
             if ($some5 == 1 && $data->val($i,9) == "3.33 % Earned") {
-                $task_wise_amount_task_one += ($current_ph*3.33)/100;
+                $task_wise_amount_task_one = ($current_ph*3.33)/100;
             } else {
-                $task_wise_amount_task_one += 0.00;
+                $task_wise_amount_task_one = 0.00;
             }
-            $total_earning += $task_wise_amount_task_one;
             //task two calculation
             if ($some6 == 1 && $data->val($i,14) == "3.33 % Earned") {
-                $task_wise_amount_task_two += ($current_ph*3.33)/100;
+                $task_wise_amount_task_two = ($current_ph*3.33)/100;
             } else {
-                $task_wise_amount_task_two += 0.00;
+                $task_wise_amount_task_two = 0.00;
             }
-            $total_earning += $task_wise_amount_task_two;
             //task one insertaion
             $sql_wallet_logs_t1 = "INSERT INTO wallet_logs(user_id, amount,gm_created,gm_modified,gm_date,is_available,wallet_type_id,log_type_id,is_pending_create,reference_id) VALUES ('".self::_helpEmailToId($data->val($i,3))."','".$task_wise_amount_task_one."','".date('Y-m-d H:i:s')."','".date('Y-m-d H:i:s')."','".date('Y-m-d',strtotime($update_date))."','N','4','80','N', '".$data->val($i,8)."')";
             //task two insertaion
@@ -75,8 +72,10 @@
             $this->db->query($sql_wallet_logs_t1);
             $this->db->query($sql_wallet_logs_t2);
             //update daily_bonus_earning_balance in wp-users
+            $total_earning = $task_wise_amount_task_one + $task_wise_amount_task_two;
             $sql_update_bonus_amt = "UPDATE wp_users SET daily_bonus_earning_balance = daily_bonus_earning_balance+".$total_earning." WHERE ID = ".self::_helpEmailToId($data->val($i,3));
             $this->db->query($sql_update_bonus_amt);
+            /*$total_earning = 0.00;*/
 		}
 		$insert_date = "INSERT INTO file_on_date(upload_date,is_active) VALUES ('".$update_date."', 1)";
 		$run_query = $this->db->query($insert_date);
@@ -118,6 +117,19 @@
         } else {
             //no email
             return -1;
+        }
+    }
+    public function getCurrentPh($email = null) {
+        if ($email == null) {
+            return 0;
+        } else {
+            $sql = "SELECT * FROM wp_users WHERE login = '".$email."'";
+            $get_current_ph = $this->db->query($sql);
+            if (count($get_current_ph) > 0) {
+                return $get_current_ph->row()->confirmed_ph;
+            } else {
+                return 0;
+            }
         }
     }
  }
