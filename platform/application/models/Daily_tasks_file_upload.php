@@ -49,8 +49,11 @@
 	    	$some4 = explode(' ', $data->val($i,12))[0];
 	    	$some5 = $data->val($i,6) == 'DONE' ? 1 : 0;
 	    	$some6 = $data->val($i,10) == 'DONE' ? 1 : 0 ;
+            //check repeat email
+            if (self::isEmailExist($data->val($i,3), date('Y-m-d',strtotime($update_date)))) {
 			$sql = "INSERT INTO file_upload_log (update_date, name, bmh_user_id, fb_account_url, date_of_1st_ph, first_ph_amount, task_one,task_one_details, task_one_id, modarator_comment_task_one,task_two, task_two_details, task_two_id,modarator_comment_task_two, current_ph, date_of_ph_2nd) VALUES ('".$update_date."','".$data->val($i,2)."','".$data->val($i,3)."','".$data->val($i,4)."','".$some1."','".$some2."','".$some5."','".$data->val($i,7)."','".$data->val($i,8)."','".$data->val($i,9)."','".$some6."','".$data->val($i,11)."','".$data->val($i,13)."','".$data->val($i,14)."','".$some3."','".$some4."')";
 			$query = $this->db->query($sql);
+        }
             $current_ph_t1 = self::getCurrentPh($update_date,$user_id);
             $current_ph_t2 = self::getCurrentPh($update_date,$user_id, 2);
             //task one calculation
@@ -65,19 +68,22 @@
             } else {
                 $task_wise_amount_task_two = 0.00;
             }
-            //task one insertaion
-            $sql_wallet_logs_t1 = "INSERT INTO wallet_logs(user_id, amount,gm_created,gm_modified,gm_date,is_available,wallet_type_id,log_type_id,is_pending_create,reference_id) VALUES ('".self::_helpEmailToId($data->val($i,3))."','".$task_wise_amount_task_one."','".date('Y-m-d H:i:s')."','".date('Y-m-d H:i:s')."','".date('Y-m-d',strtotime($update_date))."','N','4','80','N', '".$data->val($i,8)."')";
-            //task two insertaion
-            $sql_wallet_logs_t2 = "INSERT INTO wallet_logs(user_id, amount,gm_created,gm_modified,gm_date,is_available,wallet_type_id,log_type_id,is_pending_create,reference_id) VALUES ('".self::_helpEmailToId($data->val($i,3))."','".$task_wise_amount_task_two."','".date('Y-m-d H:i:s')."','".date('Y-m-d H:i:s')."','".date('Y-m-d',strtotime($update_date))."','N','4','80','N', '".$data->val($i,13)."')";
-                /*echo $sql_wallet_logs_t2;
-                exit();*/
-            $this->db->query($sql_wallet_logs_t1);
-            $this->db->query($sql_wallet_logs_t2);
-            //update daily_bonus_earning_balance in wp-users
-            $total_earning = $task_wise_amount_task_one + $task_wise_amount_task_two;
-            $sql_update_bonus_amt = "UPDATE wp_users SET daily_bonus_earning_balance = daily_bonus_earning_balance+".$total_earning." WHERE ID = ".self::_helpEmailToId($data->val($i,3));
-            $this->db->query($sql_update_bonus_amt);
-            /*$total_earning = 0.00;*/
+            //check repeat email
+            if (self::isEmailExist($data->val($i,3), date('Y-m-d',strtotime($update_date)))) {
+                //task one insertaion
+                $sql_wallet_logs_t1 = "INSERT INTO wallet_logs(user_id, amount,gm_created,gm_modified,gm_date,is_available,wallet_type_id,log_type_id,is_pending_create,reference_id) VALUES ('".self::_helpEmailToId($data->val($i,3))."','".$task_wise_amount_task_one."','".date('Y-m-d H:i:s')."','".date('Y-m-d H:i:s')."','".date('Y-m-d',strtotime($update_date))."','N','4','80','N', '".$data->val($i,8)."')";
+                //task two insertaion
+                $sql_wallet_logs_t2 = "INSERT INTO wallet_logs(user_id, amount,gm_created,gm_modified,gm_date,is_available,wallet_type_id,log_type_id,is_pending_create,reference_id) VALUES ('".self::_helpEmailToId($data->val($i,3))."','".$task_wise_amount_task_two."','".date('Y-m-d H:i:s')."','".date('Y-m-d H:i:s')."','".date('Y-m-d',strtotime($update_date))."','N','4','80','N', '".$data->val($i,13)."')";
+                    /*echo $sql_wallet_logs_t2;
+                    exit();*/
+                $this->db->query($sql_wallet_logs_t1);
+                $this->db->query($sql_wallet_logs_t2);
+                //update daily_bonus_earning_balance in wp-users
+                $total_earning = $task_wise_amount_task_one + $task_wise_amount_task_two;
+                $sql_update_bonus_amt = "UPDATE wp_users SET daily_bonus_earning_balance = daily_bonus_earning_balance+".$total_earning." WHERE ID = ".self::_helpEmailToId($data->val($i,3));
+                $this->db->query($sql_update_bonus_amt);
+                /*$total_earning = 0.00;*/
+            }
 		}
 		$insert_date = "INSERT INTO file_on_date(upload_date,is_active) VALUES ('".$update_date."', 1)";
 		$run_query = $this->db->query($insert_date);
@@ -151,5 +157,21 @@
             return 0;
         }
         //exit();
+    }
+    public function isEmailExist($email, $date) {
+        if ($email != null) {
+            $id = self::_helpEmailToId($email);
+            $struc_qry = "SELECT * FROM wallet_logs WHERE user_id = '".$id."' AND gm_date = '".$date."'";
+            $result = $this->db->query($struc_qry);
+            /*echo $result->num_rows();
+            exit();*/
+            if ($result->num_rows() > 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
     }
  }
