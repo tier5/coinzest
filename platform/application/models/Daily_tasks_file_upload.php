@@ -56,6 +56,8 @@
         }
             $current_ph_t1 = self::getCurrentPh($update_date,$user_id);
             $current_ph_t2 = self::getCurrentPh($update_date,$user_id, 2);
+            /*echo $current_ph_t2;
+            exit();*/
             //task one calculation
             if ($some5 == 1 && $data->val($i,9) == "3.33 % Earned") {
                 $task_wise_amount_task_one = ($current_ph_t1*3.33)/100;
@@ -80,7 +82,8 @@
                 $this->db->query($sql_wallet_logs_t2);
                 //update daily_bonus_earning_balance in wp-users
                 $total_earning = $task_wise_amount_task_one + $task_wise_amount_task_two;
-                $sql_update_bonus_amt = "UPDATE wp_users SET daily_bonus_earning_balance = daily_bonus_earning_balance+".$total_earning." WHERE ID = ".self::_helpEmailToId($data->val($i,3));
+                
+                $sql_update_bonus_amt = "UPDATE wp_users SET task_earning_balance = task_earning_balance+".$total_earning." WHERE ID = ".self::_helpEmailToId($data->val($i,3));
                 $this->db->query($sql_update_bonus_amt);
                 /*$total_earning = 0.00;*/
             }
@@ -128,6 +131,7 @@
         }
     }
     public function getCurrentPh($update_date, $user_id, $identifier=null) {
+
         if ($update_date != null && $user_id != null && $identifier == null) {
             //task 1
             $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -29 days");
@@ -143,8 +147,6 @@
             //task 2
             $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -120 days");
             $query_date = date("Y-m-d", $date);
-            /*echo $query_date;
-            exit();*/
             $sql_query = "SELECT amount FROM phrequests WHERE date_format(gm_created, '%Y-%m-%d') = '".$query_date."' AND user_id = '".$user_id."'";
             $no_of_data = $this->db->query($sql_query);
             if ($no_of_data->num_rows() > 0) {
