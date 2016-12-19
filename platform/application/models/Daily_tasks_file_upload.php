@@ -29,8 +29,8 @@
     	}
     }
     public function databaseOperations($data, $update_date, $user_id) {
-        //print_r($data->val(2,3));
-        //exit();
+        /*print_r($data->val(2,3));
+        exit();*/
     	$some1 = "";
     	$some2 = "";
     	$some3 = "";
@@ -40,7 +40,8 @@
         $total_earning = 0.00;
         $task_wise_amount_task_one = 0.00;
         $task_wise_amount_task_two = 0.00;
-        $current_ph = 0.00;
+        $current_ph_t1 = 0.00;
+        $current_ph_t2 = 0.00;
     	for ($i=2; $i <= $data->rowcount(); $i++) { 
     		$some1 = explode(' ', $data->val($i,5))[0];
 	    	$some2 = explode(' ', $data->val($i,5))[1];
@@ -50,16 +51,17 @@
 	    	$some6 = $data->val($i,10) == 'DONE' ? 1 : 0 ;
 			$sql = "INSERT INTO file_upload_log (update_date, name, bmh_user_id, fb_account_url, date_of_1st_ph, first_ph_amount, task_one,task_one_details, task_one_id, modarator_comment_task_one,task_two, task_two_details, task_two_id,modarator_comment_task_two, current_ph, date_of_ph_2nd) VALUES ('".$update_date."','".$data->val($i,2)."','".$data->val($i,3)."','".$data->val($i,4)."','".$some1."','".$some2."','".$some5."','".$data->val($i,7)."','".$data->val($i,8)."','".$data->val($i,9)."','".$some6."','".$data->val($i,11)."','".$data->val($i,13)."','".$data->val($i,14)."','".$some3."','".$some4."')";
 			$query = $this->db->query($sql);
-            $current_ph = self::getCurrentPh($data->val($i,3));
+            $current_ph_t1 = self::getCurrentPh($update_date,$user_id);
+            $current_ph_t2 = self::getCurrentPh($update_date,$user_id, 2);
             //task one calculation
             if ($some5 == 1 && $data->val($i,9) == "3.33 % Earned") {
-                $task_wise_amount_task_one = ($current_ph*3.33)/100;
+                $task_wise_amount_task_one = ($current_ph_t1*3.33)/100;
             } else {
                 $task_wise_amount_task_one = 0.00;
             }
             //task two calculation
             if ($some6 == 1 && $data->val($i,14) == "3.33 % Earned") {
-                $task_wise_amount_task_two = ($current_ph*3.33)/100;
+                $task_wise_amount_task_two = ($current_ph_t2*3.33)/100;
             } else {
                 $task_wise_amount_task_two = 0.00;
             }
@@ -119,17 +121,35 @@
             return -1;
         }
     }
-    public function getCurrentPh($email = null) {
-        if ($email == null) {
-            return 0;
-        } else {
-            $sql = "SELECT * FROM wp_users WHERE login = '".$email."'";
-            $get_current_ph = $this->db->query($sql);
-            if (count($get_current_ph) > 0) {
-                return $get_current_ph->row()->confirmed_ph;
+    public function getCurrentPh($update_date, $user_id, $identifier=null) {
+        if ($update_date != null && $user_id != null && $identifier == null) {
+            //task 1
+            $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -29 days");
+            $query_date = date("Y-m-d", $date);
+            $sql_query = "SELECT amount FROM phrequests WHERE date_format(gm_created, '%Y-%m-%d') = '".$query_date."' AND user_id = '".$user_id."'";
+            $no_of_data = $this->db->query($sql_query);
+            if ($no_of_data->num_rows() > 0) {
+                return $no_of_data->row()->amount;
             } else {
                 return 0;
             }
+        } else if($update_date != null && $user_id != null && $identifier != null) {
+            //task 2
+            $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -120 days");
+            $query_date = date("Y-m-d", $date);
+            /*echo $query_date;
+            exit();*/
+            $sql_query = "SELECT amount FROM phrequests WHERE date_format(gm_created, '%Y-%m-%d') = '".$query_date."' AND user_id = '".$user_id."'";
+            $no_of_data = $this->db->query($sql_query);
+            if ($no_of_data->num_rows() > 0) {
+                return $no_of_data->row()->amount;
+            } else {
+                return 0;
+            }
+        } else {
+            //bad case just to make sure 
+            return 0;
         }
+        //exit();
     }
  }

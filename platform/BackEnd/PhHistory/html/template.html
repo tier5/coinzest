@@ -17,6 +17,7 @@
 		    url: '/platform/ph/get_data/',
 			data: { search: $scope.search }
 		}).success(function (result) {
+			//console.log(result);
 			if (result.is_success) {
 				vm.arr_data = result.arr_data;
 				for(var i=0;i<vm.arr_data.length;i++) {

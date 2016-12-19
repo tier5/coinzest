@@ -179,88 +179,6 @@
       	});
 
 	});
-	/*function _generateProgress(response, month) {
-		//progress bar 
-		var month = parseInt(month);
-		var progress = 0.00;
-		switch(month) {
-			case 1:
-				
-				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
-				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
-				return progress; 
-			break;
-			case 2:
-				//var progress = 0.00;
-				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
-				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
-				return progress;
-			break;
-			case 3:
-				//var progress = 0.00;
-				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
-				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
-				return progress;
-			break;
-			case 4:
-				//var progress = 0.00;
-				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
-				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
-				return progress;
-			break;
-			case 5:
-				//var progress = 0.00;
-				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
-				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
-				return progress;
-			break;
-			case 6:
-				//var progress = 0.00;
-				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
-				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
-				return progress;
-			break;
-			case 7:
-				//var progress = 0.00;
-				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
-				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
-				return progress;
-			break;
-			case 8:
-				//var progress = 0.00;
-				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
-				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
-				return progress;
-			break;
-			case 9:
-				//var progress = 0.00;
-				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
-				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
-				return progress;
-			break;
-			case 10:
-				//var progress = 0.00;
-				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
-				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
-				return progress;
-			break;
-			case 11:
-				//var progress = 0.00;
-				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
-				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
-				return progress;
-			break;
-			case 12:
-				var progress = 0.00;
-				progress += response.modarator_comment_task_one == '3.33 % Earned' ? 3.33 : 0;
-				progress += response.modarator_comment_task_two == '3.33 % Earned' ? 3.33 : 0;
-				return progress;
-			break;
-			default:
-				console.log('Error in selecting the month debug in generate progress');
-			break;
-		}
-	}*/
 	function _returnMonth() {
 		var month = moment().month();
 		month = month+1;
@@ -321,6 +239,7 @@
 	}
 	
 	function _showTableData(month, response) {
+		//console.log(response);
 		var month = parseInt(month);
 		//var progressData = 0.00;
 		//var previousValue = 0.00;
@@ -343,7 +262,7 @@
 				setter_1++;
 				
 			}
-			$('#tab_jan #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+			$('#tab_jan #show_data').append('<tr><td>'+response.update_date+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 2:
 				if (response.modarator_comment_task_one == '3.33 % Earned') {
@@ -352,7 +271,7 @@
 				if (response.modarator_comment_task_two == '3.33 % Earned') {
 					setter_2++;
 				}
-				$('#tab_feb #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_feb #show_data').append('<tr><td>'+response.update_date+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 3:
 				if (response.modarator_comment_task_one == '3.33 % Earned') {
@@ -361,7 +280,7 @@
 				if (response.modarator_comment_task_two == '3.33 % Earned') {
 					setter_3++;
 				}
-				$('#tab_mar #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_mar #show_data').append('<tr><td>'+response.update_date+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 4:
 				if (response.modarator_comment_task_one == '3.33 % Earned') {
@@ -370,7 +289,7 @@
 				if (response.modarator_comment_task_two == '3.33 % Earned') {
 					setter_4++;
 				}
-				$('#tab_apr #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_apr #show_data').append('<tr><td>'+response.update_date+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 5:
 				if (response.modarator_comment_task_one == '3.33 % Earned') {
@@ -379,7 +298,7 @@
 				if (response.modarator_comment_task_two == '3.33 % Earned') {
 					setter_5++;
 				}
-				$('#tab_may #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_may #show_data').append('<tr><td>'+response.update_date+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 6:
 				if (response.modarator_comment_task_one == '3.33 % Earned') {
@@ -388,7 +307,7 @@
 				if (response.modarator_comment_task_two == '3.33 % Earned') {
 					setter_6++;
 				}
-				$('#tab_jun #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_jun #show_data').append('<tr><td>'+response.update_date+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 7:
 				if (response.modarator_comment_task_one == '3.33 % Earned') {
@@ -397,7 +316,7 @@
 				if (response.modarator_comment_task_two == '3.33 % Earned') {
 					setter_7++;
 				}
-				$('#tab_july #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_july #show_data').append('<tr><td>'+response.update_date+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 8:
 				if (response.modarator_comment_task_one == '3.33 % Earned') {
@@ -406,7 +325,7 @@
 				if (response.modarator_comment_task_two == '3.33 % Earned') {
 					setter_8++;
 				}
-				$('#tab_aug #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_aug #show_data').append('<tr><td>'+response.update_date+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 9:
 				if (response.modarator_comment_task_one == '3.33 % Earned') {
@@ -415,7 +334,7 @@
 				if (response.modarator_comment_task_two == '3.33 % Earned') {
 					setter_9++;
 				}
-				$('#tab_sep #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_sep #show_data').append('<tr><td>'+response.update_date+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 10:
 				if (response.modarator_comment_task_one == '3.33 % Earned') {
@@ -424,7 +343,7 @@
 				if (response.modarator_comment_task_two == '3.33 % Earned') {
 					setter_10++;
 				}
-				$('#tab_oct #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_oct #show_data').append('<tr><td>'+response.update_date+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 11:
 				if (response.modarator_comment_task_one == '3.33 % Earned') {
@@ -433,7 +352,7 @@
 				if (response.modarator_comment_task_two == '3.33 % Earned') {
 					setter_11++;
 				}
-				$('#tab_nov #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_nov #show_data').append('<tr><td>'+response.update_date+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 12:
 				if (response.modarator_comment_task_one == '3.33 % Earned') {
@@ -444,7 +363,7 @@
 					setter_12++;
 					
 				}
-				$('#tab_dec #show_data').append('<tr><td>'+response.update_date+'</td><td>'+response.name+'</td><td>'+response.bmh_user_id+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_dec #show_data').append('<tr><td>'+response.update_date+'</td><td>'+task_one_jq+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			default:
 				console.log('Error in putting data');
@@ -456,62 +375,62 @@
 		//console.log(MULTIPLIER);
 	$('.progress .prog_jan').css("width",function(){
 		$(this).attr("aria-valuenow", MULTIPLIER*setter_1);
-		$('.val').text(MULTIPLIER*setter_1+"%");
+		$('.progress .prog_jan .val').text(MULTIPLIER*setter_1+"%");
 		return $(this).attr("aria-valuenow") + "%";
 	});
 	$('.progress .prog_feb').css("width",function(){
 		$(this).attr("aria-valuenow", MULTIPLIER*setter_2);
-		$('.val').text(MULTIPLIER*setter_2+"%");
+		$('.progress .prog_feb .val').text(MULTIPLIER*setter_2+"%");
 		return $(this).attr("aria-valuenow") + "%";
 	});
 	$('.progress .prog_mar').css("width",function(){
 		$(this).attr("aria-valuenow", MULTIPLIER*setter_3);
-		$('.val').text(MULTIPLIER*setter_3+"%");
+		$('.progress .prog_mar .val').text(MULTIPLIER*setter_3+"%");
 		return $(this).attr("aria-valuenow") + "%";
 	});
 	$('.progress .prog_apr').css("width",function(){
 		$(this).attr("aria-valuenow", MULTIPLIER*setter_4);
-		$('.val').text(MULTIPLIER*setter_4+"%");
+		$('.progress .prog_apr .val').text(MULTIPLIER*setter_4+"%");
 		return $(this).attr("aria-valuenow") + "%";
 	});
 	$('.progress .prog_may').css("width",function(){
 		$(this).attr("aria-valuenow", MULTIPLIER*setter_5);
-		$('.val').text(MULTIPLIER*setter_5+"%");
+		$('.progress .prog_may .val').text(MULTIPLIER*setter_5+"%");
 		return $(this).attr("aria-valuenow") + "%";
 	});
 	$('.progress .prog_jun').css("width",function(){
 		$(this).attr("aria-valuenow", MULTIPLIER*setter_6);
-		$('.val').text(MULTIPLIER*setter_6+"%");
+		$('.progress .prog_jun .val').text(MULTIPLIER*setter_6+"%");
 		return $(this).attr("aria-valuenow") + "%";
 	});
 	$('.progress .prog_jul').css("width",function(){
 		$(this).attr("aria-valuenow", MULTIPLIER*setter_7);
-		$('.val').text(MULTIPLIER*setter_7+"%");
+		$('.progress .prog_jul .val').text(MULTIPLIER*setter_7+"%");
 		return $(this).attr("aria-valuenow") + "%";
 	});
 	$('.progress .prog_aug').css("width",function(){
 		$(this).attr("aria-valuenow", MULTIPLIER*setter_8);
-		$('.val').text(MULTIPLIER*setter_8+"%");
+		$('.progress .prog_aug .val').text(MULTIPLIER*setter_8+"%");
 		return $(this).attr("aria-valuenow") + "%";
 	});
 	$('.progress .prog_sep').css("width",function(){
 		$(this).attr("aria-valuenow", MULTIPLIER*setter_9);
-		$('.val').text(MULTIPLIER*setter_9+"%");
+		$('.progress .prog_sep .val').text(MULTIPLIER*setter_9+"%");
 		return $(this).attr("aria-valuenow") + "%";
 	});
 	$('.progress .prog_oct').css("width",function(){
 		$(this).attr("aria-valuenow", MULTIPLIER*setter_10);
-		$('.val').text(MULTIPLIER*setter_10+"%");
+		$('.progress .prog_oct .val').text(MULTIPLIER*setter_10+"%");
 		return $(this).attr("aria-valuenow") + "%";
 	});
 	$('.progress .prog_nov').css("width",function(){
 		$(this).attr("aria-valuenow", MULTIPLIER*setter_11);
-		$('.val').text(MULTIPLIER*setter_11+"%");
+		$('.progress .prog_nov .val').text(MULTIPLIER*setter_11+"%");
 		return $(this).attr("aria-valuenow") + "%";
 	});
 	$('.progress .prog_dec').css("width",function(){
 		$(this).attr("aria-valuenow", MULTIPLIER*setter_12);
-		$('.val').text(MULTIPLIER*setter_12+"%");
+		$('.progress .prog_dec .val').text(MULTIPLIER*setter_12+"%");
 		return $(this).attr("aria-valuenow") + "%";
 	});
 }
