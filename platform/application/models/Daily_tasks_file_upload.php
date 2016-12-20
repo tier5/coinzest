@@ -29,8 +29,7 @@
     	}
     }
     public function databaseOperations($data, $update_date, $user_id) {
-        /*print_r($data->val(2,3));
-        exit();*/
+        //$data->val($i,3)
     	$some1 = "";
     	$some2 = "";
     	$some3 = "";
@@ -54,10 +53,10 @@
     			$sql = "INSERT INTO file_upload_log (update_date, name, bmh_user_id, fb_account_url, date_of_1st_ph, first_ph_amount, task_one,task_one_details, task_one_id, modarator_comment_task_one,task_two, task_two_details, task_two_id,modarator_comment_task_two, current_ph, date_of_ph_2nd) VALUES ('".$update_date."','".$data->val($i,2)."','".$data->val($i,3)."','".$data->val($i,4)."','".$some1."','".$some2."','".$some5."','".$data->val($i,7)."','".$data->val($i,8)."','".$data->val($i,9)."','".$some6."','".$data->val($i,11)."','".$data->val($i,13)."','".$data->val($i,14)."','".$some3."','".$some4."')";
     			$query = $this->db->query($sql);
             }
-            $current_ph_t1 = self::getCurrentPh($update_date,$user_id);
+            $current_ph_t1 = self::getCurrentPh($update_date,$data->val($i,3));
             //print_r($current_ph_t1);
             //exit(0);
-            $current_ph_t2 = self::getCurrentPh($update_date,$user_id, 2);
+            $current_ph_t2 = self::getCurrentPh($update_date,$data->val($i,3), 2);
             //task one calculation
             if ($some5 == 1 && $data->val($i,9) == "3.33 % Earned") {
                 $task_wise_amount_task_one = ($current_ph_t1*3.33)/100;
@@ -70,6 +69,9 @@
             } else {
                 $task_wise_amount_task_two = 0.00;
             }
+            /*echo $task_wise_amount_task_two;
+
+            exit();*/
             //check repeat email
             if (self::isEmailExist($data->val($i,3), date('Y-m-d',strtotime($update_date)))) {
                 //task one insertaion
@@ -86,7 +88,7 @@
 		}
         $sql_update_bonus_amt = "UPDATE wp_users SET task_earning_balance = task_earning_balance+".$total_earning." WHERE ID = ".self::_helpEmailToId($data->val($i,3));
         $this->db->query($sql_update_bonus_amt);
-        
+
 		$insert_date = "INSERT INTO file_on_date(upload_date,is_active) VALUES ('".$update_date."', 1)";
 		$run_query = $this->db->query($insert_date);
         //unlink('../file_uploads/'.$update_date.'.xls');
@@ -158,6 +160,8 @@
             }
         } else if($update_date != null && $user_id != null && $identifier != null) {
             //task 2
+            /*echo $update_date;
+            exit();*/
             $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -120 days");
 
             $query_date = date("Y-m-d", $date);
@@ -169,6 +173,9 @@
             
 
             $sql_query = "SELECT amount,amount_matched_completed FROM phrequests WHERE date_format(gm_created, '%Y-%m-%d') BETWEEN '".$query_date."' AND '".$query_date_2."' AND user_id = '".$user_id."'";
+           /* echo $sql_query;
+            exit();*/
+
             $no_of_data = $this->db->query($sql_query);
             /*echo $no_of_data->num_rows();
             exit();*/
