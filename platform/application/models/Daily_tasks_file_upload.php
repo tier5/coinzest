@@ -51,9 +51,9 @@
 	    	$some6 = $data->val($i,10) == 'DONE' ? 1 : 0 ;
             //check repeat email
             if (self::isEmailExist($data->val($i,3), date('Y-m-d',strtotime($update_date)))) {
-			$sql = "INSERT INTO file_upload_log (update_date, name, bmh_user_id, fb_account_url, date_of_1st_ph, first_ph_amount, task_one,task_one_details, task_one_id, modarator_comment_task_one,task_two, task_two_details, task_two_id,modarator_comment_task_two, current_ph, date_of_ph_2nd) VALUES ('".$update_date."','".$data->val($i,2)."','".$data->val($i,3)."','".$data->val($i,4)."','".$some1."','".$some2."','".$some5."','".$data->val($i,7)."','".$data->val($i,8)."','".$data->val($i,9)."','".$some6."','".$data->val($i,11)."','".$data->val($i,13)."','".$data->val($i,14)."','".$some3."','".$some4."')";
-			$query = $this->db->query($sql);
-        }
+    			$sql = "INSERT INTO file_upload_log (update_date, name, bmh_user_id, fb_account_url, date_of_1st_ph, first_ph_amount, task_one,task_one_details, task_one_id, modarator_comment_task_one,task_two, task_two_details, task_two_id,modarator_comment_task_two, current_ph, date_of_ph_2nd) VALUES ('".$update_date."','".$data->val($i,2)."','".$data->val($i,3)."','".$data->val($i,4)."','".$some1."','".$some2."','".$some5."','".$data->val($i,7)."','".$data->val($i,8)."','".$data->val($i,9)."','".$some6."','".$data->val($i,11)."','".$data->val($i,13)."','".$data->val($i,14)."','".$some3."','".$some4."')";
+    			$query = $this->db->query($sql);
+            }
             $current_ph_t1 = self::getCurrentPh($update_date,$user_id);
             //print_r($current_ph_t1);
             //exit(0);
@@ -82,12 +82,11 @@
                 $this->db->query($sql_wallet_logs_t2);
                 //update daily_bonus_earning_balance in wp-users
                 $total_earning = $task_wise_amount_task_one + $task_wise_amount_task_two;
-                
-                $sql_update_bonus_amt = "UPDATE wp_users SET task_earning_balance = task_earning_balance+".$total_earning." WHERE ID = ".self::_helpEmailToId($data->val($i,3));
-                $this->db->query($sql_update_bonus_amt);
-                /*$total_earning = 0.00;*/
             }
 		}
+        $sql_update_bonus_amt = "UPDATE wp_users SET task_earning_balance = task_earning_balance+".$total_earning." WHERE ID = ".self::_helpEmailToId($data->val($i,3));
+        $this->db->query($sql_update_bonus_amt);
+        
 		$insert_date = "INSERT INTO file_on_date(upload_date,is_active) VALUES ('".$update_date."', 1)";
 		$run_query = $this->db->query($insert_date);
         //unlink('../file_uploads/'.$update_date.'.xls');
