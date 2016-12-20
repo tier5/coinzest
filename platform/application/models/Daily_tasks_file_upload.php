@@ -55,9 +55,9 @@
 			$query = $this->db->query($sql);
         }
             $current_ph_t1 = self::getCurrentPh($update_date,$user_id);
+            //print_r($current_ph_t1);
+            //exit(0);
             $current_ph_t2 = self::getCurrentPh($update_date,$user_id, 2);
-            /*echo $current_ph_t2;
-            exit();*/
             //task one calculation
             if ($some5 == 1 && $data->val($i,9) == "3.33 % Earned") {
                 $task_wise_amount_task_one = ($current_ph_t1*3.33)/100;
@@ -134,23 +134,59 @@
 
         if ($update_date != null && $user_id != null && $identifier == null) {
             //task 1
+            $tot_cost_t1=0.00;
             $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -29 days");
             $query_date = date("Y-m-d", $date);
-            $sql_query = "SELECT amount FROM phrequests WHERE date_format(gm_created, '%Y-%m-%d') = '".$query_date."' AND user_id = '".$user_id."'";
+            $date_reordered = date('Y-m-d',strtotime($update_date));
+            $sql_query = "SELECT amount,amount_matched_completed FROM phrequests WHERE date_format(gm_created, '%Y-%m-%d') BETWEEN '".$query_date."' AND '".$date_reordered."' AND user_id = '".$user_id."'";
             $no_of_data = $this->db->query($sql_query);
             if ($no_of_data->num_rows() > 0) {
-                return $no_of_data->row()->amount;
+                if (count($no_of_data->result()) > 0) {
+                   foreach ($no_of_data->result() as $key => $value) {
+                        //check active or not
+                        if ($value->amount === $value->amount_matched_completed) {
+                             $tot_cost += $value->amount;
+                        } else {
+                            $tot_cost +=0;
+                        }
+                    }
+                    return $tot_cost;
+                } else {
+                    return 0;
+                }
             } else {
                 return 0;
             }
         } else if($update_date != null && $user_id != null && $identifier != null) {
             //task 2
             $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -120 days");
+
             $query_date = date("Y-m-d", $date);
-            $sql_query = "SELECT amount FROM phrequests WHERE date_format(gm_created, '%Y-%m-%d') = '".$query_date."' AND user_id = '".$user_id."'";
+
+            $date_range_2 = strtotime(date("d-m-Y", strtotime($update_date)) . " -90 days");
+
+            $query_date_2 = date("Y-m-d", $date_range_2);
+            $tot_cost_2 = 0.00;
+            
+
+            $sql_query = "SELECT amount,amount_matched_completed FROM phrequests WHERE date_format(gm_created, '%Y-%m-%d') BETWEEN '".$query_date."' AND '".$query_date_2."' AND user_id = '".$user_id."'";
             $no_of_data = $this->db->query($sql_query);
+            /*echo $no_of_data->num_rows();
+            exit();*/
             if ($no_of_data->num_rows() > 0) {
-                return $no_of_data->row()->amount;
+                if (count($no_of_data->result()) > 0) {
+                   foreach ($no_of_data->result() as $key => $value) {
+                        //check active or not
+                        if ($value->amount === $value->amount_matched_completed) {
+                             $tot_cost_2 += $value->amount;
+                        } else {
+                            $tot_cost_2 +=0;
+                        }
+                    }
+                    return $tot_cost_2;
+                } else {
+                    return 0;
+                }
             } else {
                 return 0;
             }
