@@ -29,7 +29,8 @@
     	}
     }
     public function databaseOperations($data, $update_date, $user_id) {
-        //$data->val($i,3)
+        /*print_r($data->val(2,3));
+        exit();*/
     	$some1 = "";
     	$some2 = "";
     	$some3 = "";
@@ -139,7 +140,7 @@
             $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -29 days");
             $query_date = date("Y-m-d", $date);
             $date_reordered = date('Y-m-d',strtotime($update_date));
-            $sql_query = "SELECT amount,amount_matched_completed FROM phrequests WHERE date_format(gm_created, '%Y-%m-%d') BETWEEN '".$query_date."' AND '".$date_reordered."' AND user_id = '".$user_id."'";
+            $sql_query = "SELECT amount,amount_matched_completed FROM phrequests WHERE date_format(gm_created, '%Y-%m-%d') BETWEEN '".$query_date."' AND '".$date_reordered."' AND user_id = '".self::_helpEmailToId($user_id)."'";
             $no_of_data = $this->db->query($sql_query);
             if ($no_of_data->num_rows() > 0) {
                 if (count($no_of_data->result()) > 0) {
@@ -172,7 +173,7 @@
             $tot_cost_2 = 0.00;
             
 
-            $sql_query = "SELECT amount,amount_matched_completed FROM phrequests WHERE date_format(gm_created, '%Y-%m-%d') BETWEEN '".$query_date."' AND '".$query_date_2."' AND user_id = '".$user_id."'";
+            $sql_query = "SELECT amount,amount_matched_completed FROM phrequests WHERE date_format(gm_created, '%Y-%m-%d') BETWEEN '".$query_date."' AND '".$query_date_2."' AND user_id = '".self::_helpEmailToId($user_id)."'";
            /* echo $sql_query;
             exit();*/
 
