@@ -7,7 +7,8 @@
 
 		$scope.search = "";
 		$scope.number_per_page = 100;
-
+		$scope.task_dates_obj = {};
+		$scope.task_dates = [];
 
 	
 		// view data
@@ -65,8 +66,8 @@
 		    url: '/platform/wallets/get_data/' + current_user_id,
 			data: { wallet_name: wallet_name }
 		}).success(function (result) {
-			/*console.log(result);
-			return;*/
+			//console.log(result);
+			//return;
 			if (result.is_success) {
 				vm.arr_data = result.arr_data;
 				for(var i=0;i<vm.arr_data.length;i++) {
@@ -106,13 +107,22 @@
 		
 
 		vm.build_description = function(data) {
+			//console.log(data);
 			var s= "";
 			if (data.log_type_id == vm.WalletLogs.GH_CREATE_WITHDRAWAL_LOG_TYPE_ID) {
 				return "GH WALLET WITHDRAWAL";
 			} else if (data.log_type_id == vm.WalletLogs.DAILY_BONUS_GAME_DEPOSIT_LOG_TYPE_ID) {
 				return "DAILY BONUS GAME DEPOSIT";
 			} else if (data.log_type_id == vm.WalletLogs.DAILY_TASK_EARNING_FOR_PH_COMPLETED) {
-				return "DAILY TASK EARNING FOR PH COMPLETED";
+				
+
+
+				//task date range calculation
+				return $scope.getTaskDate(data.gm_date,data.task_identifier_tmp);
+
+
+
+
 			} else if (data.log_type_id == vm.WalletLogs.SYSTEM_ERROR_CORRECTION_LOG_TYPE_ID) {
 				return data.custom_remark;
 			} else if (data.log_type_id == vm.WalletLogs.ADMIN_ADJUSTMENT_LOG_TYPE_ID) {
@@ -164,7 +174,27 @@
 				}
 			}
 		};
-			
+		$scope.getTaskDate = function(date = null, flag = null) {
+			if (date != null && flag != null) {
+				if(flag == 1 || flag == 2) {
+					//return "Its going right";
+					if (flag == 1) {
+						return moment(moment(date).subtract(29, 'days') ).format("YYYY-MM-DD")+" UTC TO "+date+" UTC";
+					} else if(flag == 2) {
+						return moment(moment(date).subtract(120, 'days') ).format("YYYY-MM-DD")+" UTC TO "+moment(moment(date).subtract(90, 'days') ).format("YYYY-MM-DD")+" UTC";
+					} else {
+						console.log("Developer Hint 2: unexpected identifier i.e it's not 1 or 2");
+						return "DAILY TASK EARNING FOR PH COMPLETED"
+					}
+				} else {
+					console.log("Developer Hint: unexpected identifier i.e it's not 1 or 2");
+					return "DAILY TASK EARNING FOR PH COMPLETED";
+				}
+			} else {
+				console.log("Developer Hint: date or flag is null , can't identify it's task one or two");
+				return "DAILY TASK EARNING FOR PH COMPLETED";
+			}
+		}
 	}]);
 
 

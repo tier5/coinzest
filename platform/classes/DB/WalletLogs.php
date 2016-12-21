@@ -101,6 +101,7 @@ class DB_WalletLogs extends CI_Model {
 		$arr[] = "is_release_part_of_funds_on_ph_complete";
 		$arr[] = "amount_available";
 		$arr[] = "wallet_log_reference_id";
+		$arr[] = "task_identifier_tmp";
 		return $arr;
 	}
 

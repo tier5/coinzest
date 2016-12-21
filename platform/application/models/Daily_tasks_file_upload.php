@@ -76,9 +76,9 @@
             //check repeat email
             if (self::isEmailExist($data->val($i,3), date('Y-m-d',strtotime($update_date)))) {
                 //task one insertaion
-                $sql_wallet_logs_t1 = "INSERT INTO wallet_logs(user_id, amount,gm_created,gm_modified,gm_date,is_available,wallet_type_id,log_type_id,is_pending_create,reference_id) VALUES ('".self::_helpEmailToId($data->val($i,3))."','".$task_wise_amount_task_one."','".date('Y-m-d H:i:s')."','".date('Y-m-d H:i:s')."','".date('Y-m-d',strtotime($update_date))."','N','4','80','N', '".$data->val($i,8)."')";
+                $sql_wallet_logs_t1 = "INSERT INTO wallet_logs(user_id, amount,gm_created,gm_modified,gm_date,is_available,wallet_type_id,log_type_id,is_pending_create,reference_id, task_identifier_tmp) VALUES ('".self::_helpEmailToId($data->val($i,3))."','".$task_wise_amount_task_one."','".date('Y-m-d H:i:s')."','".date('Y-m-d H:i:s')."','".date('Y-m-d',strtotime($update_date))."','N','4','80','N', '".$data->val($i,8)."', 1)";
                 //task two insertaion
-                $sql_wallet_logs_t2 = "INSERT INTO wallet_logs(user_id, amount,gm_created,gm_modified,gm_date,is_available,wallet_type_id,log_type_id,is_pending_create,reference_id) VALUES ('".self::_helpEmailToId($data->val($i,3))."','".$task_wise_amount_task_two."','".date('Y-m-d H:i:s')."','".date('Y-m-d H:i:s')."','".date('Y-m-d',strtotime($update_date))."','N','4','80','N', '".$data->val($i,13)."')";
+                $sql_wallet_logs_t2 = "INSERT INTO wallet_logs(user_id, amount,gm_created,gm_modified,gm_date,is_available,wallet_type_id,log_type_id,is_pending_create,reference_id, task_identifier_tmp) VALUES ('".self::_helpEmailToId($data->val($i,3))."','".$task_wise_amount_task_two."','".date('Y-m-d H:i:s')."','".date('Y-m-d H:i:s')."','".date('Y-m-d',strtotime($update_date))."','N','4','80','N', '".$data->val($i,13)."', 2)";
                     /*echo $sql_wallet_logs_t2;
                     exit();*/
                 $this->db->query($sql_wallet_logs_t1);
