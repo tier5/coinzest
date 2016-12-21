@@ -167,7 +167,7 @@
 
             $query_date = date("Y-m-d", $date);
 
-            $date_range_2 = strtotime(date("d-m-Y", strtotime($update_date)) . " -89 days");
+            $date_range_2 = strtotime(date("d-m-Y", strtotime($update_date)) . " -90 days");
 
             $query_date_2 = date("Y-m-d", $date_range_2);
             $tot_cost_2 = 0.00;
