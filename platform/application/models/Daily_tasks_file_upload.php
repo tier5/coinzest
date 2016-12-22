@@ -24,7 +24,7 @@
 	    		return self::databaseOperations($data, $update_date, $user_id);
 	    	}
     	} else {
-    		//call that function 
+    		//call that function
     		return self::databaseOperations($data, $update_date, $user_id);
     	}
     }
@@ -42,7 +42,7 @@
         $task_wise_amount_task_two = 0.00;
         $current_ph_t1 = 0.00;
         $current_ph_t2 = 0.00;
-    	for ($i=2; $i <= $data->rowcount(); $i++) { 
+    	for ($i=2; $i <= $data->rowcount(); $i++) {
     		$some1 = explode(' ', $data->val($i,5))[0];
 	    	$some2 = explode(' ', $data->val($i,5))[1];
 	    	$some3 = explode(' ', $data->val($i,12))[1];
@@ -101,7 +101,7 @@
 			//debug the sql error here dev guide -Tier5 llc
 			//$error = $this->db->error(); print $error;
 		}
-    } 
+    }
     public function getEmail($id) {
         $sql = "SELECT login FROM wp_users WHERE ID = ".$id;
         $get_email = $this->db->query($sql);
@@ -115,7 +115,7 @@
         } else {
             return time();
         }
-        
+
     }
     public function getTableData($email) {
         if (isset($email) && $email!= null && $email->login) {
@@ -161,44 +161,71 @@
             }
         } else if($update_date != null && $user_id != null && $identifier != null) {
             //task 2
-            /*echo $update_date;
-            exit();*/
-            $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -119 days");
+            $update_date_month = explode("-", $update_date);
+            $update_date_month = $update_date_month[1];
+            if($update_date_month == 11 || $update_date_month == '11') {
+              //range should be -122 TO -92
+              $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -122 days");
 
-            $query_date = date("Y-m-d", $date);
+              $query_date = date("Y-m-d", $date);
 
-            $date_range_2 = strtotime(date("d-m-Y", strtotime($update_date)) . " -90 days");
+              $date_range_2 = strtotime(date("d-m-Y", strtotime($update_date)) . " -92 days");
 
-            $query_date_2 = date("Y-m-d", $date_range_2);
-            $tot_cost_2 = 0.00;
-            
+              $query_date_2 = date("Y-m-d", $date_range_2);
+              //echo "nov dates to aug dates";
+            } else if ($update_date_month == 12 || $update_date_month == '12') {
+              //range should be -121 TO -91
+              $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -121 days");
 
-            $sql_query = "SELECT amount,amount_matched_completed FROM phrequests WHERE date_format(gm_created, '%Y-%m-%d') BETWEEN '".$query_date."' AND '".$query_date_2."' AND user_id = '".self::_helpEmailToId($user_id)."'";
-           /* echo $sql_query;
-            exit();*/
+              $query_date = date("Y-m-d", $date);
 
-            $no_of_data = $this->db->query($sql_query);
-            /*echo $no_of_data->num_rows();
-            exit();*/
-            if ($no_of_data->num_rows() > 0) {
-                if (count($no_of_data->result()) > 0) {
-                   foreach ($no_of_data->result() as $key => $value) {
-                        //check active or not
-                        if ($value->amount === $value->amount_matched_completed) {
-                             $tot_cost_2 += $value->amount;
-                        } else {
-                            $tot_cost_2 +=0;
-                        }
-                    }
-                    return $tot_cost_2;
-                } else {
-                    return 0;
-                }
+              $date_range_2 = strtotime(date("d-m-Y", strtotime($update_date)) . " -91 days");
+
+              $query_date_2 = date("Y-m-d", $date_range_2);
+              //echo "dec dates to sept dates";
+            } else if ($update_date_month == 1 || $update_date_month == 01 || $update_date_month == '1' || $update_date_month == '01') {
+              //range should be -122 TO -92
+              $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -122 days");
+
+              $query_date = date("Y-m-d", $date);
+
+              $date_range_2 = strtotime(date("d-m-Y", strtotime($update_date)) . " -92 days");
+
+              $query_date_2 = date("Y-m-d", $date_range_2);
             } else {
-                return 0;
+              $query_date = "";
+              $query_date_2 = "";
+              //echo "task two no longer available";
+            }
+            $tot_cost_2 = 0.00;
+            if(strlen(trim($query_date)) > 0 && strlen(trim($query_date_2)) > 0) {
+              $sql_query = "SELECT amount,amount_matched_completed FROM phrequests WHERE date_format(gm_created, '%Y-%m-%d') BETWEEN '".$query_date."' AND '".$query_date_2."' AND user_id = '".self::_helpEmailToId($user_id)."'";
+              // echo $sql_query;
+              // exit();
+              $no_of_data = $this->db->query($sql_query);
+              if ($no_of_data->num_rows() > 0) {
+                  if (count($no_of_data->result()) > 0) {
+                     foreach ($no_of_data->result() as $key => $value) {
+                          //check active or not
+                          if ($value->amount === $value->amount_matched_completed) {
+                               $tot_cost_2 += $value->amount;
+                          } else {
+                              $tot_cost_2 +=0;
+                          }
+                      }
+                      return $tot_cost_2;
+                  } else {
+                      return 0;
+                  }
+              } else {
+                  return 0;
+              }
+            } else {
+              //no longer task 2 available
+              return 0;
             }
         } else {
-            //bad case just to make sure 
+            //bad case just to make sure
             return 0;
         }
         //exit();
