@@ -257,16 +257,7 @@
 				setter_1++;
 				
 			}
-			console.log();
-			var d = new Date(moment(response.update_date).format("DD-MM-YYYY"));
-d.setDate(d.getDate()-29);
-/*console.log(d);
-console.log()*/
-
-			/*console.log(moment('d-m-y'))
-			console.log(moment().add(1, 'days'));*/
-			//console.log(moment(moment(response.update_date).format("YYYY-MM-DD")).add(-29, 'days').format("YYYY-MM-DD") );
-			$('#tab_jan #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date).format("DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+			$('#tab_jan #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 2:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
@@ -275,7 +266,7 @@ console.log()*/
 				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_2++;
 				}
-				$('#tab_feb #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date).format("DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_feb #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 3:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
@@ -284,7 +275,7 @@ console.log()*/
 				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_3++;
 				}
-				$('#tab_mar #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date).format("DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_mar #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 4:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
@@ -293,7 +284,7 @@ console.log()*/
 				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_4++;
 				}
-				$('#tab_apr #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date).format("DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_apr #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 5:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
@@ -302,7 +293,7 @@ console.log()*/
 				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_5++;
 				}
-				$('#tab_may #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date).format("DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_may #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 6:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
@@ -311,7 +302,7 @@ console.log()*/
 				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_6++;
 				}
-				$('#tab_jun #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date).format("DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_jun #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 7:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
@@ -320,7 +311,7 @@ console.log()*/
 				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_7++;
 				}
-				$('#tab_july #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date).format("DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_july #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 8:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
@@ -329,7 +320,7 @@ console.log()*/
 				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_8++;
 				}
-				$('#tab_aug #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date).format("DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_aug #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 9:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
@@ -338,7 +329,7 @@ console.log()*/
 				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_9++;
 				}
-				$('#tab_sep #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date).format("DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_sep #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 10:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
@@ -347,7 +338,7 @@ console.log()*/
 				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_10++;
 				}
-				$('#tab_oct #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date).format("DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_oct #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 11:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
@@ -356,7 +347,7 @@ console.log()*/
 				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_11++;
 				}
-				$('#tab_nov #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date).format("DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_nov #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			case 12:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
@@ -367,7 +358,7 @@ console.log()*/
 					setter_12++;
 					
 				}
-				$('#tab_dec #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date).format("DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_dec #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+task_two_jq+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			default:
 				console.log('Error in putting data');
@@ -437,4 +428,13 @@ console.log()*/
 			return $(this).attr("aria-valuenow") + "%";
 		});
 	}
+	/*function _convertDate(date) {
+		if (typeof date == "undefined") {
+			//console.log(date.toString());
+			return;
+		} else {
+			console.log(date);
+		}
+    	
+    }*/
 </script>
