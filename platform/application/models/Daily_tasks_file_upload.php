@@ -47,8 +47,8 @@
 	    	$some2 = explode(' ', $data->val($i,5))[1];
 	    	$some3 = explode(' ', $data->val($i,12))[1];
 	    	$some4 = explode(' ', $data->val($i,12))[0];
-	    	$some5 = $data->val($i,6) == 'DONE' ? 1 : 0;
-	    	$some6 = $data->val($i,10) == 'DONE' ? 1 : 0 ;
+	    	$some5 = $data->val($i,9) == "3.33 % Earned" ? 1 : 0;
+	    	$some6 = $data->val($i,14) == "3.33 % Earned" ? 1 : 0 ;
             //check repeat email
             if (self::isEmailExist($data->val($i,3), date('Y-m-d',strtotime($update_date)))) {
     			$sql = "INSERT INTO file_upload_log (update_date, name, bmh_user_id, fb_account_url, date_of_1st_ph, first_ph_amount, task_one,task_one_details, task_one_id, modarator_comment_task_one,task_two, task_two_details, task_two_id,modarator_comment_task_two, current_ph, date_of_ph_2nd) VALUES ('".$update_date."','".$data->val($i,2)."','".$data->val($i,3)."','".$data->val($i,4)."','".$some1."','".$some2."','".$some5."','".$data->val($i,7)."','".$data->val($i,8)."','".$data->val($i,9)."','".$some6."','".$data->val($i,11)."','".$data->val($i,13)."','".$data->val($i,14)."','".$some3."','".$some4."')";
