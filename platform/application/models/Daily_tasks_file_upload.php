@@ -165,7 +165,7 @@
             $update_date_month = $update_date_month[1];
             if($update_date_month == 11 || $update_date_month == '11') {
               //range should be -122 TO -92
-              $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -122 days");
+              $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -121 days");
 
               $query_date = date("Y-m-d", $date);
 
@@ -185,7 +185,7 @@
               //echo "dec dates to sept dates";
             } else if ($update_date_month == 1 || $update_date_month == 01 || $update_date_month == '1' || $update_date_month == '01') {
               //range should be -122 TO -92
-              $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -122 days");
+              $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -121 days");
 
               $query_date = date("Y-m-d", $date);
 

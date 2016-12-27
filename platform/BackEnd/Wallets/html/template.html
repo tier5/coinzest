@@ -185,16 +185,16 @@
 					} else if(flag == 2) {
 						//task 2
 						if (month == 11 || month == '11') {
-							//range should be -122 TO -92
-							return moment(moment(date).subtract(122, 'days') ).format("YYYY-MM-DD")+" UTC TO "+moment(moment(date).subtract(92, 'days') ).format("YYYY-MM-DD")+" UTC";
+							//range should be -121 TO -92
+							return moment(moment(date).subtract(121, 'days') ).format("YYYY-MM-DD")+" UTC TO "+moment(moment(date).subtract(92, 'days') ).format("YYYY-MM-DD")+" UTC";
 
 						} else if (month == 12 || month == '12') {
 							//range should be -121 TO -91
 							return moment(moment(date).subtract(121, 'days') ).format("YYYY-MM-DD")+" UTC TO "+moment(moment(date).subtract(91, 'days') ).format("YYYY-MM-DD")+" UTC";
 
 						} else if (month == 1 || month == 01 || month == '1' || month == '01') {
-							//range should be -122 TO -92
-							return moment(moment(date).subtract(122, 'days') ).format("YYYY-MM-DD")+" UTC TO "+moment(moment(date).subtract(92, 'days') ).format("YYYY-MM-DD")+" UTC";
+							//range should be -121 TO -92
+							return moment(moment(date).subtract(121, 'days') ).format("YYYY-MM-DD")+" UTC TO "+moment(moment(date).subtract(92, 'days') ).format("YYYY-MM-DD")+" UTC";
 
 						} else {
 							//range should be nothing task #2 end
