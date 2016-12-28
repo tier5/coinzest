@@ -358,7 +358,7 @@
 					setter_12++;
 					
 				}
-				$('#tab_dec #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+moment(new Date(moment(response.update_date, "DD-MM-YYYY").subtract(121, 'days'))).format("DD-MM-YYYY")+" UTC TO "+ (moment(new Date(moment(response.update_date, "DD-MM-YYYY").subtract(91, 'days'))).format("DD-MM-YYYY"))+" UTC"+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				$('#tab_dec #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+moment(new Date(moment(response.update_date, "DD-MM-YYYY").subtract(120, 'days'))).format("DD-MM-YYYY")+" UTC TO "+ (moment(new Date(moment(response.update_date, "DD-MM-YYYY").subtract(91, 'days'))).format("DD-MM-YYYY"))+" UTC"+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
 			break;
 			default:
 				console.log('Error in putting data');

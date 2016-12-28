@@ -174,8 +174,8 @@
               $query_date_2 = date("Y-m-d", $date_range_2);
               //echo "nov dates to aug dates";
             } else if ($update_date_month == 12 || $update_date_month == '12') {
-              //range should be -121 TO -91
-              $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -121 days");
+              //range should be -120 TO -91
+              $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -120 days");
 
               $query_date = date("Y-m-d", $date);
 
