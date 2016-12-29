@@ -67,9 +67,10 @@
 		    url: '/platform/wallets/get_data/' + current_user_id,
 			data: { wallet_name: wallet_name }
 		}).success(function (result) {
-			// console.log(JSON.stringify(result, null, 4));
+			//console.log(JSON.stringify(result, null, 4));
 			//return;
 			if (result.is_success) {
+				//console.log(result.arr_data);
 				angular.forEach(result.arr_data, function(item){
 					angular.forEach(item, function(singleItem){
 						vm.arr_data.push(singleItem);
@@ -77,6 +78,7 @@
 				});
 				//vm.arr_data = result.arr_data;
 				vm.arr_data_custom = [];
+				//console.log(vm.arr_data);
 				for(var i=0;i<vm.arr_data.length;i++) {
 					if (vm.arr_data[i].is_available == 'Y') {
 						vm.total_amount = (+vm.total_amount) + (+vm.arr_data[i].amount);
@@ -107,7 +109,10 @@
 			//console.log(vm.total_amount + ' data being added ' + data.amount);
 			//console.log(vm.temp_amount);
 			//console.log(data.amount);
-			
+			//console.log(vm.t.arr_balance[$index]);
+			// console.log(vm.t.arr_balance);
+			// console.log('indx= '+$index);
+			// console.log(vm.t.arr_balance[$index]);
 			return vm.t.arr_balance[$index];
 		};
 
@@ -190,7 +195,18 @@
 					//return "Its going right";
 					if (flag == 1) {
 						//task one
-						return moment(moment(date).subtract(29, 'days') ).format("YYYY-MM-DD")+" UTC TO "+date+" UTC";
+						//only for march
+						if (date.split('-')[1] == 3 || date.split('-')[1] == 03 || date.split('-')[1] == '3' || date.split('-')[1] == '03') {
+							//console.log($scope.checkLeapYear(date.split('-')[0]));
+							if ($scope.checkLeapYear(date.split('-')[0])) {
+								return moment(moment(date).subtract(29, 'days') ).format("YYYY-MM-DD")+" UTC TO "+date+" UTC";
+							} else {
+								return moment(moment(date).subtract(30, 'days') ).format("YYYY-MM-DD")+" UTC TO "+date+" UTC";
+							}
+						} else {
+
+							return moment(moment(date).subtract(29, 'days') ).format("YYYY-MM-DD")+" UTC TO "+date+" UTC";
+						}
 					} else if(flag == 2) {
 						//task 2
 						if (month == 11 || month == '11') {
@@ -221,6 +237,17 @@
 			} else {
 				console.log("Developer Hint: date or flag is null , can't identify it's task one or two");
 				return "DAILY TASK EARNING FOR PH COMPLETED";
+			}
+		}
+		$scope.checkLeapYear =function(year = null) {
+			if (year == null) {
+				return false;
+			} else {
+				if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
+					return true;
+				} else {
+					return false;
+				}
 			}
 		}
 	}]);
@@ -321,7 +348,8 @@
 					</td>
 					<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
 						<div ng-show="data.is_available == 'N'" style="{{data.identifier == 3?'color:black;':'color:blue;'}}">
-						$ {{page_ctrl.build_amount($index) | number: 2}}
+
+						$ 0.00
 						</div>
 						<div ng-show="data.is_available == 'Y'" style="{{data.identifier == 3?'color:black;':''}}">
 							$ {{page_ctrl.build_amount($index) | number: 2}}

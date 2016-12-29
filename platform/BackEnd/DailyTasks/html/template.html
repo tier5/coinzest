@@ -263,81 +263,82 @@
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
 					setter_2++;
 				}
-				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
+				/*if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_2++;
-				}
+				}*/
 				$('#tab_feb #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+"N/A"+'</td><td>'+"N/A"+'</td></tr>');
 			break;
 			case 3:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
 					setter_3++;
 				}
-				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
+				/*if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_3++;
-				}
-				$('#tab_mar #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+"N/A"+'</td><td>'+"N/A"+'</td></tr>');
+				}*/
+				//console.log(checkLeapYear(response.update_date));
+				$('#tab_mar #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(checkLeapYear(response.update_date) == true ? 29 : 30, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+"N/A"+'</td><td>'+"N/A"+'</td></tr>');
 			break;
 			case 4:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
 					setter_4++;
 				}
-				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
+				/*if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_4++;
-				}
+				}*/
 				$('#tab_apr #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+"N/A"+'</td><td>'+"N/A"+'</td></tr>');
 			break;
 			case 5:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
 					setter_5++;
 				}
-				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
+				/*if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_5++;
-				}
+				}*/
 				$('#tab_may #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+"N/A"+'</td><td>'+"N/A"+'</td></tr>');
 			break;
 			case 6:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
 					setter_6++;
 				}
-				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
+				/*if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_6++;
-				}
+				}*/
 				$('#tab_jun #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+"N/A"+'</td><td>'+"N/A"+'</td></tr>');
 			break;
 			case 7:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
 					setter_7++;
 				}
-				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
+				/*if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_7++;
-				}
+				}*/
 				$('#tab_july #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+"N/A"+'</td><td>'+"N/A"+'</td></tr>');
 			break;
 			case 8:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
 					setter_8++;
 				}
-				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
+				/*if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_8++;
-				}
+				}*/
 				$('#tab_aug #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+"N/A"+'</td><td>'+"N/A"+'</td></tr>');
 			break;
 			case 9:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
 					setter_9++;
 				}
-				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
+				/*if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_9++;
-				}
+				}*/
 				$('#tab_sep #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+"N/A"+'</td><td>'+"N/A"+'</td></tr>');
 			break;
 			case 10:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
 					setter_10++;
 				}
-				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
+				/*if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_10++;
-				}
+				}*/
 				$('#tab_oct #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+"N/A"+'</td><td>'+"N/A"+'</td></tr>');
 			break;
 			case 11:
@@ -367,6 +368,7 @@
 
 	}
 	function _setProgressBar() {
+		/*console.log(setter_7);*/
 		$('.progress .prog_jan').css("width",function(){
 			$(this).attr("aria-valuenow", MULTIPLIER*setter_1.toFixed(2));
 			$('.progress .prog_jan .val').html(MULTIPLIER*setter_1.toFixed(2)+"%");
@@ -397,11 +399,13 @@
 			$('.progress .prog_jun .val').html(MULTIPLIER*setter_6.toFixed(2)+"%");
 			return $(this).attr("aria-valuenow") + "%";
 		});
-		$('.progress .prog_jul').css("width",function(){
+
+		$('.progress .prog_july').css("width",function(){
 			$(this).attr("aria-valuenow", MULTIPLIER*setter_7.toFixed(2));
-			$('.progress .prog_jul .val').html(MULTIPLIER*setter_7.toFixed(2)+"%");
+			$('.progress .prog_july .val').html(MULTIPLIER*setter_7.toFixed(2)+"%");
 			return $(this).attr("aria-valuenow") + "%";
 		});
+
 		$('.progress .prog_aug').css("width",function(){
 			$(this).attr("aria-valuenow", MULTIPLIER*setter_8.toFixed(2));
 			$('.progress .prog_aug .val').html(MULTIPLIER*setter_8.toFixed(2)+"%");
@@ -428,13 +432,14 @@
 			return $(this).attr("aria-valuenow") + "%";
 		});
 	}
-	/*function _convertDate(date) {
-		if (typeof date == "undefined") {
-			//console.log(date.toString());
-			return;
+	function checkLeapYear(year) {
+		//console.log("leap year "+year);
+		var year = year.split('-');
+		year = year[2];
+		if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
+			return true;
 		} else {
-			console.log(date);
+			return false;
 		}
-    	
-    }*/
+	}
 </script>

@@ -137,7 +137,18 @@
         if ($update_date != null && $user_id != null && $identifier == null) {
             //task 1
             $tot_cost_t1=0.00;
-            $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -29 days");
+            if (explode("-", $update_date)[1] == 3 || explode("-", $update_date)[1] == 03 || explode("-", $update_date)[1] == '3' || explode("-", $update_date)[1] == '03') {
+              if (self::isLeapYear(explode("-", $update_date)[2]) == 1) {
+                //leap year
+                $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -29 days");
+              } else {
+                //not leap year
+                $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -30 days");
+              }
+            } else {
+              $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -29 days");
+            }
+            
             $query_date = date("Y-m-d", $date);
             $date_reordered = date('Y-m-d',strtotime($update_date));
             $sql_query = "SELECT amount,amount_matched_completed FROM phrequests WHERE date_format(gm_created, '%Y-%m-%d') BETWEEN '".$query_date."' AND '".$date_reordered."' AND user_id = '".self::_helpEmailToId($user_id)."'";
@@ -245,5 +256,16 @@
         } else {
             return false;
         }
+    }
+    public function isLeapYear($year=null) {
+      if ($year == null) {
+        return 0;
+      } else {
+        if ($year % 4 == 0 && $year % 100 != 0 || $year % 400 == 0) {
+          return 1;
+        } else {
+          return 0;
+        }
+      }
     }
  }

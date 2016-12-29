@@ -170,11 +170,12 @@ class Wallets extends CI_Controller {
 							'user_id' => $user_id,
 							'amount' => $janTotal,
 							'gm_date' => '2016-01-02',
-							'is_available' => 'N',
+							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
-							'identifier' => 3
+							'identifier' => 3,
+							'balance' => $janTotal
 
 						);
 				array_push($jan, $janArray);
@@ -190,12 +191,12 @@ class Wallets extends CI_Controller {
 							'user_id' => $user_id,
 							'amount' => $febTotal,
 							'gm_date' => '2016-01-02',
-							'is_available' => 'N',
+							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
-							'identifier' => 3
-
+							'identifier' => 3,
+							'balance' => $janTotal+$febTotal
 						);
 				array_push($feb, $febArray);
 				array_push($new_array, $feb);
@@ -210,11 +211,12 @@ class Wallets extends CI_Controller {
 							'user_id' => $user_id,
 							'amount' => $marTotal,
 							'gm_date' => '2016-01-02',
-							'is_available' => 'N',
+							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
-							'identifier' => 3
+							'identifier' => 3,
+							'balance' => $janTotal+$febTotal+$marTotal
 
 						);
 				array_push($mar, $marArray);
@@ -230,11 +232,12 @@ class Wallets extends CI_Controller {
 							'user_id' => $user_id,
 							'amount' => $aprTotal,
 							'gm_date' => '2016-01-02',
-							'is_available' => 'N',
+							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
-							'identifier' => 3
+							'identifier' => 3,
+							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal
 
 						);
 				array_push($apr, $aprArray);
@@ -250,11 +253,12 @@ class Wallets extends CI_Controller {
 							'user_id' => $user_id,
 							'amount' => $mayTotal,
 							'gm_date' => '2016-01-02',
-							'is_available' => 'N',
+							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
-							'identifier' => 3
+							'identifier' => 3,
+							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal
 
 						);
 				array_push($may, $mayArray);
@@ -270,11 +274,12 @@ class Wallets extends CI_Controller {
 							'user_id' => $user_id,
 							'amount' => $juneTotal,
 							'gm_date' => '2016-01-02',
-							'is_available' => 'N',
+							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
-							'identifier' => 3
+							'identifier' => 3,
+							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal
 
 						);
 				array_push($june, $juneArray);
@@ -290,11 +295,12 @@ class Wallets extends CI_Controller {
 							'user_id' => $user_id,
 							'amount' => $julyTotal,
 							'gm_date' => '2016-01-02',
-							'is_available' => 'N',
+							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
-							'identifier' => 3
+							'identifier' => 3,
+							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal
 
 						);
 				array_push($july, $julyArray);
@@ -310,11 +316,12 @@ class Wallets extends CI_Controller {
 							'user_id' => $user_id,
 							'amount' => $augTotal,
 							'gm_date' => '2016-01-02',
-							'is_available' => 'N',
+							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
-							'identifier' => 3
+							'identifier' => 3,
+							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal
 
 						);
 				array_push($aug, $augArray);
@@ -330,11 +337,12 @@ class Wallets extends CI_Controller {
 							'user_id' => $user_id,
 							'amount' => $septTotal,
 							'gm_date' => '2016-01-02',
-							'is_available' => 'N',
+							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
-							'identifier' => 3
+							'identifier' => 3,
+							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal+$septTotal
 
 						);
 				array_push($sept, $septArray);
@@ -350,11 +358,12 @@ class Wallets extends CI_Controller {
 							'user_id' => $user_id,
 							'amount' => $octTotal,
 							'gm_date' => '2016-01-02',
-							'is_available' => 'N',
+							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
-							'identifier' => 3
+							'identifier' => 3,
+							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal+$septTotal+$octTotal
 
 						);
 				array_push($oct, $octArray);
@@ -370,11 +379,12 @@ class Wallets extends CI_Controller {
 							'user_id' => $user_id,
 							'amount' => $novTotal,
 							'gm_date' => '2016-01-02',
-							'is_available' => 'N',
+							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
-							'identifier' => 3
+							'identifier' => 3,
+							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal+$septTotal+$octTotal+$novTotal
 
 						);
 				array_push($nov, $novArray);
@@ -390,11 +400,12 @@ class Wallets extends CI_Controller {
 							'user_id' => $user_id,
 							'amount' => $decTotal,
 							'gm_date' => '2016-01-02',
-							'is_available' => 'N',
+							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
-							'identifier' => 3
+							'identifier' => 3,
+							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal+$septTotal+$octTotal+$novTotal+$decTotal
 
 						);
 				array_push($dec, $decArray);
