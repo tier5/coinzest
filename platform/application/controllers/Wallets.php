@@ -99,7 +99,308 @@ class Wallets extends CI_Controller {
 			//print "in here\n";
 			//exit(0);
 			$obj_result->is_success = true;
-			$obj_result->arr_data = $arr_data;
+			$new_array = array();
+			$jan = $feb = $mar = $apr = $may = $june = $july = $aug = $sept = $oct = $nov = $dec =   array();
+			$janTotal = $febTotal = $marTotal = $aprTotal = $mayTotal = $juneTotal = $julyTotal = $augTotal = $septTotal = $octTotal = $novTotal = $decTotal = 0;
+
+			for ($i=0; $i < count($arr_data) ; $i++) { 
+				switch (explode("-", $arr_data[$i]['gm_date'])[1]) {
+					case 1:
+						array_push($jan, $arr_data[$i]);
+						$janTotal += $arr_data[$i]['amount'];
+						break;
+					case 2:
+						array_push($feb, $arr_data[$i]);
+						$febTotal += $arr_data[$i]['amount'];
+						break;
+					case 3:
+						array_push($mar, $arr_data[$i]);
+						$marTotal += $arr_data[$i]['amount'];
+						break;
+					case 4:
+						array_push($apr, $arr_data[$i]);
+						$aprTotal += $arr_data[$i]['amount'];
+						break;
+					case 5:
+						array_push($may, $arr_data[$i]);
+						$mayTotal += $arr_data[$i]['amount'];
+						break;
+					case 6:
+						array_push($june, $arr_data[$i]);
+						$juneTotal += $arr_data[$i]['amount'];
+						break;
+					case 7:
+						array_push($july, $arr_data[$i]);
+						$julyTotal += $arr_data[$i]['amount'];
+						break;
+					case 8:
+						array_push($aug, $arr_data[$i]);
+						$augTotal += $arr_data[$i]['amount'];
+						break;
+					case 9:
+						array_push($sept, $arr_data[$i]);
+						$septTotal += $arr_data[$i]['amount'];
+						break;
+					case 10:
+						array_push($oct, $arr_data[$i]);
+						$octTotal += $arr_data[$i]['amount'];
+						break;
+					case 11:
+						array_push($nov, $arr_data[$i]);
+						$novTotal += $arr_data[$i]['amount'];
+						break;
+					case 12:
+						array_push($dec, $arr_data[$i]);
+						$decTotal += $arr_data[$i]['amount'];
+						break;
+					default:
+						# code...
+						break;
+				}
+
+			}
+			/*print_r($nov);*/
+			//january
+			if(count($jan)){
+				$janArray = array(
+							'id' => rand(),
+							'gm_created' => time(),
+							'gm_modified' => time(),
+							'status_id' => 1,
+							'user_id' => $user_id,
+							'amount' => $janTotal,
+							'gm_date' => '2016-01-02',
+							'is_available' => 'N',
+							'wallet_type_id' => $wallet_type_id,
+							'log_type_id' => 80,
+							'is_pending_create' => 'N',
+							'identifier' => 3
+
+						);
+				array_push($jan, $janArray);
+				array_push($new_array, $jan);
+			}
+			//february
+			if(count($feb)){
+				$febArray = array(
+							'id' => rand(),
+							'gm_created' => time(),
+							'gm_modified' => time(),
+							'status_id' => 1,
+							'user_id' => $user_id,
+							'amount' => $febTotal,
+							'gm_date' => '2016-01-02',
+							'is_available' => 'N',
+							'wallet_type_id' => $wallet_type_id,
+							'log_type_id' => 80,
+							'is_pending_create' => 'N',
+							'identifier' => 3
+
+						);
+				array_push($feb, $febArray);
+				array_push($new_array, $feb);
+			}
+			//march
+			if(count($mar)){
+				$marArray = array(
+							'id' => rand(),
+							'gm_created' => time(),
+							'gm_modified' => time(),
+							'status_id' => 1,
+							'user_id' => $user_id,
+							'amount' => $marTotal,
+							'gm_date' => '2016-01-02',
+							'is_available' => 'N',
+							'wallet_type_id' => $wallet_type_id,
+							'log_type_id' => 80,
+							'is_pending_create' => 'N',
+							'identifier' => 3
+
+						);
+				array_push($mar, $marArray);
+				array_push($new_array, $mar);
+			}
+			//april
+			if(count($apr)){
+				$aprArray = array(
+							'id' => rand(),
+							'gm_created' => time(),
+							'gm_modified' => time(),
+							'status_id' => 1,
+							'user_id' => $user_id,
+							'amount' => $aprTotal,
+							'gm_date' => '2016-01-02',
+							'is_available' => 'N',
+							'wallet_type_id' => $wallet_type_id,
+							'log_type_id' => 80,
+							'is_pending_create' => 'N',
+							'identifier' => 3
+
+						);
+				array_push($apr, $aprArray);
+				array_push($new_array, $apr);
+			}
+			//may
+			if(count($may)){
+				$mayArray = array(
+							'id' => rand(),
+							'gm_created' => time(),
+							'gm_modified' => time(),
+							'status_id' => 1,
+							'user_id' => $user_id,
+							'amount' => $mayTotal,
+							'gm_date' => '2016-01-02',
+							'is_available' => 'N',
+							'wallet_type_id' => $wallet_type_id,
+							'log_type_id' => 80,
+							'is_pending_create' => 'N',
+							'identifier' => 3
+
+						);
+				array_push($may, $mayArray);
+				array_push($new_array, $may);
+			}
+			//june
+			if(count($june)){
+				$juneArray = array(
+							'id' => rand(),
+							'gm_created' => time(),
+							'gm_modified' => time(),
+							'status_id' => 1,
+							'user_id' => $user_id,
+							'amount' => $juneTotal,
+							'gm_date' => '2016-01-02',
+							'is_available' => 'N',
+							'wallet_type_id' => $wallet_type_id,
+							'log_type_id' => 80,
+							'is_pending_create' => 'N',
+							'identifier' => 3
+
+						);
+				array_push($june, $juneArray);
+				array_push($new_array, $june);
+			}
+			//july
+			if(count($july)){
+				$julyArray = array(
+							'id' => rand(),
+							'gm_created' => time(),
+							'gm_modified' => time(),
+							'status_id' => 1,
+							'user_id' => $user_id,
+							'amount' => $julyTotal,
+							'gm_date' => '2016-01-02',
+							'is_available' => 'N',
+							'wallet_type_id' => $wallet_type_id,
+							'log_type_id' => 80,
+							'is_pending_create' => 'N',
+							'identifier' => 3
+
+						);
+				array_push($july, $julyArray);
+				array_push($new_array, $july);
+			}
+			//aug
+			if(count($aug)){
+				$augArray = array(
+							'id' => rand(),
+							'gm_created' => time(),
+							'gm_modified' => time(),
+							'status_id' => 1,
+							'user_id' => $user_id,
+							'amount' => $augTotal,
+							'gm_date' => '2016-01-02',
+							'is_available' => 'N',
+							'wallet_type_id' => $wallet_type_id,
+							'log_type_id' => 80,
+							'is_pending_create' => 'N',
+							'identifier' => 3
+
+						);
+				array_push($aug, $augArray);
+				array_push($new_array, $aug);
+			}
+			//sept
+			if(count($sept)){
+				$septArray = array(
+							'id' => rand(),
+							'gm_created' => time(),
+							'gm_modified' => time(),
+							'status_id' => 1,
+							'user_id' => $user_id,
+							'amount' => $septTotal,
+							'gm_date' => '2016-01-02',
+							'is_available' => 'N',
+							'wallet_type_id' => $wallet_type_id,
+							'log_type_id' => 80,
+							'is_pending_create' => 'N',
+							'identifier' => 3
+
+						);
+				array_push($sept, $septArray);
+				array_push($new_array, $sept);
+			}
+			//oct
+			if(count($oct)){
+				$octArray = array(
+							'id' => rand(),
+							'gm_created' => time(),
+							'gm_modified' => time(),
+							'status_id' => 1,
+							'user_id' => $user_id,
+							'amount' => $octTotal,
+							'gm_date' => '2016-01-02',
+							'is_available' => 'N',
+							'wallet_type_id' => $wallet_type_id,
+							'log_type_id' => 80,
+							'is_pending_create' => 'N',
+							'identifier' => 3
+
+						);
+				array_push($oct, $octArray);
+				array_push($new_array, $oct);
+			}
+			//november
+			if(count($nov)){
+				$novArray = array(
+							'id' => rand(),
+							'gm_created' => time(),
+							'gm_modified' => time(),
+							'status_id' => 1,
+							'user_id' => $user_id,
+							'amount' => $novTotal,
+							'gm_date' => '2016-01-02',
+							'is_available' => 'N',
+							'wallet_type_id' => $wallet_type_id,
+							'log_type_id' => 80,
+							'is_pending_create' => 'N',
+							'identifier' => 3
+
+						);
+				array_push($nov, $novArray);
+				array_push($new_array, $nov);
+			}
+			//december
+			if(count($dec)){
+				$decArray = array(
+							'id' => rand(),
+							'gm_created' => time(),
+							'gm_modified' => time(),
+							'status_id' => 1,
+							'user_id' => $user_id,
+							'amount' => $decTotal,
+							'gm_date' => '2016-01-02',
+							'is_available' => 'N',
+							'wallet_type_id' => $wallet_type_id,
+							'log_type_id' => 80,
+							'is_pending_create' => 'N',
+							'identifier' => 3
+
+						);
+				array_push($dec, $decArray);
+				array_push($new_array, $dec);
+			}
+			$obj_result->arr_data = $new_array;
 		}
 
 		print json_encode($obj_result);

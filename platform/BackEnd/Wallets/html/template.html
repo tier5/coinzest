@@ -4,6 +4,7 @@
 
 		var vm = this;
 		vm.arr_data = [];
+		//vm.arr_data_custom = [];
 
 		$scope.search = "";
 		$scope.number_per_page = 100;
@@ -28,7 +29,7 @@
 		var wallet_name = "";
 		var current_user_id = 0;
 		
-		console.log(arr_split[3]);
+		//console.log(arr_split[3]);
 		wallet_name = arr_split[arr_split.length-1];
 		current_user_id = arr_split[arr_split.length-2];
 		if (wallet_name == "") {
@@ -50,14 +51,14 @@
 
 		}
 
-		console.log("current user id " + current_user_id);
+		//console.log("current user id " + current_user_id);
 
 		if (current_user_id == "view") {
 			current_user_id = 0;
 		}
 		
-		console.log(wallet_name);
-		console.log("current user id " + current_user_id);
+		//console.log(wallet_name);
+		//console.log("current user id " + current_user_id);
 
 		
 
@@ -66,10 +67,16 @@
 		    url: '/platform/wallets/get_data/' + current_user_id,
 			data: { wallet_name: wallet_name }
 		}).success(function (result) {
-			//console.log(result);
+			// console.log(JSON.stringify(result, null, 4));
 			//return;
 			if (result.is_success) {
-				vm.arr_data = result.arr_data;
+				angular.forEach(result.arr_data, function(item){
+					angular.forEach(item, function(singleItem){
+						vm.arr_data.push(singleItem);
+					});
+				});
+				//vm.arr_data = result.arr_data;
+				vm.arr_data_custom = [];
 				for(var i=0;i<vm.arr_data.length;i++) {
 					if (vm.arr_data[i].is_available == 'Y') {
 						vm.total_amount = (+vm.total_amount) + (+vm.arr_data[i].amount);
@@ -116,8 +123,10 @@
 			} else if (data.log_type_id == vm.WalletLogs.DAILY_TASK_EARNING_FOR_PH_COMPLETED) {
 				
 
-
+				//console.log(data.gm_date);
+				//return data.gm_date;
 				//task date range calculation
+				//console.log(data.gm_date)
 				return $scope.getTaskDate(data.gm_date,data.task_identifier_tmp);
 
 
@@ -286,35 +295,35 @@
 				<tr class="have_hover" ng-repeat="data in page_ctrl.arr_data track by $index">
 					<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{$index+1}}</td>
 					<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
-						<div ng-show="data.is_available == 'N'" style="color:blue;">
+						<div ng-show="data.is_available == 'N'" style="{{data.identifier == 3?'color:black;':'color:blue;'}}">
 							{{data.gm_date}} UTC
 						</div>
-						<div ng-show="data.is_available == 'Y'">
+						<div ng-show="data.is_available == 'Y'" style="{{data.identifier == 3?'color:black;':''}}">
 							{{data.gm_date}} UTC
 						</div>
 					</td>
 					<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" width="300">
-						<div ng-show="data.is_available == 'N'" style="color:blue;">
+						<div ng-show="data.is_available == 'N'"  style="{{data.identifier == 3?'color:black;':'color:blue;'}}">
 							<p ng-bind-html="page_ctrl.build_description(data)"></p>
 							<!--{{page_ctrl.build_description(data)}}-->
 						</div>
-						<div ng-show="data.is_available == 'Y'">
+						<div ng-show="data.is_available == 'Y'" style="{{data.identifier == 3?'color:black;':''}}">
 							{{page_ctrl.build_description(data)}}
 						</div>
 					</td>
 					<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
-						<div ng-show="data.is_available == 'N'" style="color:blue;">
+						<div ng-show="data.is_available == 'N'" style="{{data.identifier == 3?'color:black;':'color:blue;'}}">
 							$ {{data.amount | number:2 }}	
 						</div>
-						<div ng-show="data.is_available == 'Y'">
+						<div ng-show="data.is_available == 'Y'" style="{{data.identifier == 3?'color:black;':''}}">
 							$ {{data.amount | number:2 }}	
 						</div>
 					</td>
 					<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
-						<div ng-show="data.is_available == 'N'" style="color:blue;">
+						<div ng-show="data.is_available == 'N'" style="{{data.identifier == 3?'color:black;':'color:blue;'}}">
 						$ {{page_ctrl.build_amount($index) | number: 2}}
 						</div>
-						<div ng-show="data.is_available == 'Y'">
+						<div ng-show="data.is_available == 'Y'" style="{{data.identifier == 3?'color:black;':''}}">
 							$ {{page_ctrl.build_amount($index) | number: 2}}
 						</div>
 					</td>
