@@ -276,7 +276,7 @@
 					setter_3++;
 				}*/
 				//console.log(checkLeapYear(response.update_date));
-				$('#tab_mar #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(checkLeapYear(response.update_date) == true ? 29 : 30, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+"N/A"+'</td><td>'+"N/A"+'</td></tr>');
+				$('#tab_mar #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(checkLeapYear(response.update_date) == true ? 28 : 29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+"N/A"+'</td><td>'+"N/A"+'</td></tr>');
 			break;
 			case 4:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {

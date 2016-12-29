@@ -140,10 +140,10 @@
             if (explode("-", $update_date)[1] == 3 || explode("-", $update_date)[1] == 03 || explode("-", $update_date)[1] == '3' || explode("-", $update_date)[1] == '03') {
               if (self::isLeapYear(explode("-", $update_date)[2]) == 1) {
                 //leap year
-                $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -29 days");
+                $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -28 days");
               } else {
                 //not leap year
-                $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -30 days");
+                $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -29 days");
               }
             } else {
               $date = strtotime(date("d-m-Y", strtotime($update_date)) . " -29 days");

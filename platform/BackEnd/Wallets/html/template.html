@@ -199,9 +199,9 @@
 						if (date.split('-')[1] == 3 || date.split('-')[1] == 03 || date.split('-')[1] == '3' || date.split('-')[1] == '03') {
 							//console.log($scope.checkLeapYear(date.split('-')[0]));
 							if ($scope.checkLeapYear(date.split('-')[0])) {
-								return moment(moment(date).subtract(29, 'days') ).format("YYYY-MM-DD")+" UTC TO "+date+" UTC";
+								return moment(moment(date).subtract(28, 'days') ).format("YYYY-MM-DD")+" UTC TO "+date+" UTC";
 							} else {
-								return moment(moment(date).subtract(30, 'days') ).format("YYYY-MM-DD")+" UTC TO "+date+" UTC";
+								return moment(moment(date).subtract(29, 'days') ).format("YYYY-MM-DD")+" UTC TO "+date+" UTC";
 							}
 						} else {
 
