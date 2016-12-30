@@ -181,7 +181,7 @@
 		$scope.getTaskDate = function(date = null, flag = null) {
 			var month = date.split('-')[1];
 			if (date != null && flag != null) {
-				if(flag == 1 || flag == 2) {
+				if(flag == 1 || flag == 2 || flag == 3) {
 					//return "Its going right";
 					if (flag == 1) {
 						//task one
@@ -216,7 +216,36 @@
 							console.log('Developer Hint: Not in task #2 date range');
 							return "DAILY TASK FOR PH EARNED";
 						}
-					} else {
+					} else if (flag == 3) {
+						if (month == 1 || month == 01) {
+							return moment().format('YYYY')+"-01-01 UTC TO "+moment().format('YYYY')+"-01-31 UTC";
+						} else if (month == 2 || month == 02) {
+							return $scope.checkLeapYear(moment().format('YYYY')) == true ? moment().format('YYYY')+"-02-01 UTC TO "+moment().format('YYYY')+"-02-29 UTC" : moment().format('YYYY')+"-02-01 UTC TO "+moment().format('YYYY')+"-02-28 UTC";
+						} else if (month == 3 || month == 03) {
+							return moment().format('YYYY')+"-03-01 UTC TO "+moment().format('YYYY')+"-03-31 UTC";
+						} else if (month == 4 || month == 04) {
+							return moment().format('YYYY')+"-04-01 UTC TO "+moment().format('YYYY')+"-04-30 UTC";
+						} else if (month == 5 || month == 05) {
+							return moment().format('YYYY')+"-05-01 UTC TO "+moment().format('YYYY')+"-05-31 UTC";
+						} else if (month == 6 || month == 06) {
+							return moment().format('YYYY')+"-06-01 UTC TO "+moment().format('YYYY')+"-01-30 UTC";
+						} else if (month == 7 || month == 07) {
+							return moment().format('YYYY')+"-07-01 UTC TO "+moment().format('YYYY')+"-07-31 UTC";
+						} else if (month == 8 || month == 08) {
+							return moment().format('YYYY')+"-08-01 UTC TO "+moment().format('YYYY')+"-08-31 UTC";
+						} else if (month == 9 || month == 09) {
+							return moment().format('YYYY')+"-09-01 UTC TO "+moment().format('YYYY')+"-09-30 UTC";
+						} else if (month == 10 || month == 10) {
+							return moment().format('YYYY')+"-10-01 UTC TO "+moment().format('YYYY')+"-10-31 UTC";
+						} else if (month == 11 || month == 11) {
+							return moment().format('YYYY')+"-11-01 UTC TO "+moment().format('YYYY')+"-11-30 UTC";
+						} else if (month == 12 || month == 12) {
+							return moment().format('YYYY')+"-12-01 UTC TO "+moment().format('YYYY')+"-12-31 UTC";
+						}  else {
+							return "DAILY TASK EARNING FOR PH COMPLETED";
+						}
+					} 
+					else {
 						console.log("Developer Hint 2: unexpected identifier i.e it's not 1 or 2");
 						return "DAILY TASK EARNING FOR PH COMPLETED"
 					}

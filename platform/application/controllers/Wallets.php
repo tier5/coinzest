@@ -188,7 +188,7 @@ class Wallets extends CI_Controller {
 							'is_pending_create' => 'N',
 							'identifier' => 3,
 							'balance' => $janTotal,
-							'task_identifier_tmp' =>1
+							'task_identifier_tmp' =>3
 
 						);
 				array_push($jan, $janArray);
@@ -213,7 +213,7 @@ class Wallets extends CI_Controller {
 							'is_pending_create' => 'N',
 							'identifier' => 3,
 							'balance' => $janTotal+$febTotal,
-							'task_identifier_tmp' =>1
+							'task_identifier_tmp' =>3
 						);
 				array_push($feb, $febArray);
 				array_push($new_array, $feb);
@@ -234,7 +234,7 @@ class Wallets extends CI_Controller {
 							'is_pending_create' => 'N',
 							'identifier' => 3,
 							'balance' => $janTotal+$febTotal+$marTotal,
-							'task_identifier_tmp' =>1
+							'task_identifier_tmp' =>3
 
 						);
 				array_push($mar, $marArray);
@@ -256,7 +256,7 @@ class Wallets extends CI_Controller {
 							'is_pending_create' => 'N',
 							'identifier' => 3,
 							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal,
-							'task_identifier_tmp' =>1
+							'task_identifier_tmp' =>3
 
 						);
 				array_push($apr, $aprArray);
@@ -278,7 +278,7 @@ class Wallets extends CI_Controller {
 							'is_pending_create' => 'N',
 							'identifier' => 3,
 							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal,
-							'task_identifier_tmp' =>1
+							'task_identifier_tmp' =>3
 
 						);
 				array_push($may, $mayArray);
@@ -300,7 +300,7 @@ class Wallets extends CI_Controller {
 							'is_pending_create' => 'N',
 							'identifier' => 3,
 							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal,
-							'task_identifier_tmp' =>1
+							'task_identifier_tmp' =>3
 
 						);
 				array_push($june, $juneArray);
@@ -322,7 +322,7 @@ class Wallets extends CI_Controller {
 							'is_pending_create' => 'N',
 							'identifier' => 3,
 							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal,
-							'task_identifier_tmp' =>1
+							'task_identifier_tmp' =>3
 
 						);
 				array_push($july, $julyArray);
@@ -344,7 +344,7 @@ class Wallets extends CI_Controller {
 							'is_pending_create' => 'N',
 							'identifier' => 3,
 							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal,
-							'task_identifier_tmp' =>1
+							'task_identifier_tmp' =>3
 
 						);
 				array_push($aug, $augArray);
@@ -366,7 +366,7 @@ class Wallets extends CI_Controller {
 							'is_pending_create' => 'N',
 							'identifier' => 3,
 							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal+$septTotal,
-							'task_identifier_tmp' =>1
+							'task_identifier_tmp' =>3
 
 						);
 				array_push($sept, $septArray);
@@ -388,7 +388,7 @@ class Wallets extends CI_Controller {
 							'is_pending_create' => 'N',
 							'identifier' => 3,
 							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal+$septTotal+$octTotal,
-							'task_identifier_tmp' =>1
+							'task_identifier_tmp' =>3
 
 						);
 				array_push($oct, $octArray);
@@ -410,7 +410,7 @@ class Wallets extends CI_Controller {
 							'is_pending_create' => 'N',
 							'identifier' => 3,
 							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal+$septTotal+$octTotal+$novTotal,
-							'task_identifier_tmp' =>1
+							'task_identifier_tmp' =>3
 
 						);
 				array_push($nov, $novArray);
@@ -432,7 +432,7 @@ class Wallets extends CI_Controller {
 							'is_pending_create' => 'N',
 							'identifier' => 3,
 							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal+$septTotal+$octTotal+$novTotal+$decTotal,
-							'task_identifier_tmp' =>1
+							'task_identifier_tmp' =>3
 
 						);
 				array_push($dec, $decArray);
