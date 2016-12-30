@@ -368,7 +368,7 @@
 					<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
 						<div ng-show="data.is_available == 'N'" style="{{data.identifier == 3?'color:black;font-weight: bold;':'color:blue;'}}">
 
-						$ 0.00
+						$ {{page_ctrl.build_amount($index) | number: 2}}
 						</div>
 						<div ng-show="data.is_available == 'Y'" style="{{data.identifier == 3?'color:black;font-weight: bold;':''}}">
 							$ {{page_ctrl.build_amount($index) | number: 2}}
