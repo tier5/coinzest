@@ -125,15 +125,7 @@
 				return "DAILY BONUS GAME DEPOSIT";
 			} else if (data.log_type_id == vm.WalletLogs.DAILY_TASK_EARNING_FOR_PH_COMPLETED) {
 				
-
-				//console.log(data.gm_date);
-				//return data.gm_date;
-				//task date range calculation
-				//console.log(data.gm_date)
 				return $scope.getTaskDate(data.gm_date,data.task_identifier_tmp);
-
-
-
 
 			} else if (data.log_type_id == vm.WalletLogs.SYSTEM_ERROR_CORRECTION_LOG_TYPE_ID) {
 				return data.custom_remark;

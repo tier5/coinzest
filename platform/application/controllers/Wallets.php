@@ -102,56 +102,68 @@ class Wallets extends CI_Controller {
 			$new_array = array();
 			$jan = $feb = $mar = $apr = $may = $june = $july = $aug = $sept = $oct = $nov = $dec =   array();
 			$janTotal = $febTotal = $marTotal = $aprTotal = $mayTotal = $juneTotal = $julyTotal = $augTotal = $septTotal = $octTotal = $novTotal = $decTotal = 0;
-
+			$janGmDate = $febGmDate = $marGmDate = $aprGmDate = $mayGmDate = $juneGmDate = $julyGmDate = $augGmDate = $septGmDate = $octGmDate = $novGmDate = $decGmDate =   "";
 			for ($i=0; $i < count($arr_data) ; $i++) { 
 				switch (explode("-", $arr_data[$i]['gm_date'])[1]) {
 					case 1:
 						array_push($jan, $arr_data[$i]);
 						$janTotal += $arr_data[$i]['amount'];
+						$janGmDate = $arr_data[$i]['gm_date'];
 						break;
 					case 2:
 						array_push($feb, $arr_data[$i]);
 						$febTotal += $arr_data[$i]['amount'];
+						$febGmDate = $arr_data[$i]['gm_date'];
 						break;
 					case 3:
 						array_push($mar, $arr_data[$i]);
 						$marTotal += $arr_data[$i]['amount'];
+						$marGmDate = $arr_data[$i]['gm_date'];
 						break;
 					case 4:
 						array_push($apr, $arr_data[$i]);
 						$aprTotal += $arr_data[$i]['amount'];
+						$aprGmDate = $arr_data[$i]['gm_date'];
 						break;
 					case 5:
 						array_push($may, $arr_data[$i]);
 						$mayTotal += $arr_data[$i]['amount'];
+						$mayGmDate = $arr_data[$i]['gm_date'];
 						break;
 					case 6:
 						array_push($june, $arr_data[$i]);
 						$juneTotal += $arr_data[$i]['amount'];
+						$juneGmDate = $arr_data[$i]['gm_date'];
 						break;
 					case 7:
 						array_push($july, $arr_data[$i]);
 						$julyTotal += $arr_data[$i]['amount'];
+						$julyGmDate = $arr_data[$i]['gm_date'];
 						break;
 					case 8:
 						array_push($aug, $arr_data[$i]);
 						$augTotal += $arr_data[$i]['amount'];
+						$augGmDate = $arr_data[$i]['gm_date'];
 						break;
 					case 9:
 						array_push($sept, $arr_data[$i]);
 						$septTotal += $arr_data[$i]['amount'];
+						$septGmDate = $arr_data[$i]['gm_date'];
 						break;
 					case 10:
 						array_push($oct, $arr_data[$i]);
 						$octTotal += $arr_data[$i]['amount'];
+						$octGmDate = $arr_data[$i]['gm_date'];
 						break;
 					case 11:
 						array_push($nov, $arr_data[$i]);
 						$novTotal += $arr_data[$i]['amount'];
+						$novGmDate = $arr_data[$i]['gm_date'];
 						break;
 					case 12:
 						array_push($dec, $arr_data[$i]);
 						$decTotal += $arr_data[$i]['amount'];
+						$decGmDate = $arr_data[$i]['gm_date'];
 						break;
 					default:
 						# code...
@@ -169,13 +181,14 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $janTotal,
-							'gm_date' => date('Y')."-01-01 TO ".date('Y')."-01-31",
+							'gm_date' => $janGmDate,
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
 							'identifier' => 3,
-							'balance' => $janTotal
+							'balance' => $janTotal,
+							'task_identifier_tmp' =>1
 
 						);
 				array_push($jan, $janArray);
@@ -193,13 +206,14 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $febTotal,
-							'gm_date' => self::isLeapYear(date('Y')) == 1 ? date('Y')."-02-01 TO ".date('Y')."-02-29" : date('Y')."-02-01 TO ".date('Y')."-02-28",
+							'gm_date' => $febGmDate,
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
 							'identifier' => 3,
-							'balance' => $janTotal+$febTotal
+							'balance' => $janTotal+$febTotal,
+							'task_identifier_tmp' =>1
 						);
 				array_push($feb, $febArray);
 				array_push($new_array, $feb);
@@ -213,13 +227,14 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $marTotal,
-							'gm_date' => date('Y')."-03-01 TO ".date('Y')."-03-31",
+							'gm_date' => $marGmDate,
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
 							'identifier' => 3,
-							'balance' => $janTotal+$febTotal+$marTotal
+							'balance' => $janTotal+$febTotal+$marTotal,
+							'task_identifier_tmp' =>1
 
 						);
 				array_push($mar, $marArray);
@@ -234,13 +249,14 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $aprTotal,
-							'gm_date' => date('Y')."-04-01 TO ".date('Y')."-04-30",
+							'gm_date' => $aprGmDate,
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
 							'identifier' => 3,
-							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal
+							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal,
+							'task_identifier_tmp' =>1
 
 						);
 				array_push($apr, $aprArray);
@@ -255,13 +271,14 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $mayTotal,
-							'gm_date' => date('Y')."-05-01 TO ".date('Y')."-05-31",
+							'gm_date' => $mayGmDate,
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
 							'identifier' => 3,
-							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal
+							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal,
+							'task_identifier_tmp' =>1
 
 						);
 				array_push($may, $mayArray);
@@ -276,13 +293,14 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $juneTotal,
-							'gm_date' => date('Y')."-06-01 TO ".date('Y')."-06-30",
+							'gm_date' => $juneGmDate,
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
 							'identifier' => 3,
-							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal
+							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal,
+							'task_identifier_tmp' =>1
 
 						);
 				array_push($june, $juneArray);
@@ -297,13 +315,14 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $julyTotal,
-							'gm_date' => date('Y')."-07-01 TO ".date('Y')."-07-31",
+							'gm_date' => $julyGmDate,
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
 							'identifier' => 3,
-							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal
+							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal,
+							'task_identifier_tmp' =>1
 
 						);
 				array_push($july, $julyArray);
@@ -318,13 +337,14 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $augTotal,
-							'gm_date' => date('Y')."-08-01 TO ".date('Y')."-08-31",
+							'gm_date' => $augGmDate,
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
 							'identifier' => 3,
-							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal
+							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal,
+							'task_identifier_tmp' =>1
 
 						);
 				array_push($aug, $augArray);
@@ -339,13 +359,14 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $septTotal,
-							'gm_date' => date('Y')."-09-01 TO ".date('Y')."-09-30",
+							'gm_date' => $septGmDate,
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
 							'identifier' => 3,
-							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal+$septTotal
+							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal+$septTotal,
+							'task_identifier_tmp' =>1
 
 						);
 				array_push($sept, $septArray);
@@ -360,13 +381,14 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $octTotal,
-							'gm_date' => date('Y')."-10-01 TO ".date('Y')."-10-31",
+							'gm_date' => $octGmDate,
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
 							'identifier' => 3,
-							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal+$septTotal+$octTotal
+							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal+$septTotal+$octTotal,
+							'task_identifier_tmp' =>1
 
 						);
 				array_push($oct, $octArray);
@@ -381,13 +403,14 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $novTotal,
-							'gm_date' => date('Y')."-11-01 TO ".date('Y')."-11-30",
+							'gm_date' => $novGmDate,
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
 							'identifier' => 3,
-							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal+$septTotal+$octTotal+$novTotal
+							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal+$septTotal+$octTotal+$novTotal,
+							'task_identifier_tmp' =>1
 
 						);
 				array_push($nov, $novArray);
@@ -402,13 +425,14 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $decTotal,
-							'gm_date' => date('Y')."-12-01 TO ".date('Y')."-12-31",
+							'gm_date' => $decGmDate,
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
 							'is_pending_create' => 'N',
 							'identifier' => 3,
-							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal+$septTotal+$octTotal+$novTotal+$decTotal
+							'balance' => $janTotal+$febTotal+$marTotal+$aprTotal+$mayTotal+$juneTotal+$julyTotal+$augTotal+$septTotal+$octTotal+$novTotal+$decTotal,
+							'task_identifier_tmp' =>1
 
 						);
 				array_push($dec, $decArray);
