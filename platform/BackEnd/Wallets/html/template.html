@@ -67,8 +67,6 @@
 		    url: '/platform/wallets/get_data/' + current_user_id,
 			data: { wallet_name: wallet_name }
 		}).success(function (result) {
-			//console.log(JSON.stringify(result, null, 4));
-			//return;
 			if (result.is_success) {
 				//console.log(result.arr_data);
 				angular.forEach(result.arr_data, function(item){
@@ -322,36 +320,36 @@
 				<tr class="have_hover" ng-repeat="data in page_ctrl.arr_data track by $index">
 					<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">{{$index+1}}</td>
 					<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
-						<div ng-show="data.is_available == 'N'" style="{{data.identifier == 3?'color:black;':'color:blue;'}}">
+						<div ng-show="data.is_available == 'N'" style="{{data.identifier == 3?'color:black; font-weight: bold;':'color:blue;'}}">
 							{{data.gm_date}} UTC
 						</div>
-						<div ng-show="data.is_available == 'Y'" style="{{data.identifier == 3?'color:black;':''}}">
+						<div ng-show="data.is_available == 'Y'" style="{{data.identifier == 3?'color:black;font-weight: bold;':''}}">
 							{{data.gm_date}} UTC
 						</div>
 					</td>
 					<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'" width="300">
-						<div ng-show="data.is_available == 'N'"  style="{{data.identifier == 3?'color:black;':'color:blue;'}}">
+						<div ng-show="data.is_available == 'N'"  style="{{data.identifier == 3?'color:black;font-weight: bold;':'color:blue;'}}">
 							<p ng-bind-html="page_ctrl.build_description(data)"></p>
 							<!--{{page_ctrl.build_description(data)}}-->
 						</div>
-						<div ng-show="data.is_available == 'Y'" style="{{data.identifier == 3?'color:black;':''}}">
+						<div ng-show="data.is_available == 'Y'" style="{{data.identifier == 3?'color:black;font-weight: bold;':''}}">
 							{{page_ctrl.build_description(data)}}
 						</div>
 					</td>
 					<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
-						<div ng-show="data.is_available == 'N'" style="{{data.identifier == 3?'color:black;':'color:blue;'}}">
+						<div ng-show="data.is_available == 'N'" style="{{data.identifier == 3?'color:black;font-weight: bold;':'color:blue;'}}">
 							$ {{data.amount | number:2 }}	
 						</div>
-						<div ng-show="data.is_available == 'Y'" style="{{data.identifier == 3?'color:black;':''}}">
+						<div ng-show="data.is_available == 'Y'" style="{{data.identifier == 3?'color:black;font-weight: bold;':''}}">
 							$ {{data.amount | number:2 }}	
 						</div>
 					</td>
 					<td class="table_cell" ng-class-odd="'data_table_odd_cell'" ng-class-even="'data_table_even_cell'">
-						<div ng-show="data.is_available == 'N'" style="{{data.identifier == 3?'color:black;':'color:blue;'}}">
+						<div ng-show="data.is_available == 'N'" style="{{data.identifier == 3?'color:black;font-weight: bold;':'color:blue;'}}">
 
 						$ 0.00
 						</div>
-						<div ng-show="data.is_available == 'Y'" style="{{data.identifier == 3?'color:black;':''}}">
+						<div ng-show="data.is_available == 'Y'" style="{{data.identifier == 3?'color:black;font-weight: bold;':''}}">
 							$ {{page_ctrl.build_amount($index) | number: 2}}
 						</div>
 					</td>

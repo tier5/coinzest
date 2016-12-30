@@ -169,7 +169,7 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $janTotal,
-							'gm_date' => '2016-01-02',
+							'gm_date' => date('Y')."-01-01 TO ".date('Y')."-01-31",
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
@@ -182,6 +182,9 @@ class Wallets extends CI_Controller {
 				array_push($new_array, $jan);
 			}
 			//february
+			/*print_r(date('Y'));
+			exit();*/
+			
 			if(count($feb)){
 				$febArray = array(
 							'id' => rand(),
@@ -190,7 +193,7 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $febTotal,
-							'gm_date' => '2016-01-02',
+							'gm_date' => self::isLeapYear(date('Y')) == 1 ? date('Y')."-02-01 TO ".date('Y')."-02-29" : date('Y')."-02-01 TO ".date('Y')."-02-28",
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
@@ -210,7 +213,7 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $marTotal,
-							'gm_date' => '2016-01-02',
+							'gm_date' => date('Y')."-03-01 TO ".date('Y')."-03-31",
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
@@ -231,7 +234,7 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $aprTotal,
-							'gm_date' => '2016-01-02',
+							'gm_date' => date('Y')."-04-01 TO ".date('Y')."-04-30",
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
@@ -252,7 +255,7 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $mayTotal,
-							'gm_date' => '2016-01-02',
+							'gm_date' => date('Y')."-05-01 TO ".date('Y')."-05-31",
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
@@ -273,7 +276,7 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $juneTotal,
-							'gm_date' => '2016-01-02',
+							'gm_date' => date('Y')."-06-01 TO ".date('Y')."-06-30",
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
@@ -294,7 +297,7 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $julyTotal,
-							'gm_date' => '2016-01-02',
+							'gm_date' => date('Y')."-07-01 TO ".date('Y')."-07-31",
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
@@ -315,7 +318,7 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $augTotal,
-							'gm_date' => '2016-01-02',
+							'gm_date' => date('Y')."-08-01 TO ".date('Y')."-08-31",
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
@@ -336,7 +339,7 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $septTotal,
-							'gm_date' => '2016-01-02',
+							'gm_date' => date('Y')."-09-01 TO ".date('Y')."-09-30",
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
@@ -357,7 +360,7 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $octTotal,
-							'gm_date' => '2016-01-02',
+							'gm_date' => date('Y')."-10-01 TO ".date('Y')."-10-31",
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
@@ -378,7 +381,7 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $novTotal,
-							'gm_date' => '2016-01-02',
+							'gm_date' => date('Y')."-11-01 TO ".date('Y')."-11-30",
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
@@ -399,7 +402,7 @@ class Wallets extends CI_Controller {
 							'status_id' => 1,
 							'user_id' => $user_id,
 							'amount' => $decTotal,
-							'gm_date' => '2016-01-02',
+							'gm_date' => date('Y')."-12-01 TO ".date('Y')."-12-31",
 							'is_available' => 'Y',
 							'wallet_type_id' => $wallet_type_id,
 							'log_type_id' => 80,
@@ -416,5 +419,16 @@ class Wallets extends CI_Controller {
 
 		print json_encode($obj_result);
 	}
+	public function isLeapYear($year=null) {
+      if ($year == null) {
+        return 0;
+      } else {
+        if ($year % 4 == 0 && $year % 100 != 0 || $year % 400 == 0) {
+          return 1;
+        } else {
+          return 0;
+        }
+      }
+    }
 }
 ?>
