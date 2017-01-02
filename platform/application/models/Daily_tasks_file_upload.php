@@ -29,8 +29,8 @@
     	}
     }
     public function databaseOperations($data, $update_date, $user_id) {
-        /*print_r($data->val(2,3));
-        exit();*/
+      /*print_r($data->val(2,14));
+      exit();*/
     	$some1 = "";
     	$some2 = "";
     	$some3 = "";
@@ -82,7 +82,14 @@
                     /*echo $sql_wallet_logs_t2;
                     exit();*/
                 $this->db->query($sql_wallet_logs_t1);
-                $this->db->query($sql_wallet_logs_t2);
+                //check for task two if available i.e only january, november, december
+                if (explode("-", $update_date)[1] == 1 || explode("-", $update_date)[1] == 01 || explode("-", $update_date)[1] == '1' || explode("-", $update_date)[1] == '01' || explode("-", $update_date)[1] == 11 || explode("-", $update_date)[1] == '11' || explode("-", $update_date)[1] == 12 || explode("-", $update_date)[1] == '12') {
+                  //check if exists that column
+                  if ($data->val($i,14) != null && $data->val($i,10) != null && $data->val($i,13) != null) {
+                    $this->db->query($sql_wallet_logs_t2);
+                  }
+                }
+                
                 //update daily_bonus_earning_balance in wp-users
                 $total_earning = $task_wise_amount_task_one + $task_wise_amount_task_two;
             }

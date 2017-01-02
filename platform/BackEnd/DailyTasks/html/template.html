@@ -257,7 +257,15 @@
 				setter_1++;
 				
 			}
-			$('#tab_jan #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+moment(new Date(moment(response.update_date, "DD-MM-YYYY").subtract(121, 'days'))).format("DD-MM-YYYY")+" UTC TO "+ (moment(new Date(moment(response.update_date, "DD-MM-YYYY").subtract(92, 'days'))).format("DD-MM-YYYY"))+" UTC"+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+			//console.log(response);
+			//conditions of task two 1. no task #2 id, no details, modarator_comment_task_two empty
+			if (response.modarator_comment_task_two.length == 0 &&response.task_two_id == 0 && response.task_two_details.length == 0 ) {
+				//no entry of task two
+				$('#tab_jan #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+"N/A"+'</td><td>'+"N/A"+'</td></tr>');
+			} else {
+				$('#tab_jan #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+moment(new Date(moment(response.update_date, "DD-MM-YYYY").subtract(121, 'days'))).format("DD-MM-YYYY")+" UTC TO "+ (moment(new Date(moment(response.update_date, "DD-MM-YYYY").subtract(92, 'days'))).format("DD-MM-YYYY"))+" UTC"+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+			}
+			
 			break;
 			case 2:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
@@ -348,7 +356,13 @@
 				if (response.modarator_comment_task_two == '3.33 % Earned' && response.task_two == "1") {
 					setter_11++;
 				}
-				$('#tab_nov #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+moment(new Date(moment(response.update_date, "DD-MM-YYYY").subtract(121, 'days'))).format("DD-MM-YYYY")+" UTC TO "+ (moment(new Date(moment(response.update_date, "DD-MM-YYYY").subtract(92, 'days'))).format("DD-MM-YYYY"))+" UTC"+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				//console.log(response);
+				if (response.modarator_comment_task_two.length == 0 &&response.task_two_id == 0 && response.task_two_details.length == 0 ) {
+					$('#tab_nov #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+"N/A"+'</td><td>'+"N/A"+'</td></tr>');
+				} else {
+					$('#tab_nov #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+moment(new Date(moment(response.update_date, "DD-MM-YYYY").subtract(121, 'days'))).format("DD-MM-YYYY")+" UTC TO "+ (moment(new Date(moment(response.update_date, "DD-MM-YYYY").subtract(92, 'days'))).format("DD-MM-YYYY"))+" UTC"+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				}
+				
 			break;
 			case 12:
 				if (response.modarator_comment_task_one == '3.33 % Earned' && response.task_one == "1") {
@@ -359,7 +373,13 @@
 					setter_12++;
 					
 				}
-				$('#tab_dec #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+moment(new Date(moment(response.update_date, "DD-MM-YYYY").subtract(121, 'days'))).format("DD-MM-YYYY")+" UTC TO "+ (moment(new Date(moment(response.update_date, "DD-MM-YYYY").subtract(92, 'days'))).format("DD-MM-YYYY"))+" UTC"+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				//console.log(response);
+				if (response.modarator_comment_task_two.length == 0 &&response.task_two_id == 0 && response.task_two_details.length == 0 ) {
+					$('#tab_dec #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>N/A</td><td>N/A</td></tr>');
+				} else {
+					$('#tab_dec #show_data').append('<tr><td>'+response.update_date+'</td><td>'+moment(moment(new Date(moment(response.update_date, "DD-MM-YYYY"))).subtract(29, 'days') ).format("DD-MM-YYYY")+" UTC TO "+response.update_date+" UTC"+'</td><td>'+response.modarator_comment_task_one+'</td><td>'+moment(new Date(moment(response.update_date, "DD-MM-YYYY").subtract(121, 'days'))).format("DD-MM-YYYY")+" UTC TO "+ (moment(new Date(moment(response.update_date, "DD-MM-YYYY").subtract(92, 'days'))).format("DD-MM-YYYY"))+" UTC"+'</td><td>'+response.modarator_comment_task_two+'</td></tr>');
+				}
+				
 			break;
 			default:
 				console.log('Error in putting data');
